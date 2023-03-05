@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+/// Represents a String parameter for a widget on a [WidgetStage].
 class StringFieldConfigurator extends FieldConfigurator<String> {
   StringFieldConfigurator(String value) : super(value: value);
 

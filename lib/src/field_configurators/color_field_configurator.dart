@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+/// Represents a Color parameter for a widget on a [WidgetStage].
 class ColorFieldConfigurator extends FieldConfigurator<Color> {
   ColorFieldConfigurator(
     Color value,

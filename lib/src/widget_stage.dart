@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widget_stage/src/discrete_resizable_component.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+/// The stage where all widgets can be put on.
 class WidgetStage extends StatefulWidget {
   const WidgetStage({
     Key? key,
@@ -75,6 +76,7 @@ class _WidgetStageState extends State<WidgetStage> {
   }
 }
 
+/// The actual stage to display the widget.
 class Stage extends StatelessWidget {
   const Stage({
     Key? key,
@@ -95,6 +97,7 @@ class Stage extends StatelessWidget {
   }
 }
 
+/// The configuration bar containing all the fields to live update the widget.
 class ConfigurationBar extends StatelessWidget {
   const ConfigurationBar({
     Key? key,
@@ -111,6 +114,9 @@ class ConfigurationBar extends StatelessWidget {
   }
 }
 
+/// Representing a single parameter of a widget on stage.
+/// The [builder] returns a field for example a TextField to live update the widget.´
+/// @see [StringFieldConfigurator] or [ColorFieldConfigurator]
 abstract class FieldConfigurator<T> extends ChangeNotifier {
   FieldConfigurator({
     required this.value,

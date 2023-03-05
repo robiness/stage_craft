@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+/// Represents a int parameter for a widget on a [WidgetStage].
 class IntFieldConfigurator extends FieldConfigurator<int> {
   IntFieldConfigurator(int value) : super(value: value);
 

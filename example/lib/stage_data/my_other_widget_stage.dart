@@ -14,12 +14,8 @@ class MyOtherWidgetStageData implements WidgetStageData {
 
   @override
   Widget widgetBuilder(BuildContext context) {
-    return Column(
-      children: [
-        MyOtherWidget(
-          text: _text.value,
-        ),
-      ],
+    return MyOtherWidget(
+      text: _text.value,
     );
   }
 
