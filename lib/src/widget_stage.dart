@@ -37,21 +37,29 @@ class _WidgetStageState extends State<WidgetStage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 40,
-            child: Row(
-              children: widget.widgets.map((e) {
-                return OutlinedButton(
-                  onPressed: () => _selectWidget(e),
-                  child: Text(e.name),
-                );
-              }).toList(),
-            ),
+          const SizedBox(
+            height: 48,
           ),
           Divider(color: Colors.grey.withOpacity(0.2), thickness: 1),
           Expanded(
             child: Row(
               children: [
+                SizedBox(
+                  width: 200,
+                  child: ListView(
+                    children: widget.widgets.map(
+                      (e) {
+                        return ListTile(
+                          tileColor: selectedWidget == e ? Colors.orange : null,
+                          title: Text(e.name),
+                          onTap: () => _selectWidget(e),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+                VerticalDivider(
+                    color: Colors.grey.withOpacity(0.2), thickness: 1),
                 Expanded(
                   child: Stage(
                     child: selectedWidget.widgetBuilder(context),
