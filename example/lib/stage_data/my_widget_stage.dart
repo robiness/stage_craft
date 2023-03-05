@@ -1,4 +1,4 @@
-import 'package:example/my_widget.dart';
+import 'package:example/widgets/my_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
