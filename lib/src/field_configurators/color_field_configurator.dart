@@ -2,6 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+class ColorFieldConfigurator extends FieldConfigurator<Color> {
+  ColorFieldConfigurator(
+    Color value,
+  ) : super(value: value);
+
+  @override
+  Widget builder(BuildContext context) {
+    return ColorPickerField(
+      color: value,
+      onChanged: (Color color) {
+        value = color;
+        notifyListeners();
+      },
+    );
+  }
+}
+
 class ColorPickerField extends StatelessWidget {
   const ColorPickerField({
     Key? key,
@@ -58,18 +75,4 @@ class ColorPickerField extends StatelessWidget {
       ),
     );
   }
-}
-
-class ColorFieldConfigurator extends FieldConfigurator<Color> {
-  ColorFieldConfigurator({
-    required Color value,
-  }) : super(
-          value: value,
-          builder: () => ColorPickerField(
-            color: value,
-            onChanged: (Color value) {
-              value = value;
-            },
-          ),
-        );
 }

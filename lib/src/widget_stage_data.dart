@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:widget_stage/widget_stage.dart';
 
-abstract class WidgetStageData implements ChangeNotifier {
+abstract class WidgetStageData {
   String get name;
 
   Widget get widget;
 
-  List<Widget> get configurationFields;
+  List<FieldConfigurator> get configurators;
 }

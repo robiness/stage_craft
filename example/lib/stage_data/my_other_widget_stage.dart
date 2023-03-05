@@ -2,13 +2,12 @@ import 'package:example/my_other_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
-class MyOtherWidgetStageData extends ChangeNotifier implements WidgetStageData {
+class MyOtherWidgetStageData implements WidgetStageData {
   MyOtherWidgetStageData({
     required String text,
-  }) : _text = text;
+  }) : _text = StringFieldConfigurator(text);
 
-  String get text => _text;
-  String _text;
+  final StringFieldConfigurator _text;
 
   @override
   String get name => 'MyOtherWidget';
@@ -16,23 +15,14 @@ class MyOtherWidgetStageData extends ChangeNotifier implements WidgetStageData {
   @override
   Widget get widget {
     return MyOtherWidget(
-      text: _text,
+      text: _text.value,
     );
   }
 
   @override
-  List<Widget> get configurationFields {
+  List<FieldConfigurator> get configurators {
     return [
-      TextField(
-        decoration: const InputDecoration(
-          labelText: 'text',
-        ),
-        controller: TextEditingController(text: _text),
-        onChanged: (String value) {
-          _text = value;
-          notifyListeners();
-        },
-      ),
+      _text,
     ];
   }
 }

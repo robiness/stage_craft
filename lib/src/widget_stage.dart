@@ -25,9 +25,9 @@ class _WidgetStageState extends State<WidgetStage> {
 
   void _selectWidget(WidgetStageData widget) {
     selectedWidget = widget;
-    selectedWidget.addListener(() {
-      setState(() {});
-    });
+    for (var element in selectedWidget.configurators) {
+      element.addListener(() => setState(() {}));
+    }
     setState(() {});
   }
 
@@ -61,7 +61,9 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
-                    fields: selectedWidget.configurationFields,
+                    fields: selectedWidget.configurators.map((e) {
+                      return e.builder(context);
+                    }).toList(),
                   ),
                 ),
               ],
@@ -109,12 +111,12 @@ class ConfigurationBar extends StatelessWidget {
   }
 }
 
-class FieldConfigurator<T> {
-  const FieldConfigurator({
+abstract class FieldConfigurator<T> extends ChangeNotifier {
+  FieldConfigurator({
     required this.value,
-    required this.builder,
   });
 
-  final T value;
-  final Widget Function() builder;
+  T value;
+
+  Widget builder(BuildContext context);
 }
