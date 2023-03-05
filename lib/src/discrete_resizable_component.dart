@@ -61,8 +61,6 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
 
   @override
   Widget build(BuildContext context) {
-    print('$width');
-    print('${currentConstraints?.maxWidth}');
     return LayoutBuilder(
       builder: (context, constraints) {
         currentConstraints = constraints;
@@ -342,7 +340,7 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
     return AnimatedScale(
       scale: widget.show ? 1 : 0,
       duration: const Duration(milliseconds: 200),
-      curve: Curves.elasticInOut,
+      curve: Curves.easeInCubic,
       child: MouseRegion(
         cursor: SystemMouseCursors.grab,
         child: GestureDetector(
