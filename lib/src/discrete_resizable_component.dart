@@ -43,7 +43,7 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
           child: Container(
             height: height,
             width: width,
-            color: Colors.red[100],
+            color: Colors.black26,
             child: widget.child,
           ),
         ),
@@ -337,18 +337,18 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
   double? initX;
   double? initY;
 
-  _handleDrag(details) {
+  _handleDrag(DragStartDetails details) {
     setState(() {
-      initX = details.globalPosition.dx;
-      initY = details.globalPosition.dy;
+      initX = details.localPosition.dx;
+      initY = details.localPosition.dy;
     });
   }
 
-  _handleUpdate(details) {
-    var dx = details.globalPosition.dx - initX;
-    var dy = details.globalPosition.dy - initY;
-    initX = details.globalPosition.dx;
-    initY = details.globalPosition.dy;
+  _handleUpdate(DragUpdateDetails details) {
+    var dx = details.localPosition.dx - initX!;
+    var dy = details.localPosition.dy - initY!;
+    initX = details.localPosition.dx;
+    initY = details.localPosition.dy;
     widget.onDrag(dx, dy);
   }
 

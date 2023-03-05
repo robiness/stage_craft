@@ -120,9 +120,12 @@ class ConfigurationBar extends StatelessWidget {
 abstract class FieldConfigurator<T> extends ChangeNotifier {
   FieldConfigurator({
     required this.value,
+    required this.name,
   });
 
   T value;
+
+  String name;
 
   Widget builder(BuildContext context);
 }

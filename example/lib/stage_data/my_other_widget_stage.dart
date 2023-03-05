@@ -5,7 +5,7 @@ import 'package:widget_stage/widget_stage.dart';
 class MyOtherWidgetStageData implements WidgetStageData {
   MyOtherWidgetStageData({
     required String text,
-  }) : _text = StringFieldConfigurator(text);
+  }) : _text = StringFieldConfigurator(value: text, name: 'text');
 
   final StringFieldConfigurator _text;
 

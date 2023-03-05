@@ -8,9 +8,10 @@ class MyWidgetStageData implements WidgetStageData {
     required Color color,
     required String text,
     required double borderRadius,
-  })  : _color = ColorFieldConfigurator(color),
-        _text = StringFieldConfigurator(text),
-        _borderRadius = DoubleFieldConfigurator(borderRadius);
+  })  : _color = ColorFieldConfigurator(value: color, name: 'color'),
+        _text = StringFieldConfigurator(value: text, name: 'text'),
+        _borderRadius =
+            DoubleFieldConfigurator(value: borderRadius, name: 'borderRadius');
 
   @override
   String get name => 'MyWidget';

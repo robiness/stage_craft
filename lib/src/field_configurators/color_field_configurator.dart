@@ -4,9 +4,10 @@ import 'package:widget_stage/widget_stage.dart';
 
 /// Represents a Color parameter for a widget on a [WidgetStage].
 class ColorFieldConfigurator extends FieldConfigurator<Color> {
-  ColorFieldConfigurator(
-    Color value,
-  ) : super(value: value);
+  ColorFieldConfigurator({
+    required super.value,
+    required super.name,
+  });
 
   @override
   Widget builder(BuildContext context) {

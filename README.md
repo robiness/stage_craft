@@ -40,3 +40,4 @@ Provided `FieldConfigurator`s are:<br />
 For each widget you want to put on stage, create a new class which implements `WidgetStageData`.<br />
 If the widget has a parameter of a type where there is no `FieldConfigurator` yet, you can easily create one and use it
 afterwards.<br />
+
