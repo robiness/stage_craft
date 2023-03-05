@@ -1,4 +1,4 @@
-import 'package:example/stage_data/example_widget_stage.dart';
+import 'package:example/example_widget_stage.dart';
 import 'package:flutter/material.dart';
 
 void main() {

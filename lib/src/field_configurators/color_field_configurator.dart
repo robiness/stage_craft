@@ -33,13 +33,11 @@ class ColorPickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          const Text('color'),
-          const SizedBox(width: 32),
-          GestureDetector(
+    return Row(
+      children: [
+        const Expanded(child: Text('color')),
+        Expanded(
+          child: GestureDetector(
             onTap: () async {
               showDialog(
                 context: context,
@@ -65,16 +63,16 @@ class ColorPickerField extends StatelessWidget {
               );
             },
             child: Container(
-              height: 40,
-              width: 40,
+              height: 48,
+              width: 48,
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

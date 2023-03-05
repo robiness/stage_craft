@@ -10,15 +10,25 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
 
   @override
   Widget builder(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        labelText: 'text',
-      ),
-      controller: TextEditingController(text: value.toString()),
-      onChanged: (String newValue) {
-        value = int.tryParse(newValue) ?? 0;
-        notifyListeners();
-      },
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('$name:'),
+        const SizedBox(width: 8),
+        Flexible(
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+            ),
+            controller: TextEditingController(text: value.toString()),
+            onChanged: (String newValue) {
+              value = int.tryParse(newValue) ?? 0;
+              notifyListeners();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

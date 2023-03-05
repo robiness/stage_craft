@@ -10,15 +10,24 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
 
   @override
   Widget builder(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        labelText: 'text',
-      ),
-      controller: TextEditingController(text: value),
-      onChanged: (String newValue) {
-        value = newValue;
-        notifyListeners();
-      },
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(child: Text('$name: ')),
+        Expanded(
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+            ),
+            controller: TextEditingController(text: value),
+            onChanged: (String newValue) {
+              value = newValue;
+              notifyListeners();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

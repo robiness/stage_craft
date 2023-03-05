@@ -10,15 +10,25 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
 
   @override
   Widget builder(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        labelText: 'double',
-      ),
-      controller: TextEditingController(text: value.toString()),
-      onChanged: (String newValue) {
-        value = double.tryParse(newValue) ?? 0;
-        notifyListeners();
-      },
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(child: Text('$name:')),
+        Expanded(
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+            ),
+            controller: TextEditingController(text: value.toString()),
+            onChanged: (String newValue) {
+              value = double.tryParse(newValue) ?? 0;
+              notifyListeners();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

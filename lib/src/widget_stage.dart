@@ -108,8 +108,18 @@ class ConfigurationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: fields,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: fields.map(
+          (e) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: e,
+            );
+          },
+        ).toList(),
+      ),
     );
   }
 }
