@@ -25,7 +25,7 @@ class _WidgetStageState extends State<WidgetStage> {
 
   void _selectWidget(WidgetStageData widget) {
     selectedWidget = widget;
-    for (var element in selectedWidget.configurators) {
+    for (var element in selectedWidget.fieldConfigurators) {
       element.addListener(() => setState(() {}));
     }
     setState(() {});
@@ -53,7 +53,7 @@ class _WidgetStageState extends State<WidgetStage> {
               children: [
                 Expanded(
                   child: Stage(
-                    child: selectedWidget.widget,
+                    child: selectedWidget.widgetBuilder(context),
                   ),
                 ),
                 VerticalDivider(
@@ -61,7 +61,7 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
-                    fields: selectedWidget.configurators.map((e) {
+                    fields: selectedWidget.fieldConfigurators.map((e) {
                       return e.builder(context);
                     }).toList(),
                   ),

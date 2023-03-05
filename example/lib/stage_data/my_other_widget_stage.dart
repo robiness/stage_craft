@@ -13,14 +13,14 @@ class MyOtherWidgetStageData implements WidgetStageData {
   String get name => 'MyOtherWidget';
 
   @override
-  Widget get widget {
+  Widget widgetBuilder(BuildContext context) {
     return MyOtherWidget(
       text: _text.value,
     );
   }
 
   @override
-  List<FieldConfigurator> get configurators {
+  List<FieldConfigurator> get fieldConfigurators {
     return [
       _text,
     ];

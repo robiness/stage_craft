@@ -19,7 +19,7 @@ class MyWidgetStageData implements WidgetStageData {
   final DoubleFieldConfigurator _borderRadius;
 
   @override
-  Widget get widget {
+  Widget widgetBuilder(BuildContext context) {
     return MyWidget(
       color: _color.value,
       text: _text.value,
@@ -28,7 +28,7 @@ class MyWidgetStageData implements WidgetStageData {
   }
 
   @override
-  List<FieldConfigurator> get configurators {
+  List<FieldConfigurator> get fieldConfigurators {
     return [
       _color,
       _text,

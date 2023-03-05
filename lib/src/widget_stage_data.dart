@@ -4,7 +4,7 @@ import 'package:widget_stage/widget_stage.dart';
 abstract class WidgetStageData {
   String get name;
 
-  Widget get widget;
+  Widget widgetBuilder(BuildContext context);
 
-  List<FieldConfigurator> get configurators;
+  List<FieldConfigurator> get fieldConfigurators;
 }
