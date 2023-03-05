@@ -7,9 +7,11 @@ class WidgetStage extends StatefulWidget {
   const WidgetStage({
     Key? key,
     required this.widgets,
+    required this.onThemeSwitchChanged,
   }) : super(key: key);
 
   final List<WidgetStageData> widgets;
+  final void Function(ThemeMode themeMode) onThemeSwitchChanged;
 
   @override
   State<WidgetStage> createState() => _WidgetStageState();
@@ -37,8 +39,34 @@ class _WidgetStageState extends State<WidgetStage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(
-            height: 48,
+          SizedBox(
+            height: 38,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Switch(
+                      value: Theme.of(context).brightness == Brightness.light,
+                      activeColor: Colors.white,
+                      inactiveThumbColor: Colors.black54,
+                      onChanged: (value) {
+                        widget.onThemeSwitchChanged(
+                          value ? ThemeMode.light : ThemeMode.dark,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+            ),
           ),
           Divider(color: Colors.grey.withOpacity(0.2), thickness: 1),
           Expanded(
