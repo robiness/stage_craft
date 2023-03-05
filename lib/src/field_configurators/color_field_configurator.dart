@@ -23,10 +23,10 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
 
 class ColorPickerField extends StatelessWidget {
   const ColorPickerField({
-    Key? key,
+    super.key,
     required this.color,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final Color color;
   final ValueChanged<Color> onChanged;

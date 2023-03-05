@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
 class DiscreteResizableComponent extends StatefulWidget {
-  const DiscreteResizableComponent({Key? key, required this.child})
-      : super(key: key);
+  const DiscreteResizableComponent({super.key, required this.child});
 
   final Widget child;
   @override
-  _ResizebleWidgetState createState() => _ResizebleWidgetState();
+  _ResizableWidgetState createState() => _ResizableWidgetState();
 }
 
 const ballDiameter = 30.0;
 const discreteStepSize = 1;
 
-class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
+class _ResizableWidgetState extends State<DiscreteResizableComponent> {
   double height = 400;
   double width = 200;
 
@@ -24,8 +23,8 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
   double cumulativeMid = 0;
 
   void onDrag(double dx, double dy) {
-    var newHeight = height + dy;
-    var newWidth = width + dx;
+    final newHeight = height + dy;
+    final newWidth = width + dx;
 
     setState(() {
       height = newHeight > 0 ? newHeight : 0;
@@ -53,13 +52,13 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
           left: left - ballDiameter / 2,
           child: ManipulatingBall(
             onDrag: (dx, dy) {
-              var mid = (dx + dy) / 2;
+              final mid = (dx + dy) / 2;
               cumulativeMid -= 2 * mid;
               if (cumulativeMid >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   top -= discreteStepSize;
                   left -= discreteStepSize;
@@ -68,9 +67,9 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
                 });
               } else if (cumulativeMid <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   top += discreteStepSize;
                   left += discreteStepSize;
@@ -128,13 +127,13 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
           left: left + width - ballDiameter / 2,
           child: ManipulatingBall(
             onDrag: (dx, dy) {
-              var mid = (dx + (dy * -1)) / 2;
+              final mid = (dx + (dy * -1)) / 2;
               cumulativeMid += 2 * mid;
               if (cumulativeMid >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   top -= discreteStepSize;
 
@@ -142,9 +141,9 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
                 });
               } else if (cumulativeMid <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   top += discreteStepSize;
 
@@ -161,22 +160,22 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
           left: left + width - ballDiameter / 2,
           child: ManipulatingBall(
             onDrag: (dx, dy) {
-              var mid = (dx + dy) / 2;
+              final mid = (dx + dy) / 2;
 
               cumulativeMid += 2 * mid;
               if (cumulativeMid >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   cumulativeMid = 0;
                 });
               } else if (cumulativeMid <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   cumulativeMid = 0;
                 });
@@ -193,7 +192,7 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
               cumulativeDy -= dy;
               if (cumulativeDy >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
                   top -= discreteStepSize;
 
@@ -201,7 +200,7 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
                 });
               } else if (cumulativeDy <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
                   top += discreteStepSize;
 
@@ -221,13 +220,13 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
 
               if (cumulativeDy >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
                   cumulativeDy = 0;
                 });
               } else if (cumulativeDy <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
                   cumulativeDy = 0;
                 });
@@ -241,23 +240,23 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
           left: left - ballDiameter / 2,
           child: ManipulatingBall(
             onDrag: (dx, dy) {
-              var mid = ((dx * -1) + dy) / 2;
+              final mid = ((dx * -1) + dy) / 2;
 
               cumulativeMid += 2 * mid;
               if (cumulativeMid >= discreteStepSize) {
                 setState(() {
-                  var newHeight = height + discreteStepSize;
+                  final newHeight = height + discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   left -= discreteStepSize;
                   cumulativeMid = 0;
                 });
               } else if (cumulativeMid <= -discreteStepSize) {
                 setState(() {
-                  var newHeight = height - discreteStepSize;
+                  final newHeight = height - discreteStepSize;
                   height = newHeight > 0 ? newHeight : 0;
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   left += discreteStepSize;
                   cumulativeMid = 0;
@@ -276,7 +275,7 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
 
               if (cumulativeDx >= discreteStepSize) {
                 setState(() {
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
 
                   left = left - discreteStepSize;
@@ -285,7 +284,7 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
                 });
               } else if (cumulativeDx <= -discreteStepSize) {
                 setState(() {
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
 
                   left = left + discreteStepSize;
@@ -305,13 +304,13 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
 
               if (cumulativeDx >= discreteStepSize) {
                 setState(() {
-                  var newWidth = width + discreteStepSize;
+                  final newWidth = width + discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   cumulativeDx = 0;
                 });
               } else if (cumulativeDx <= -discreteStepSize) {
                 setState(() {
-                  var newWidth = width - discreteStepSize;
+                  final newWidth = width - discreteStepSize;
                   width = newWidth > 0 ? newWidth : 0;
                   cumulativeDx = 0;
                 });
@@ -325,9 +324,9 @@ class _ResizebleWidgetState extends State<DiscreteResizableComponent> {
 }
 
 class ManipulatingBall extends StatefulWidget {
-  ManipulatingBall({Key? key, required this.onDrag});
+  const ManipulatingBall({required this.onDrag});
 
-  final Function onDrag;
+  final Function(double, double) onDrag;
 
   @override
   _ManipulatingBallState createState() => _ManipulatingBallState();
@@ -345,8 +344,8 @@ class _ManipulatingBallState extends State<ManipulatingBall> {
   }
 
   _handleUpdate(DragUpdateDetails details) {
-    var dx = details.localPosition.dx - initX!;
-    var dy = details.localPosition.dy - initY!;
+    final dx = details.localPosition.dx - initX!;
+    final dy = details.localPosition.dy - initY!;
     initX = details.localPosition.dx;
     initY = details.localPosition.dy;
     widget.onDrag(dx, dy);

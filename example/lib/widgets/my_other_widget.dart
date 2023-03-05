@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyOtherWidget extends StatelessWidget {
   const MyOtherWidget({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   final String text;
 
@@ -12,7 +12,7 @@ class MyOtherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
+        border: Border.all(width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

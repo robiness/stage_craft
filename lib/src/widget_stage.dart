@@ -5,10 +5,10 @@ import 'package:widget_stage/widget_stage.dart';
 /// The stage where all widgets can be put on.
 class WidgetStage extends StatefulWidget {
   const WidgetStage({
-    Key? key,
+    super.key,
     required this.widgets,
     required this.onThemeSwitchChanged,
-  }) : super(key: key);
+  });
 
   final List<WidgetStageData> widgets;
   final void Function(ThemeMode themeMode) onThemeSwitchChanged;
@@ -28,7 +28,7 @@ class _WidgetStageState extends State<WidgetStage> {
 
   void _selectWidget(WidgetStageData widget) {
     selectedWidget = widget;
-    for (var element in selectedWidget.fieldConfigurators) {
+    for (final element in selectedWidget.fieldConfigurators) {
       element.addListener(() => setState(() {}));
     }
     setState(() {});
@@ -44,7 +44,6 @@ class _WidgetStageState extends State<WidgetStage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(),
                   Container(
@@ -87,14 +86,14 @@ class _WidgetStageState extends State<WidgetStage> {
                   ),
                 ),
                 VerticalDivider(
-                    color: Colors.grey.withOpacity(0.2), thickness: 1),
+                    color: Colors.grey.withOpacity(0.2), thickness: 1,),
                 Expanded(
                   child: Stage(
                     child: selectedWidget.widgetBuilder(context),
                   ),
                 ),
                 VerticalDivider(
-                    color: Colors.grey.withOpacity(0.2), thickness: 1),
+                    color: Colors.grey.withOpacity(0.2), thickness: 1,),
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
@@ -115,9 +114,9 @@ class _WidgetStageState extends State<WidgetStage> {
 /// The actual stage to display the widget.
 class Stage extends StatelessWidget {
   const Stage({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -136,9 +135,9 @@ class Stage extends StatelessWidget {
 /// The configuration bar containing all the fields to live update the widget.
 class ConfigurationBar extends StatelessWidget {
   const ConfigurationBar({
-    Key? key,
+    super.key,
     required this.fields,
-  }) : super(key: key);
+  });
 
   final List<Widget> fields;
 

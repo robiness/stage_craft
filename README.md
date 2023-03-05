@@ -1,4 +1,4 @@
-# widget_stage
+# stage_craft
 
 Help your widgets get the attention they deserve. <br />
 Each widget gets its own stage where you can live manipulate it and see if it's behaving as expected.

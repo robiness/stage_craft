@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class MyWidget extends StatelessWidget {
   const MyWidget({
-    Key? key,
+    super.key,
     required this.color,
     required this.text,
     this.borderRadius = 8,
-  }) : super(key: key);
+  });
 
   final Color color;
   final double? borderRadius;
@@ -21,7 +21,7 @@ class MyWidget extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+          border: Border.all(),
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
         child: Padding(
