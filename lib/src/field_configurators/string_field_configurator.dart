@@ -18,7 +18,10 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
           child: TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
             ),
             controller: TextEditingController(text: value),
             onChanged: (String newValue) {
