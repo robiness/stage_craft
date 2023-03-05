@@ -22,7 +22,7 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
   double top = 50;
   double left = 50;
 
-  BoxConstraints? initialContainerConstraints;
+  BoxConstraints? currentConstraints;
 
   bool _isDragging = false;
 
@@ -43,8 +43,8 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        top = initialContainerConstraints!.maxHeight / 2 - height / 2;
-        left = initialContainerConstraints!.maxWidth / 2 - width / 2;
+        top = currentConstraints!.maxHeight / 2 - height / 2;
+        left = currentConstraints!.maxWidth / 2 - width / 2;
       });
     });
   }
@@ -61,9 +61,11 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
 
   @override
   Widget build(BuildContext context) {
+    print('$width');
+    print('${currentConstraints?.maxWidth}');
     return LayoutBuilder(
       builder: (context, constraints) {
-        initialContainerConstraints ??= constraints;
+        currentConstraints = constraints;
         return Stack(
           children: <Widget>[
             // The actual widget
@@ -91,11 +93,15 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 onDrag: (dx, dy) {
                   setState(() {
                     final newHeight = height - dy;
-                    height = newHeight > 0 ? newHeight : 0;
                     final newWidth = width - dx;
-                    width = newWidth > 0 ? newWidth : 0;
-                    top += dy;
-                    left += dx;
+                    if (top + dy > 0) {
+                      top += dy;
+                      height = newHeight > 0 ? newHeight : 0;
+                    }
+                    if (left + dx > 0) {
+                      left += dx;
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
                   });
                 },
               ),
@@ -128,10 +134,15 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 onDrag: (dx, dy) {
                   setState(() {
                     final newHeight = height - dy;
-                    height = newHeight > 0 ? newHeight : 0;
                     final newWidth = width + dx;
-                    width = newWidth > 0 ? newWidth : 0;
-                    top += dy;
+                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
+
+                    if (top + dy > 0) {
+                      height = newHeight > 0 ? newHeight : 0;
+                      top += dy;
+                    }
                   });
                 },
               ),
@@ -150,7 +161,9 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                     final newHeight = height + dy;
                     height = newHeight > 0 ? newHeight : 0;
                     final newWidth = width + dx;
-                    width = newWidth > 0 ? newWidth : 0;
+                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
                   });
                 },
               ),
@@ -166,8 +179,10 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 onDrag: (dx, dy) {
                   setState(() {
                     final newHeight = height - dy;
-                    height = newHeight > 0 ? newHeight : 0;
-                    top += dy;
+                    if (top + dy > 0) {
+                      height = newHeight > 0 ? newHeight : 0;
+                      top += dy;
+                    }
                   });
                 },
               ),
@@ -201,8 +216,10 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                     final newHeight = height + dy;
                     height = newHeight > 0 ? newHeight : 0;
                     final newWidth = width - dx;
-                    width = newWidth > 0 ? newWidth : 0;
-                    left += dx;
+                    if (left + dx > 0) {
+                      left += dx;
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
                   });
                 },
               ),
@@ -218,8 +235,10 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 onDrag: (dx, dy) {
                   setState(() {
                     final newWidth = width - dx;
-                    width = newWidth > 0 ? newWidth : 0;
-                    left += dx;
+                    if (left + dx > 0) {
+                      left += dx;
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
                   });
                 },
               ),
@@ -235,7 +254,9 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 onDrag: (dx, dy) {
                   setState(() {
                     final newWidth = width + dx;
-                    width = newWidth > 0 ? newWidth : 0;
+                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
+                      width = newWidth > 0 ? newWidth : 0;
+                    }
                   });
                 },
               ),
