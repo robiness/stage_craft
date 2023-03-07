@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DiscreteResizableComponent extends StatefulWidget {
-  const DiscreteResizableComponent({
+class FlexibleStage extends StatefulWidget {
+  const FlexibleStage({
     super.key,
     required this.child,
   });
@@ -13,9 +13,8 @@ class DiscreteResizableComponent extends StatefulWidget {
 }
 
 const ballDiameter = 30.0;
-const discreteStepSize = 1;
 
-class _ResizableWidgetState extends State<DiscreteResizableComponent> {
+class _ResizableWidgetState extends State<FlexibleStage> {
   double height = 400;
   double width = 200;
 
@@ -72,11 +71,19 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
               left: left,
               child: Padding(
                 padding: const EdgeInsets.all(handlePadding),
-                child: Container(
-                  height: height,
-                  width: width,
-                  color: Colors.black26,
-                  child: widget.child,
+                child: GestureDetector(
+                  onPanUpdate: (details) {
+                    setState(() {
+                      top += details.delta.dy;
+                      left += details.delta.dx;
+                    });
+                  },
+                  child: Container(
+                    height: height,
+                    width: width,
+                    color: Colors.black26,
+                    child: widget.child,
+                  ),
                 ),
               ),
             ),
@@ -104,23 +111,6 @@ class _ResizableWidgetState extends State<DiscreteResizableComponent> {
                 },
               ),
             ),
-            // // center center
-            // Positioned(
-            //   top: top + height / 2 - ballDiameter / 2 + handlePadding,
-            //   left: left + width / 2 - ballDiameter / 2 + handlePadding,
-            //   child: ManipulatingBall(
-            //     show: showManipulatingBalls,
-            //     onDragStart: onDragStart,
-            //     onDragEnd: onDragEnd,
-            //     onDrag: (dx, dy) {
-            //       setState(() {
-            //         top += dy;
-            //         left += dx;
-            //       });
-            //     },
-            //   ),
-            // ),
-
             // top right
             Positioned(
               top: top - ballDiameter / 2 + handlePadding,

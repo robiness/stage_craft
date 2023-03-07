@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widget_stage/src/discrete_resizable_component.dart';
+import 'package:widget_stage/src/flexible_stage.dart';
 import 'package:widget_stage/widget_stage.dart';
 
 /// The stage where all widgets can be put on.
@@ -86,14 +86,18 @@ class _WidgetStageState extends State<WidgetStage> {
                   ),
                 ),
                 VerticalDivider(
-                    color: Colors.grey.withOpacity(0.2), thickness: 1,),
+                  color: Colors.grey.withOpacity(0.2),
+                  thickness: 1,
+                ),
                 Expanded(
                   child: Stage(
                     child: selectedWidget.widgetBuilder(context),
                   ),
                 ),
                 VerticalDivider(
-                    color: Colors.grey.withOpacity(0.2), thickness: 1,),
+                  color: Colors.grey.withOpacity(0.2),
+                  thickness: 1,
+                ),
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
@@ -123,7 +127,7 @@ class Stage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: DiscreteResizableComponent(
+      child: FlexibleStage(
         child: Center(
           child: child,
         ),
