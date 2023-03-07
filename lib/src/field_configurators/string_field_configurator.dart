@@ -6,7 +6,9 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
   StringFieldConfigurator({
     required super.value,
     required super.name,
-  });
+  }) : _controller = TextEditingController(text: value);
+
+  final TextEditingController _controller;
 
   @override
   Widget builder(BuildContext context) {
@@ -23,7 +25,7 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
                 ),
               ),
             ),
-            controller: TextEditingController(text: value),
+            controller: _controller,
             onChanged: (String newValue) {
               value = newValue;
               notifyListeners();
