@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
+/// Represents a bool parameter for a widget on a [WidgetStage].
 class BoolFieldConfigurator extends FieldConfigurator<bool> {
   BoolFieldConfigurator({
     required super.value,
