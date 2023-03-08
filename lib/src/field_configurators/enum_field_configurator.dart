@@ -19,7 +19,7 @@ class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
             .map(
               (e) => DropdownMenuItem<T>(
                 value: e,
-                child: Text(e.toString()),
+                child: Text(e.name),
               ),
             )
             .toList(),
