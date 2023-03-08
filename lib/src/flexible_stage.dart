@@ -60,7 +60,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   void dragLeft(double dx, double dy) {
     final newWidth = width - dx;
-    if (left + dx > 0) {
+    if (left + dx > 0 && newWidth > 0) {
       setState(() {
         left += dx;
         width = newWidth > 0 ? newWidth : 0;
@@ -79,7 +79,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   void dragUp(double dx, double dy) {
     final newHeight = height - dy;
-    if (top + dy > 0) {
+    if (top + dy > 0 && newHeight > 0) {
       setState(() {
         top += dy;
         height = newHeight > 0 ? newHeight : 0;
