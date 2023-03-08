@@ -13,7 +13,6 @@ class MyOtherWidget extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
