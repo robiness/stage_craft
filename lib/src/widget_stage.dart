@@ -131,7 +131,13 @@ class StageController extends ChangeNotifier {
   WidgetStageData? get selectedWidget => _selectedWidget;
 
   void selectWidget(WidgetStageData selectedWidget) {
+    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
+      fieldConfigurator.removeListener(notifyListeners);
+    }
     _selectedWidget = selectedWidget;
+    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
+      fieldConfigurator.addListener(notifyListeners);
+    }
     notifyListeners();
   }
 }
