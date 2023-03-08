@@ -15,8 +15,8 @@ class FlexibleStage extends StatefulWidget {
 const ballDiameter = 22.0;
 
 class _ResizableWidgetState extends State<FlexibleStage> {
-  double height = 400;
-  double width = 200;
+  double height = 600;
+  double width = 800;
 
   double top = 50;
   double left = 50;
