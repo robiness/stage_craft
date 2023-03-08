@@ -15,31 +15,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.dark;
+  final StageController _stageController = StageController();
+
+  final widgetsOnStage = [
+    MyWidgetStageData(),
+    MyOtherWidgetStageData(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: _themeMode,
       darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: WidgetStage(
-        widgets: [
-          MyWidgetStageData(
-            color: Colors.yellow,
-            text: 'MyWidget',
-            borderRadius: 4,
-          ),
-          MyOtherWidgetStageData(
-            text: 'MyOtherWidget',
-          ),
-        ],
-        onThemeSwitchChanged: (ThemeMode themeMode) {
-          setState(() {
-            _themeMode = themeMode;
-          });
-        },
+      home: Scaffold(
+        body: Row(
+          children: [
+            SizedBox(
+              width: 200,
+              child: ListView(
+                children: widgetsOnStage.map(
+                  (e) {
+                    return ListTile(
+                      onTap: () => _stageController.selectWidget(e),
+                      title: Text(e.name),
+                    );
+                  },
+                ).toList(),
+              ),
+            ),
+            Expanded(
+              child: WidgetStage(
+                controller: _stageController,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -12,7 +12,7 @@ class FlexibleStage extends StatefulWidget {
   _ResizableWidgetState createState() => _ResizableWidgetState();
 }
 
-const ballDiameter = 30.0;
+const ballDiameter = 22.0;
 
 class _ResizableWidgetState extends State<FlexibleStage> {
   double height = 400;
@@ -192,6 +192,12 @@ class _ResizableWidgetState extends State<FlexibleStage> {
               ),
             ),
             // bottom left
+            Positioned(
+              top: top + height - ballDiameter / 2 + handlePadding + 24,
+              left: left + handlePadding,
+              child: Text('${width.toStringAsFixed(1)} x ${height.toStringAsFixed(1)}'),
+            ),
+            // size handle
             Positioned(
               top: top + height - ballDiameter / 2 + handlePadding,
               left: left - ballDiameter / 2 + handlePadding,

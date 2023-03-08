@@ -4,14 +4,10 @@ import 'package:widget_stage/widget_stage.dart';
 
 /// Defines everything you need to put it on the stage.
 class MyWidgetStageData implements WidgetStageData {
-  MyWidgetStageData({
-    required Color color,
-    required String text,
-    required double borderRadius,
-  })  : _color = ColorFieldConfigurator(value: color, name: 'color'),
-        _text = StringFieldConfigurator(value: text, name: 'text'),
-        _borderRadius =
-            DoubleFieldConfigurator(value: borderRadius, name: 'borderRadius');
+  MyWidgetStageData()
+      : _color = ColorFieldConfigurator(value: Colors.yellow, name: 'color'),
+        _text = StringFieldConfigurator(value: 'MyWidget', name: 'text'),
+        _borderRadius = DoubleFieldConfigurator(value: 4, name: 'borderRadius');
 
   @override
   String get name => 'MyWidget';

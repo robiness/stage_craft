@@ -6,32 +6,24 @@ import 'package:widget_stage/widget_stage.dart';
 class WidgetStage extends StatefulWidget {
   const WidgetStage({
     super.key,
-    required this.widgets,
-    required this.onThemeSwitchChanged,
+    this.controller,
   });
 
-  final List<WidgetStageData> widgets;
-  final void Function(ThemeMode themeMode) onThemeSwitchChanged;
+  final StageController? controller;
 
   @override
   State<WidgetStage> createState() => _WidgetStageState();
 }
 
 class _WidgetStageState extends State<WidgetStage> {
-  late WidgetStageData selectedWidget;
+  late final StageController _stageController = widget.controller ?? StageController();
 
   @override
   void initState() {
     super.initState();
-    _selectWidget(widget.widgets.first);
-  }
-
-  void _selectWidget(WidgetStageData widget) {
-    selectedWidget = widget;
-    for (final element in selectedWidget.fieldConfigurators) {
-      element.addListener(() => setState(() {}));
-    }
-    setState(() {});
+    _stageController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -39,59 +31,12 @@ class _WidgetStageState extends State<WidgetStage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 38,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: [
-                  const Spacer(),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Switch(
-                      value: Theme.of(context).brightness == Brightness.light,
-                      activeColor: Colors.white,
-                      inactiveThumbColor: Colors.black54,
-                      onChanged: (value) {
-                        widget.onThemeSwitchChanged(
-                          value ? ThemeMode.light : ThemeMode.dark,
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-              ),
-            ),
-          ),
-          Divider(color: Colors.grey.withOpacity(0.2), thickness: 1),
           Expanded(
             child: Row(
               children: [
-                SizedBox(
-                  width: 200,
-                  child: ListView(
-                    children: widget.widgets.map(
-                      (e) {
-                        return ListTile(
-                          tileColor: selectedWidget == e ? Colors.orange : null,
-                          title: Text(e.name),
-                          onTap: () => _selectWidget(e),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
-                VerticalDivider(
-                  color: Colors.grey.withOpacity(0.2),
-                  thickness: 1,
-                ),
                 Expanded(
                   child: Stage(
-                    child: selectedWidget.widgetBuilder(context),
+                    child: _stageController.selectedWidget?.widgetBuilder(context) ?? const SizedBox(),
                   ),
                 ),
                 VerticalDivider(
@@ -101,9 +46,10 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
-                    fields: selectedWidget.fieldConfigurators.map((e) {
-                      return e.builder(context);
-                    }).toList(),
+                    fields: _stageController.selectedWidget?.fieldConfigurators.map((e) {
+                          return e.builder(context);
+                        }).toList() ??
+                        [],
                   ),
                 ),
               ],
@@ -177,4 +123,15 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
   String name;
 
   Widget builder(BuildContext context);
+}
+
+class StageController extends ChangeNotifier {
+  WidgetStageData? _selectedWidget;
+
+  WidgetStageData? get selectedWidget => _selectedWidget;
+
+  void selectWidget(WidgetStageData selectedWidget) {
+    _selectedWidget = selectedWidget;
+    notifyListeners();
+  }
 }
