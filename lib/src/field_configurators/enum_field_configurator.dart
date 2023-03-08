@@ -12,21 +12,23 @@ class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
 
   @override
   Widget builder(BuildContext context) {
-    return DropdownButtonFormField<T>(
-      value: value,
-      items: enumValues
-          .map(
-            (e) => DropdownMenuItem<T>(
-              value: e,
-              child: Text(e.toString()),
-            ),
-          )
-          .toList(),
-      onChanged: (newValue) {
-        if (newValue == null) return;
-        value = newValue;
-        notifyListeners();
-      },
+    return Material(
+      child: DropdownButtonFormField<T>(
+        value: value,
+        items: enumValues
+            .map(
+              (e) => DropdownMenuItem<T>(
+                value: e,
+                child: Text(e.toString()),
+              ),
+            )
+            .toList(),
+        onChanged: (newValue) {
+          if (newValue == null) return;
+          value = newValue;
+          notifyListeners();
+        },
+      ),
     );
   }
 }
