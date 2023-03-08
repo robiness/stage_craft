@@ -58,6 +58,44 @@ class _ResizableWidgetState extends State<FlexibleStage> {
     _isDragging = false;
   }
 
+  void dragLeft(double dx, double dy) {
+    final newWidth = width - dx;
+    if (left + dx > 0) {
+      setState(() {
+        left += dx;
+        width = newWidth > 0 ? newWidth : 0;
+      });
+    }
+  }
+
+  void dragRight(double dx, double dy) {
+    final newWidth = width + dx;
+    if (newWidth + left < currentConstraints!.maxWidth - 70) {
+      setState(() {
+        width = newWidth > 0 ? newWidth : 0;
+      });
+    }
+  }
+
+  void dragUp(double dx, double dy) {
+    final newHeight = height - dy;
+    if (top + dy > 0) {
+      setState(() {
+        top += dy;
+        height = newHeight > 0 ? newHeight : 0;
+      });
+    }
+  }
+
+  void dragDown(double dx, double dy) {
+    final newHeight = height + dy;
+    if (newHeight + top < currentConstraints!.maxHeight - 70) {
+      setState(() {
+        height = newHeight > 0 ? newHeight : 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -73,10 +111,19 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 padding: const EdgeInsets.all(handlePadding),
                 child: GestureDetector(
                   onPanUpdate: (details) {
-                    setState(() {
-                      top += details.delta.dy;
-                      left += details.delta.dx;
-                    });
+                    final dx = details.delta.dx;
+                    final dy = details.delta.dy;
+                    final newWidth = width + dx;
+                    final newHeight = height + dy;
+                    if (left + dx >= 0 &&
+                        (newWidth + left) <= (currentConstraints!.maxWidth - 70) &&
+                        top + dy >= 0 &&
+                        (newHeight + top) <= (currentConstraints!.maxHeight - 70)) {
+                      setState(() {
+                        top += details.delta.dy;
+                        left += details.delta.dx;
+                      });
+                    }
                   },
                   child: Container(
                     height: height,
@@ -96,18 +143,8 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
                 onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height - dy;
-                    final newWidth = width - dx;
-                    if (top + dy > 0) {
-                      top += dy;
-                      height = newHeight > 0 ? newHeight : 0;
-                    }
-                    if (left + dx > 0) {
-                      left += dx;
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-                  });
+                  dragUp(dx, dy);
+                  dragLeft(dx, dy);
                 },
               ),
             ),
@@ -120,18 +157,8 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
                 onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height - dy;
-                    final newWidth = width + dx;
-                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-
-                    if (top + dy > 0) {
-                      height = newHeight > 0 ? newHeight : 0;
-                      top += dy;
-                    }
-                  });
+                  dragRight(dx, dy);
+                  dragUp(dx, dy);
                 },
               ),
             ),
@@ -145,14 +172,8 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
                 onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height + dy;
-                    height = newHeight > 0 ? newHeight : 0;
-                    final newWidth = width + dx;
-                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-                  });
+                  dragDown(dx, dy);
+                  dragRight(dx, dy);
                 },
               ),
             ),
@@ -164,15 +185,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 show: showManipulatingBalls,
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
-                onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height - dy;
-                    if (top + dy > 0) {
-                      height = newHeight > 0 ? newHeight : 0;
-                      top += dy;
-                    }
-                  });
-                },
+                onDrag: dragUp,
               ),
             ),
             // bottom center
@@ -183,12 +196,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 show: showManipulatingBalls,
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
-                onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height + dy;
-                    height = newHeight > 0 ? newHeight : 0;
-                  });
-                },
+                onDrag: dragDown,
               ),
             ),
             // bottom left
@@ -197,7 +205,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
               left: left + handlePadding,
               child: Text('${width.toStringAsFixed(1)} x ${height.toStringAsFixed(1)}'),
             ),
-            // size handle
+            // bottom left
             Positioned(
               top: top + height - ballDiameter / 2 + handlePadding,
               left: left - ballDiameter / 2 + handlePadding,
@@ -206,15 +214,8 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
                 onDrag: (dx, dy) {
-                  setState(() {
-                    final newHeight = height + dy;
-                    height = newHeight > 0 ? newHeight : 0;
-                    final newWidth = width - dx;
-                    if (left + dx > 0) {
-                      left += dx;
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-                  });
+                  dragLeft(dx, dy);
+                  dragDown(dx, dy);
                 },
               ),
             ),
@@ -226,15 +227,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 show: showManipulatingBalls,
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
-                onDrag: (dx, dy) {
-                  setState(() {
-                    final newWidth = width - dx;
-                    if (left + dx > 0) {
-                      left += dx;
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-                  });
-                },
+                onDrag: dragLeft,
               ),
             ),
             // center right
@@ -245,14 +238,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                 show: showManipulatingBalls,
                 onDragStart: onDragStart,
                 onDragEnd: onDragEnd,
-                onDrag: (dx, dy) {
-                  setState(() {
-                    final newWidth = width + dx;
-                    if (newWidth + left < currentConstraints!.maxWidth - 70) {
-                      width = newWidth > 0 ? newWidth : 0;
-                    }
-                  });
-                },
+                onDrag: dragRight,
               ),
             ),
             // Just here to detect mouse enter and exit around stage
