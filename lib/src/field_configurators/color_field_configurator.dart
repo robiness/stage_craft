@@ -13,6 +13,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   Widget builder(BuildContext context) {
     return ColorPickerField(
       color: value,
+      name: name,
       onChanged: (Color color) {
         value = color;
         notifyListeners();
@@ -26,16 +27,18 @@ class ColorPickerField extends StatelessWidget {
     super.key,
     required this.color,
     required this.onChanged,
+    required this.name,
   });
 
   final Color color;
   final ValueChanged<Color> onChanged;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(child: Text('color')),
+        Expanded(child: Text(name)),
         Expanded(
           child: GestureDetector(
             onTap: () async {
