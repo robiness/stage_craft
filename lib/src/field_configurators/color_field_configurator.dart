@@ -38,7 +38,7 @@ class ColorPickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Text(name)),
+        Expanded(child: Text('$name:')),
         Expanded(
           child: GestureDetector(
             onTap: () async {
