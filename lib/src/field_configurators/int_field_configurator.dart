@@ -8,6 +8,8 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
     required super.name,
   });
 
+  late final _textEditingController = TextEditingController(text: value.toString());
+
   @override
   Widget builder(BuildContext context) {
     return Row(
@@ -19,9 +21,10 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
           child: TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
-            controller: TextEditingController(text: value.toString()),
+            controller: _textEditingController,
             onChanged: (String newValue) {
               value = int.tryParse(newValue) ?? 0;
               notifyListeners();

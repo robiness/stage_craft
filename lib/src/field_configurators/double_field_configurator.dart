@@ -8,6 +8,8 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
     required super.name,
   });
 
+  late final _textEditingController = TextEditingController(text: value.toString());
+
   @override
   Widget builder(BuildContext context) {
     return Row(
@@ -19,9 +21,10 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
           child: TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
-            controller: TextEditingController(text: value.toString()),
+            controller: _textEditingController,
             onChanged: (String newValue) {
               value = double.tryParse(newValue) ?? 0;
               notifyListeners();

@@ -6,9 +6,9 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
   StringFieldConfigurator({
     required super.value,
     required super.name,
-  }) : _controller = TextEditingController(text: value);
+  });
 
-  final TextEditingController _controller;
+  late final TextEditingController _controller = TextEditingController(text: value);
 
   @override
   Widget builder(BuildContext context) {
