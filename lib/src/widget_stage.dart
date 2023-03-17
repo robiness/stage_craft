@@ -46,8 +46,8 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 300,
                   child: ConfigurationBar(
-                    fields: _stageController.selectedWidget?.fieldConfigurators.map((e) {
-                          return e.builder(context);
+                    fields: _stageController.selectedWidget?.fieldConfigurators.map((configurator) {
+                          return configurator.builder(context);
                         }).toList() ??
                         [],
                   ),
@@ -93,14 +93,14 @@ class ConfigurationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: fields.map(
-          (e) {
+          (field) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: e,
+              child: field,
             );
           },
         ).toList(),
