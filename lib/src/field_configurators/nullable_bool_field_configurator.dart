@@ -1,117 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
-/// Represents a nullable bool parameter for a widget on a [WidgetStage].
+/// A [FieldConfigurator] for the [WidgetStage] which can handle a nullable boolean parameter by
+/// offering to set one of the following values:
+/// - null
+/// - false
+/// - true
 class NullableBoolFieldConfigurator extends FieldConfigurator<bool?> {
   NullableBoolFieldConfigurator({
     required super.value,
     required super.name,
   });
 
+  int? _hoveredIndex;
+  final List<bool?> _options = [null, false, true];
+
   @override
   Widget builder(BuildContext context) {
-    return _ButtonRow(
-      value: value,
-      callbacks: [
-        () {
-          value = null;
-          notifyListeners();
-        },
-        () {
-          value = false;
-          notifyListeners();
-        },
-        () {
-          value = true;
-          notifyListeners();
-        },
-      ],
-    );
-  }
-}
-
-class _ButtonRow extends StatefulWidget {
-  const _ButtonRow({
-    required this.callbacks,
-    this.value,
-  });
-
-  final List<void Function()> callbacks;
-  final bool? value;
-
-  @override
-  State<_ButtonRow> createState() => _ButtonRowState();
-}
-
-class _ButtonRowState extends State<_ButtonRow> {
-  int? _hoveredIndex;
-
-  @override
-  Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildButton(index: 0, onTap: widget.callbacks.first),
-        _buildButton(index: 1, value: false, onTap: widget.callbacks[1]),
-        _buildButton(index: 2, value: true, onTap: widget.callbacks.last),
+        Expanded(child: Text('$name:')),
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: _options.map((option) {
+              return Expanded(
+                child: _buildOption(option: option),
+              );
+            }).toList(),
+          ),
+        )
       ],
     );
   }
 
-  Widget _buildButton({
-    required int index,
-    bool? value,
-    required void Function() onTap,
+  Widget _buildOption({
+    bool? option,
   }) {
-    final text = () {
-      if (index == 0) {
-        return 'null';
-      } else if (index == 1) {
-        return 'false';
-      }
-      return 'true';
-    }();
+    final index = _options.indexOf(option);
+    final isSelected = value == option;
+    final isHovered = _hoveredIndex == index;
 
-    final color = () {
-      final isHovered = _hoveredIndex == index;
-      if (isHovered) {
-        return Colors.grey[200]!;
+    final fillColor = () {
+      if (isSelected) {
+        return Colors.blue;
       }
-      return Colors.grey[600]!;
+      return isHovered ? Colors.blue.withOpacity(0.3) : Colors.transparent;
     }();
 
     final borderRadius = () {
-      const radius = Radius.circular(8);
-      if (index == 1) {
-        return null;
-      } else if (index == 0) {
+      const radius = Radius.circular(6);
+      if (option == null) {
         return const BorderRadius.only(topLeft: radius, bottomLeft: radius);
       }
-      return const BorderRadius.only(topRight: radius, bottomRight: radius);
+      return option ? const BorderRadius.only(topRight: radius, bottomRight: radius) : null;
     }();
 
     return MouseRegion(
       onEnter: (event) {
-        setState(() {
-          _hoveredIndex = index;
-        });
+        _hoveredIndex = index;
+        notifyListeners();
       },
       onExit: (event) {
-        setState(() {
-          _hoveredIndex = null;
-        });
+        _hoveredIndex = null;
+        notifyListeners();
       },
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        onTap: () {
+          value = option;
+          notifyListeners();
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            color: widget.value == value ? Colors.green : Colors.transparent,
-            border: Border.all(color: color),
+            color: fillColor,
+            border: Border.all(color: isSelected ? Colors.blue : Colors.grey[600]!),
             borderRadius: borderRadius,
           ),
-          child: Text(text),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(option.toString()),
+            ),
+          ),
         ),
       ),
     );

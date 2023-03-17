@@ -5,8 +5,9 @@ import 'package:widget_stage/widget_stage.dart';
 /// Defines everything you need to put it on the stage.
 class MyWidgetStageData implements WidgetStageData {
   MyWidgetStageData()
-      : _color = ColorFieldConfigurator(value: Colors.yellow, name: 'color'),
-        _text = StringFieldConfigurator(value: 'MyWidget', name: 'text'),
+      : _color = ColorFieldConfigurator(value: Colors.transparent, name: 'color'),
+        _text = StringFieldConfigurator(value: "My text", name: 'text'),
+        _nullableBool = NullableBoolFieldConfigurator(value: false, name: 'nullableBool'),
         _borderRadius = DoubleFieldConfigurator(value: 4, name: 'borderRadius');
 
   @override
@@ -15,6 +16,7 @@ class MyWidgetStageData implements WidgetStageData {
   final ColorFieldConfigurator _color;
   final StringFieldConfigurator _text;
   final DoubleFieldConfigurator _borderRadius;
+  final NullableBoolFieldConfigurator _nullableBool;
 
   @override
   Widget widgetBuilder(BuildContext context) {
@@ -22,6 +24,7 @@ class MyWidgetStageData implements WidgetStageData {
       color: _color.value,
       text: _text.value,
       borderRadius: _borderRadius.value,
+      isTrue: _nullableBool.value,
     );
   }
 
@@ -31,6 +34,7 @@ class MyWidgetStageData implements WidgetStageData {
       _color,
       _text,
       _borderRadius,
+      _nullableBool,
     ];
   }
 }

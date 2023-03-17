@@ -5,12 +5,14 @@ class MyWidget extends StatelessWidget {
     super.key,
     required this.color,
     required this.text,
+    this.isTrue,
     this.borderRadius = 8,
   });
 
   final Color color;
   final double? borderRadius;
   final String text;
+  final bool? isTrue;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class MyWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(text),
+          child: Text("$text is $isTrue"),
         ),
       ),
     );
