@@ -7,16 +7,16 @@ class MyWidgetStageData implements WidgetStageData {
   MyWidgetStageData()
       : _color = ColorFieldConfigurator(value: Colors.transparent, name: 'color'),
         _text = StringFieldConfigurator(value: "My text", name: 'text'),
-        _nullableBool = NullableBoolFieldConfigurator(value: false, name: 'nullableBool'),
-        _borderRadius = DoubleFieldConfigurator(value: 4, name: 'borderRadius');
+        _nullableBool = BoolFieldConfiguratorNullable(value: false, name: 'nullableBool'),
+        _borderRadius = DoubleFieldConfiguratorNullable(value: 4, name: 'borderRadius');
 
   @override
   String get name => 'MyWidget';
 
   final ColorFieldConfigurator _color;
   final StringFieldConfigurator _text;
-  final DoubleFieldConfigurator _borderRadius;
-  final NullableBoolFieldConfigurator _nullableBool;
+  final BoolFieldConfiguratorNullable _nullableBool;
+  final DoubleFieldConfiguratorNullable _borderRadius;
 
   @override
   Widget widgetBuilder(BuildContext context) {

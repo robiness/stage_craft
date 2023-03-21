@@ -44,7 +44,7 @@ class _WidgetStageState extends State<WidgetStage> {
                   thickness: 1,
                 ),
                 SizedBox(
-                  width: 300,
+                  width: 400,
                   child: ConfigurationBar(
                     fields: _stageController.selectedWidget?.fieldConfigurators.map((configurator) {
                           return configurator.builder(context);
@@ -123,6 +123,11 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
   String name;
 
   Widget builder(BuildContext context);
+
+  void updateValue(T value) {
+    this.value = value;
+    notifyListeners();
+  }
 }
 
 class StageController extends ChangeNotifier {
