@@ -22,9 +22,9 @@ class EnumFieldConfiguratorNullable<T extends Enum> extends FieldConfigurator<T?
           value: value,
           items: enumValues
               .map(
-                (e) => DropdownMenuItem<T>(
-                  value: e,
-                  child: Text(e.name),
+                (item) => DropdownMenuItem<T>(
+                  value: item,
+                  child: Text(item.name),
                 ),
               )
               .toList(),
