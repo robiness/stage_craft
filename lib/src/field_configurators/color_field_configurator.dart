@@ -96,6 +96,7 @@ class ColorPickerField extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(8),
+            border: color == Colors.transparent ? Border.all(color: Colors.grey[600]!) : null,
           ),
         ),
       ),
