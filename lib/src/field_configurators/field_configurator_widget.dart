@@ -26,14 +26,14 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(child: child),
               if (isNullable) ...[
                 const SizedBox(width: 4.0),
                 TextButton(
                   onPressed: onNullTapped,
                   child: const Text('null'),
                 ),
-              ]
+              ],
+              Expanded(child: child),
             ],
           ),
         ),

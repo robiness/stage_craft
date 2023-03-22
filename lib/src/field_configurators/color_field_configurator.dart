@@ -43,7 +43,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   }
 }
 
-class ColorPickerField extends StatelessWidget {
+class ColorPickerField extends StatefulWidget {
   const ColorPickerField({
     super.key,
     required this.color,
@@ -58,13 +58,26 @@ class ColorPickerField extends StatelessWidget {
   final bool isNullable;
 
   @override
+  State<ColorPickerField> createState() => _ColorPickerFieldState();
+}
+
+class _ColorPickerFieldState extends State<ColorPickerField> {
+  Color? _initialColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialColor = widget.color;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FieldConfiguratorWidget(
       onNullTapped: () {
-        onChanged(null);
+        widget.onChanged(null);
       },
-      name: name,
-      isNullable: isNullable,
+      name: widget.name,
+      isNullable: widget.isNullable,
       child: GestureDetector(
         onTap: () async {
           showDialog(
@@ -74,11 +87,18 @@ class ColorPickerField extends StatelessWidget {
                 title: const Text('Pick a color!'),
                 content: SingleChildScrollView(
                   child: ColorPicker(
-                    pickerColor: color ?? Colors.transparent,
-                    onColorChanged: onChanged,
+                    pickerColor: widget.color ?? Colors.transparent,
+                    onColorChanged: widget.onChanged,
                   ),
                 ),
                 actions: <Widget>[
+                  ElevatedButton(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      widget.onChanged.call(_initialColor);
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   ElevatedButton(
                     child: const Text('Accept'),
                     onPressed: () {
@@ -94,9 +114,9 @@ class ColorPickerField extends StatelessWidget {
           height: 48,
           width: 48,
           decoration: BoxDecoration(
-            color: color,
+            color: widget.color,
             borderRadius: BorderRadius.circular(8),
-            border: color == Colors.transparent ? Border.all(color: Colors.grey[600]!) : null,
+            border: widget.color == Colors.transparent ? Border.all(color: Colors.grey[600]!) : null,
           ),
         ),
       ),
