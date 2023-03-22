@@ -11,7 +11,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
 
   @override
   Widget build(BuildContext context) {
-    return ColorPickerField(
+    return ColorConfigurationWidget(
       value: value,
       updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
@@ -29,7 +29,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
 
   @override
   Widget build(BuildContext context) {
-    return ColorPickerField(
+    return ColorConfigurationWidget(
       value: value,
       updateValue: (Color? color) {
         value = color;
@@ -39,17 +39,24 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   }
 }
 
-class ColorPickerField extends ConfigurationWidget<Color?> {
-  const ColorPickerField({
+class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
+  const ColorConfigurationWidget({
     super.key,
     required super.value,
     required super.updateValue,
   });
 
   @override
+  State<ColorConfigurationWidget> createState() => _ColorConfigurationFieldState();
+}
+
+class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
+  late Color? color = widget.value;
+
+  @override
   Widget build(BuildContext context) {
     final border = () {
-      if (value == Colors.transparent || value == null) {
+      if (color == Colors.transparent || color == null) {
         return Border.all(color: Colors.grey[600]!);
       }
     }();
@@ -62,14 +69,23 @@ class ColorPickerField extends ConfigurationWidget<Color?> {
               title: const Text('Pick a color!'),
               content: SingleChildScrollView(
                 child: ColorPicker(
-                  pickerColor: value ?? Colors.transparent,
-                  onColorChanged: updateValue,
+                  pickerColor: widget.value ?? Colors.transparent,
+                  onColorChanged: (newColor) {
+                    color = newColor;
+                  },
                 ),
               ),
               actions: <Widget>[
                 ElevatedButton(
+                  child: const Text('Abort'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
                   child: const Text('Accept'),
                   onPressed: () {
+                    widget.updateValue(color);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -82,7 +98,7 @@ class ColorPickerField extends ConfigurationWidget<Color?> {
         height: 48,
         width: 48,
         decoration: BoxDecoration(
-          color: value,
+          color: widget.value,
           borderRadius: BorderRadius.circular(8),
           border: border,
         ),
