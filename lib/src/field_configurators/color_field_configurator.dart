@@ -48,6 +48,11 @@ class ColorPickerField extends ConfigurationWidget<Color?> {
 
   @override
   Widget build(BuildContext context) {
+    final border = () {
+      if (value == Colors.transparent || value == null) {
+        return Border.all(color: Colors.grey[600]!);
+      }
+    }();
     return GestureDetector(
       onTap: () async {
         showDialog(
@@ -79,6 +84,7 @@ class ColorPickerField extends ConfigurationWidget<Color?> {
         decoration: BoxDecoration(
           color: value,
           borderRadius: BorderRadius.circular(8),
+          border: border,
         ),
       ),
     );
