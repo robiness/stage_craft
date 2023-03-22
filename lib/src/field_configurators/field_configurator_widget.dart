@@ -17,24 +17,25 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Expanded(
+          child: Text('$name:'),
+        ),
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('$name:'),
-              if (isNullable)
+              if (isNullable) ...[
+                const SizedBox(width: 4.0),
                 TextButton(
                   onPressed: onNullTapped,
                   child: const Text('null'),
                 ),
+              ],
+              Expanded(child: child),
             ],
           ),
-        ),
-        Expanded(
-          child: child,
         ),
       ],
     );
