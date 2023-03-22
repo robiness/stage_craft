@@ -72,6 +72,11 @@ class _ColorPickerFieldState extends State<ColorPickerField> {
 
   @override
   Widget build(BuildContext context) {
+    final border = () {
+      if (widget.color == Colors.transparent || widget.color == null) {
+        return Border.all(color: Colors.grey[600]!);
+      }
+    }();
     return FieldConfiguratorWidget(
       onNullTapped: () {
         widget.onChanged(null);
@@ -116,7 +121,7 @@ class _ColorPickerFieldState extends State<ColorPickerField> {
           decoration: BoxDecoration(
             color: widget.color,
             borderRadius: BorderRadius.circular(8),
-            border: widget.color == Colors.transparent ? Border.all(color: Colors.grey[600]!) : null,
+            border: border,
           ),
         ),
       ),
