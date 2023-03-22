@@ -10,12 +10,10 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return ColorPickerField(
-      color: value,
-      name: name,
-      isNullable: false,
-      onChanged: (Color? color) {
+  Widget build(BuildContext context) {
+    return ColorConfigurationWidget(
+      value: value,
+      updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
       },
     );
@@ -30,12 +28,10 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return ColorPickerField(
-      color: value,
-      name: name,
-      isNullable: true,
-      onChanged: (Color? color) {
+  Widget build(BuildContext context) {
+    return ColorConfigurationWidget(
+      value: value,
+      updateValue: (Color? color) {
         value = color;
         notifyListeners();
       },
@@ -43,86 +39,68 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   }
 }
 
-class ColorPickerField extends StatefulWidget {
-  const ColorPickerField({
+class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
+  const ColorConfigurationWidget({
     super.key,
-    required this.color,
-    required this.onChanged,
-    required this.name,
-    required this.isNullable,
+    required super.value,
+    required super.updateValue,
   });
 
-  final Color? color;
-  final ValueChanged<Color?> onChanged;
-  final String name;
-  final bool isNullable;
-
   @override
-  State<ColorPickerField> createState() => _ColorPickerFieldState();
+  State<ColorConfigurationWidget> createState() => _ColorConfigurationFieldState();
 }
 
-class _ColorPickerFieldState extends State<ColorPickerField> {
-  Color? _initialColor;
-
-  @override
-  void initState() {
-    super.initState();
-    _initialColor = widget.color;
-  }
+class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
+  late Color? color = widget.value;
 
   @override
   Widget build(BuildContext context) {
     final border = () {
-      if (widget.color == Colors.transparent || widget.color == null) {
+      if (color == Colors.transparent || color == null) {
         return Border.all(color: Colors.grey[600]!);
       }
     }();
-    return FieldConfiguratorWidget(
-      onNullTapped: () {
-        widget.onChanged(null);
-      },
-      name: widget.name,
-      isNullable: widget.isNullable,
-      child: GestureDetector(
-        onTap: () async {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Pick a color!'),
-                content: SingleChildScrollView(
-                  child: ColorPicker(
-                    pickerColor: widget.color ?? Colors.transparent,
-                    onColorChanged: widget.onChanged,
-                  ),
+    return GestureDetector(
+      onTap: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Pick a color!'),
+              content: SingleChildScrollView(
+                child: ColorPicker(
+                  pickerColor: widget.value ?? Colors.transparent,
+                  onColorChanged: (newColor) {
+                    color = newColor;
+                  },
                 ),
-                actions: <Widget>[
-                  ElevatedButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      widget.onChanged.call(_initialColor);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: const Text('Accept'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Container(
-          height: 48,
-          width: 48,
-          decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: BorderRadius.circular(8),
-            border: border,
-          ),
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('Abort'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('Accept'),
+                  onPressed: () {
+                    widget.updateValue(color);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        height: 48,
+        width: 48,
+        decoration: BoxDecoration(
+          color: widget.value,
+          borderRadius: BorderRadius.circular(8),
+          border: border,
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
 import 'package:widget_stage/src/widget_stage.dart';
 
+/// Represents a nullable enum parameter for a widget on a [WidgetStage].
 class EnumFieldConfiguratorNullable<T extends Enum> extends FieldConfigurator<T?> {
   EnumFieldConfiguratorNullable({
     required super.value,
@@ -12,33 +13,16 @@ class EnumFieldConfiguratorNullable<T extends Enum> extends FieldConfigurator<T?
   final List<T> enumValues;
 
   @override
-  Widget builder(BuildContext context) {
-    return FieldConfiguratorWidget(
-      onNullTapped: () => updateValue(null),
-      name: name,
-      isNullable: true,
-      child: Material(
-        child: DropdownButtonFormField<T>(
-          value: value,
-          items: enumValues
-              .map(
-                (item) => DropdownMenuItem<T>(
-                  value: item,
-                  child: Text(item.name),
-                ),
-              )
-              .toList(),
-          onChanged: (newValue) {
-            if (newValue == null) return;
-            value = newValue;
-            notifyListeners();
-          },
-        ),
-      ),
+  Widget build(BuildContext context) {
+    return EnumFieldConfigurationWidget(
+      enumValues: enumValues,
+      value: value,
+      updateValue: updateValue,
     );
   }
 }
 
+/// Represents a T parameter for a widget on a [WidgetStage].
 class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
   EnumFieldConfigurator({
     required super.value,
@@ -49,27 +33,42 @@ class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
   final List<T> enumValues;
 
   @override
-  Widget builder(BuildContext context) {
-    return FieldConfiguratorWidget(
-      name: name,
-      isNullable: false,
-      child: Material(
-        child: DropdownButtonFormField<T>(
-          value: value,
-          items: enumValues
-              .map(
-                (e) => DropdownMenuItem<T>(
-                  value: e,
-                  child: Text(e.name),
-                ),
-              )
-              .toList(),
-          onChanged: (newValue) {
-            if (newValue == null) return;
-            value = newValue;
-            notifyListeners();
-          },
-        ),
+  Widget build(BuildContext context) {
+    return EnumFieldConfigurationWidget(
+      enumValues: enumValues,
+      value: value,
+      updateValue: (value) {
+        if (value != null) {
+          updateValue(value);
+        }
+      },
+    );
+  }
+}
+
+class EnumFieldConfigurationWidget<T extends Enum> extends ConfigurationWidget<T?> {
+  const EnumFieldConfigurationWidget({
+    required super.value,
+    required super.updateValue,
+    required this.enumValues,
+  });
+
+  final List<T> enumValues;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: DropdownButtonFormField<T>(
+        value: value,
+        items: enumValues
+            .map(
+              (item) => DropdownMenuItem<T>(
+                value: item,
+                child: Text(item.name),
+              ),
+            )
+            .toList(),
+        onChanged: updateValue,
       ),
     );
   }
