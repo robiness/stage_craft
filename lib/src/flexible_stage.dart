@@ -113,19 +113,10 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                   padding: const EdgeInsets.all(handlePadding),
                   child: GestureDetector(
                     onPanUpdate: (details) {
-                      final dx = details.delta.dx;
-                      final dy = details.delta.dy;
-                      final newWidth = width + dx;
-                      final newHeight = height + dy;
-                      if (left + dx >= 0 &&
-                          (newWidth + left) <= (currentConstraints!.maxWidth - 70) &&
-                          top + dy >= 0 &&
-                          (newHeight + top) <= (currentConstraints!.maxHeight - 70)) {
-                        setState(() {
-                          top += details.delta.dy;
-                          left += details.delta.dx;
-                        });
-                      }
+                      setState(() {
+                        top += details.delta.dy;
+                        left += details.delta.dx;
+                      });
                     },
                     child: Container(
                       height: height,
