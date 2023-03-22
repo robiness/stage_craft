@@ -46,10 +46,10 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsetsGeometry> {
 
   EdgeInsetsGeometry createEdgeInsets(List<String> stringList) {
     return EdgeInsets.only(
-      left: double.parse(stringList[0]),
-      top: double.parse(stringList[1]),
-      right: double.parse(stringList[2]),
-      bottom: double.parse(stringList[3]),
+      left: double.tryParse(stringList[0]) ?? 0.0,
+      top: double.tryParse(stringList[1]) ?? 0.0,
+      right: double.tryParse(stringList[2]) ?? 0.0,
+      bottom: double.tryParse(stringList[3]) ?? 0.0,
     );
   }
 
