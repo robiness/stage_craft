@@ -126,7 +126,7 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
 
   String name;
 
-  bool get nullable => null is T;
+  bool get isNullable => null is T;
 
   void updateValue(T value) {
     this.value = value;
