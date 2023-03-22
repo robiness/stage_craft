@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:widget_stage/src/widget_stage.dart';
 
 class FieldConfiguratorWidget<T> extends StatelessWidget {
   const FieldConfiguratorWidget({
     super.key,
-    required this.name,
+    required this.fieldConfigurator,
     required this.child,
-    required this.isNullable,
-    this.onNullTapped,
   });
 
-  final String name;
   final Widget child;
-  final bool isNullable;
-  final VoidCallback? onNullTapped;
+  final FieldConfigurator fieldConfigurator;
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +17,16 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Text('$name:'),
+          child: Text('${fieldConfigurator.name}:'),
         ),
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (isNullable) ...[
+              if (fieldConfigurator.nullable) ...[
                 const SizedBox(width: 4.0),
                 TextButton(
-                  onPressed: onNullTapped,
+                  onPressed: () => fieldConfigurator.updateValue(null),
                   child: const Text('null'),
                 ),
               ],
@@ -40,4 +37,26 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
       ],
     );
   }
+}
+
+abstract class ConfigurationWidget<T> extends StatelessWidget {
+  const ConfigurationWidget({
+    super.key,
+    required this.value,
+    required this.updateValue,
+  });
+
+  final T value;
+  final void Function(T newValue) updateValue;
+}
+
+abstract class StatefulConfigurationWidget<T> extends StatefulWidget {
+  const StatefulConfigurationWidget({
+    super.key,
+    required this.value,
+    required this.updateValue,
+  });
+
+  final T value;
+  final void Function(T newValue) updateValue;
 }

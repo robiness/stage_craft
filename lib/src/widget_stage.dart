@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
 import 'package:widget_stage/src/flexible_stage.dart';
 import 'package:widget_stage/widget_stage.dart';
 
@@ -47,7 +48,10 @@ class _WidgetStageState extends State<WidgetStage> {
                   width: 400,
                   child: ConfigurationBar(
                     fields: _stageController.selectedWidget?.fieldConfigurators.map((configurator) {
-                          return configurator.builder(context);
+                          return FieldConfiguratorWidget(
+                            fieldConfigurator: configurator,
+                            child: configurator.build(context),
+                          );
                         }).toList() ??
                         [],
                   ),
@@ -122,12 +126,14 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
 
   String name;
 
-  Widget builder(BuildContext context);
+  bool get nullable => null is T;
 
   void updateValue(T value) {
     this.value = value;
     notifyListeners();
   }
+
+  Widget build(BuildContext context);
 }
 
 class StageController extends ChangeNotifier {
