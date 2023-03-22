@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
 import 'package:widget_stage/src/widget_stage.dart';
 
-/// Represents a nullable T parameter for a widget on a [WidgetStage].
+/// Represents a nullable enum parameter for a widget on a [WidgetStage].
 class EnumFieldConfiguratorNullable<T extends Enum> extends FieldConfigurator<T?> {
   EnumFieldConfiguratorNullable({
     required super.value,
