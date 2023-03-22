@@ -4,9 +4,11 @@ class MyOtherWidget extends StatelessWidget {
   const MyOtherWidget({
     super.key,
     required this.text,
+    this.padding,
   });
 
   final String text;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class MyOtherWidget extends StatelessWidget {
         border: Border.all(width: 2),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: padding ?? const EdgeInsets.all(8.0),
         child: Row(
           children: [
             Text(text),
