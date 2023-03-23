@@ -31,10 +31,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
       value: value,
-      updateValue: (Color? color) {
-        value = color;
-        notifyListeners();
-      },
+      updateValue: updateValue,
     );
   }
 }
@@ -55,11 +52,6 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final border = () {
-      if (color == Colors.transparent || color == null) {
-        return Border.all(color: Colors.grey[600]!);
-      }
-    }();
     return GestureDetector(
       onTap: () async {
         showDialog(
@@ -69,7 +61,7 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
               title: const Text('Pick a color!'),
               content: SingleChildScrollView(
                 child: ColorPicker(
-                  pickerColor: widget.value ?? Colors.transparent,
+                  pickerColor: widget.value ?? Colors.white,
                   onColorChanged: (newColor) {
                     color = newColor;
                   },
@@ -94,15 +86,72 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
           },
         );
       },
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          color: widget.value,
-          borderRadius: BorderRadius.circular(8),
-          border: border,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          height: 48,
+          width: 48,
+          foregroundDecoration: BoxDecoration(
+            // The actual color drawn over the chessboard pattern
+            color: widget.value,
+          ),
+          // The chessboard pattern
+          child: const CustomPaint(
+            foregroundPainter: ChessBoardPainter(
+              boxSize: 8,
+              // The color of the chessboard pattern
+              color: Colors.grey,
+            ),
+            child: ColoredBox(
+              // Background of the chessboard pattern
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
+  }
+}
+
+class ChessBoardPainter extends CustomPainter {
+  const ChessBoardPainter({
+    required this.color,
+    this.boxSize = 20,
+  });
+
+  final double boxSize;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.fill;
+
+    final maxVerticalBoxes = size.height / boxSize + 1;
+    final maxHorizontalBoxes = size.width / boxSize + 1;
+
+    for (int verticalBoxIndex = 0; verticalBoxIndex < maxVerticalBoxes; verticalBoxIndex++) {
+      for (int horizontalBoxIndex = 0;
+          horizontalBoxIndex < maxHorizontalBoxes;
+          horizontalBoxIndex = horizontalBoxIndex + 2) {
+        // Add a boxSize offset for every second row
+        final offset = (verticalBoxIndex % 2) * boxSize;
+        canvas.drawRect(
+          Rect.fromLTWH(
+            horizontalBoxIndex * boxSize + offset,
+            verticalBoxIndex * boxSize,
+            boxSize,
+            boxSize,
+          ),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

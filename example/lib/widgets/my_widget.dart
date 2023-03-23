@@ -9,7 +9,7 @@ class MyWidget extends StatelessWidget {
     this.borderRadius = 8,
   });
 
-  final Color color;
+  final Color? color;
   final double? borderRadius;
   final String text;
   final bool? isTrue;
@@ -18,7 +18,7 @@ class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: color,
+        color: color ?? Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius ?? 0),
       ),
       child: Container(

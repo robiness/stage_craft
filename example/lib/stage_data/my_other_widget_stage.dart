@@ -2,7 +2,7 @@ import 'package:example/widgets/my_other_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
-class MyOtherWidgetStageData implements WidgetStageData {
+class MyOtherWidgetStageData extends WidgetStageData {
   MyOtherWidgetStageData() : _text = StringFieldConfigurator(value: 'MyOtherWidget', name: 'text');
 
   final StringFieldConfigurator _text;

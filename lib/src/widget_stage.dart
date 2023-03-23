@@ -37,6 +37,7 @@ class _WidgetStageState extends State<WidgetStage> {
               children: [
                 Expanded(
                   child: Stage(
+                    stageController: _stageController,
                     child: _stageController.selectedWidget?.widgetBuilder(context) ?? const SizedBox(),
                   ),
                 ),
@@ -70,14 +71,17 @@ class Stage extends StatelessWidget {
   const Stage({
     super.key,
     required this.child,
+    required this.stageController,
   });
 
   final Widget child;
+  final StageController stageController;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: FlexibleStage(
+        stageController: stageController,
         child: Center(
           child: child,
         ),
