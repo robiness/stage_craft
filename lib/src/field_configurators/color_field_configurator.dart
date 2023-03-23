@@ -31,10 +31,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
       value: value,
-      updateValue: (Color? color) {
-        value = color;
-        notifyListeners();
-      },
+      updateValue: updateValue,
     );
   }
 }
@@ -55,11 +52,6 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final border = () {
-      if (color == Colors.transparent || color == null) {
-        return Border.all(color: Colors.grey[600]!);
-      }
-    }();
     return GestureDetector(
       onTap: () async {
         showDialog(
@@ -69,7 +61,7 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
               title: const Text('Pick a color!'),
               content: SingleChildScrollView(
                 child: ColorPicker(
-                  pickerColor: widget.value ?? Colors.transparent,
+                  pickerColor: widget.value ?? Colors.white,
                   onColorChanged: (newColor) {
                     color = newColor;
                   },
@@ -95,14 +87,62 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
         );
       },
       child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          color: widget.value,
-          borderRadius: BorderRadius.circular(8),
-          border: border,
-        ),
-      ),
+          height: 48,
+          width: 48,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: CustomPaint(
+              painter: ChessBoardPainter(
+                boxSize: 8,
+                color: widget.value,
+                offset: Offset(-4, -8),
+              ),
+            ),
+          )),
     );
+  }
+}
+
+class ChessBoardPainter extends CustomPainter {
+  const ChessBoardPainter({
+    this.boxSize = 20,
+    this.offset = Offset.zero,
+    this.color,
+  });
+
+  final double boxSize;
+  final Offset offset;
+  final Color? color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    print(color);
+    final paint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+
+    for (int vertical = 0; vertical < (size.height / boxSize) + 1; vertical++) {
+      for (int horizontal = 0; horizontal < (size.width / boxSize) + 1; horizontal = horizontal + 2) {
+        canvas.drawRect(
+          Rect.fromLTWH(
+            (horizontal.toDouble() * boxSize + boxSize * (vertical % 2)) + offset.dx,
+            (vertical.toDouble() * boxSize) + offset.dy,
+            boxSize,
+            boxSize,
+          ),
+          paint,
+        );
+      }
+    }
+    canvas.drawColor(color ?? Colors.grey, BlendMode.hue);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    print('should repaint');
+    return true;
   }
 }
