@@ -86,50 +86,61 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
           },
         );
       },
-      child: Container(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
           height: 48,
           width: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+          foregroundDecoration: BoxDecoration(
+            // The actual color drawn over the chessboard pattern
+            color: widget.value,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: CustomPaint(
-              painter: ChessBoardPainter(
-                boxSize: 8,
-                color: widget.value,
-                offset: Offset(-4, -8),
-              ),
+          // The chessboard pattern
+          child: const CustomPaint(
+            foregroundPainter: ChessBoardPainter(
+              boxSize: 8,
+              // The color of the chessboard pattern
+              color: Colors.grey,
             ),
-          )),
+            child: ColoredBox(
+              // Background of the chessboard pattern
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
 class ChessBoardPainter extends CustomPainter {
   const ChessBoardPainter({
+    required this.color,
     this.boxSize = 20,
-    this.offset = Offset.zero,
-    this.color,
   });
 
   final double boxSize;
-  final Offset offset;
-  final Color? color;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(color);
     final paint = Paint()
-      ..color = Colors.white
+      ..color = Colors.grey
       ..style = PaintingStyle.fill;
 
-    for (int vertical = 0; vertical < (size.height / boxSize) + 1; vertical++) {
-      for (int horizontal = 0; horizontal < (size.width / boxSize) + 1; horizontal = horizontal + 2) {
+    final maxVerticalBoxes = size.height / boxSize + 1;
+    final maxHorizontalBoxes = size.width / boxSize + 1;
+
+    for (int verticalBoxIndex = 0; verticalBoxIndex < maxVerticalBoxes; verticalBoxIndex++) {
+      for (int horizontalBoxIndex = 0;
+          horizontalBoxIndex < maxHorizontalBoxes;
+          horizontalBoxIndex = horizontalBoxIndex + 2) {
+        // Add a boxSize offset for every second row
+        final offset = (verticalBoxIndex % 2) * boxSize;
         canvas.drawRect(
           Rect.fromLTWH(
-            (horizontal.toDouble() * boxSize + boxSize * (vertical % 2)) + offset.dx,
-            (vertical.toDouble() * boxSize) + offset.dy,
+            horizontalBoxIndex * boxSize + offset,
+            verticalBoxIndex * boxSize,
             boxSize,
             boxSize,
           ),
@@ -137,12 +148,10 @@ class ChessBoardPainter extends CustomPainter {
         );
       }
     }
-    canvas.drawColor(color ?? Colors.grey, BlendMode.hue);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    print('should repaint');
     return true;
   }
 }
