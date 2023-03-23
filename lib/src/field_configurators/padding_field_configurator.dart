@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
 import 'package:widget_stage/src/widget_stage.dart';
 
@@ -29,9 +30,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
       value: value,
-      updateValue: (value) {
-        updateValue(value ?? EdgeInsets.zero);
-      },
+      updateValue: (value) => updateValue(value ?? EdgeInsets.zero),
     );
   }
 }
@@ -48,73 +47,120 @@ class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeIn
 }
 
 class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurationWidget> {
-  late final Map<String, TextEditingController> _controllerMap = {
-    "left": TextEditingController(text: widget.value?.left.toString()),
-    "top": TextEditingController(text: widget.value?.top.toString()),
-    "right": TextEditingController(text: widget.value?.right.toString()),
-    "bottom": TextEditingController(text: widget.value?.bottom.toString()),
-  };
-
-  EdgeInsets createEdgeInsets() {
-    final controllers = _controllerMap.values.toList();
-    final doubles = controllers.map((controller) => double.tryParse(controller.text) ?? 0.0).toList();
-    return EdgeInsets.only(
-      left: doubles.first,
-      top: doubles[1],
-      right: doubles[2],
-      bottom: doubles.last,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final textFields = _controllerMap.entries
-        .map(
-          (entry) => _buildTextField(
-            label: entry.key,
-            controller: entry.value,
-          ),
-        )
-        .toList();
-
+    final padding = widget.value ?? EdgeInsets.zero;
     return Column(
       children: [
+        SizedBox(
+          width: 80,
+          child: _PaddingField(
+            value: widget.value?.top,
+            onChanged: (value) {
+              setState(() {
+                final newValue = padding.copyWith(top: value);
+                widget.updateValue(newValue);
+              });
+            },
+            label: 'top',
+          ),
+        ),
+        const SizedBox(height: 8.0),
         Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: textFields.first,
+            SizedBox(
+              width: 60,
+              child: _PaddingField(
+                value: widget.value?.left,
+                onChanged: (value) {
+                  setState(() {
+                    final newValue = padding.copyWith(left: value);
+                    widget.updateValue(newValue);
+                  });
+                },
+                label: 'left',
+              ),
             ),
             const SizedBox(width: 8.0),
-            Expanded(
-              child: textFields[1],
+            SizedBox(
+              width: 60,
+              child: _PaddingField(
+                value: widget.value?.right,
+                onChanged: (value) {
+                  setState(() {
+                    final newValue = padding.copyWith(right: value);
+                    widget.updateValue(newValue);
+                  });
+                },
+                label: 'right',
+              ),
             ),
           ],
         ),
         const SizedBox(height: 8.0),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: textFields[2],
-            ),
-            const SizedBox(width: 8.0),
-            Expanded(
-              child: textFields.last,
-            ),
-          ],
+        SizedBox(
+          width: 80,
+          child: _PaddingField(
+            value: widget.value?.bottom,
+            onChanged: (value) {
+              setState(() {
+                final newValue = padding.copyWith(bottom: value);
+                widget.updateValue(newValue);
+              });
+            },
+            label: 'bottom',
+          ),
         ),
       ],
     );
   }
+}
 
-  TextField _buildTextField({
-    required String label,
-    required TextEditingController controller,
-  }) {
+class _PaddingField extends StatefulWidget {
+  const _PaddingField({
+    required this.onChanged,
+    required this.label,
+    required this.value,
+  });
+
+  final String label;
+
+  final double? value;
+  final void Function(double) onChanged;
+
+  @override
+  State<_PaddingField> createState() => _PaddingFieldState();
+}
+
+class _PaddingFieldState extends State<_PaddingField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value?.toString());
+  }
+
+  @override
+  void didUpdateWidget(covariant _PaddingField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value == null && oldWidget.value != null) {
+      setState(() {
+        _controller.clear();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return TextField(
+      inputFormatters: <TextInputFormatter>[
+        // Allow only digits, dot and 1 decimal
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
+      ],
       decoration: InputDecoration(
-        labelText: label,
+        labelText: widget.label,
         isDense: true,
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
@@ -122,9 +168,9 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
           ),
         ),
       ),
-      controller: controller,
-      onChanged: (String newValue) {
-        widget.updateValue(createEdgeInsets());
+      controller: _controller,
+      onChanged: (value) {
+        widget.onChanged.call(double.tryParse(value) ?? 0);
       },
     );
   }
