@@ -48,14 +48,19 @@ class _ResizableWidgetState extends State<FlexibleStage> {
         setState(() {
           height = widget.stageController.selectedWidget!.stageSize!.height;
           width = widget.stageController.selectedWidget!.stageSize!.width;
+          centerStage();
         });
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        top = currentConstraints!.maxHeight / 2 - height / 2;
-        left = currentConstraints!.maxWidth / 2 - width / 2;
-      });
+      centerStage();
+    });
+  }
+
+  void centerStage() {
+    setState(() {
+      top = currentConstraints!.maxHeight / 2 - height / 2;
+      left = currentConstraints!.maxWidth / 2 - width / 2;
     });
   }
 
