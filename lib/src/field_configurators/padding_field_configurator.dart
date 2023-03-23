@@ -3,153 +3,93 @@ import 'package:widget_stage/src/field_configurators/field_configurator_widget.d
 import 'package:widget_stage/src/widget_stage.dart';
 
 /// Represents a String parameter for a widget on a [WidgetStage].
-class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsetsGeometry> {
+class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   PaddingFieldConfigurator({
     required super.value,
     required super.name,
   });
 
-  late final TextEditingController _leftController = TextEditingController(text: convertToExplicitEdgeInsets(value)[0]);
-  late final TextEditingController _topController = TextEditingController(text: convertToExplicitEdgeInsets(value)[1]);
-  late final TextEditingController _rightController =
-      TextEditingController(text: convertToExplicitEdgeInsets(value)[2]);
-  late final TextEditingController _bottomController =
-      TextEditingController(text: convertToExplicitEdgeInsets(value)[3]);
+  late final Map<String, TextEditingController> _controllerMap = {
+    "left": TextEditingController(text: value.left.toString()),
+    "top": TextEditingController(text: value.top.toString()),
+    "right": TextEditingController(text: value.right.toString()),
+    "bottom": TextEditingController(text: value.bottom.toString()),
+  };
 
-  List<String> convertToExplicitEdgeInsets(EdgeInsetsGeometry? padding) {
-    if (padding == null || padding == EdgeInsets.zero) {
-      return ['0.0', '0.0', '0.0', '0.0'];
-    }
-
-    final RegExp edgeInsetsPattern = RegExp(r'EdgeInsets\((\d+(\.\d+)?),(\d+(\.\d+)?),(\d+(\.\d+)?),(\d+(\.\d+)?)\)');
-    final RegExp edgeInsetsAllPattern = RegExp(r'EdgeInsets\.all\((\d+(\.\d+)?)\)');
-
-    final String input = padding.toString();
-
-    if (edgeInsetsPattern.hasMatch(input)) {
-      final Match match = edgeInsetsPattern.firstMatch(input)!;
-      return [match.group(1)!, match.group(3)!, match.group(5)!, match.group(7)!];
-    } else if (edgeInsetsAllPattern.hasMatch(input)) {
-      final RegExpMatch? match = edgeInsetsAllPattern.firstMatch(input);
-      if (match != null) {
-        final String? value = match.group(1);
-        if (value != null) {
-          return [value, value, value, value];
-        }
-      }
-    }
-
-    // Return a list with "0.0" values in case of an invalid input format
-    // or if extraction of EdgeInsets.all value fails
-    return ['0.0', '0.0', '0.0', '0.0'];
-  }
-
-  EdgeInsetsGeometry createEdgeInsets(List<String> stringList) {
+  EdgeInsets createEdgeInsets() {
+    final controllers = _controllerMap.values.toList();
+    final doubles = controllers.map((controller) => double.tryParse(controller.text) ?? 0.0).toList();
     return EdgeInsets.only(
-      left: double.tryParse(stringList[0]) ?? 0.0,
-      top: double.tryParse(stringList[1]) ?? 0.0,
-      right: double.tryParse(stringList[2]) ?? 0.0,
-      bottom: double.tryParse(stringList[3]) ?? 0.0,
+      left: doubles.first,
+      top: doubles[1],
+      right: doubles[2],
+      bottom: doubles.last,
     );
   }
 
   @override
   Widget builder(BuildContext context) {
+    final textFields = _controllerMap.entries
+        .map((entry) => _buildTextField(
+              label: entry.key,
+              controller: entry.value,
+            ))
+        .toList();
+
     return FieldConfiguratorWidget(
       name: name,
       isNullable: false,
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: textFields.first,
               ),
-              controller: _leftController,
-              onChanged: (String newValue) {
-                final List<String> stringList = [
-                  newValue,
-                  _topController.text,
-                  _rightController.text,
-                  _bottomController.text
-                ];
-                value = createEdgeInsets(stringList);
-                notifyListeners();
-              },
-            ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: textFields[1],
+              ),
+            ],
           ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
+          const SizedBox(height: 8.0),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: textFields[2],
               ),
-              controller: _topController,
-              onChanged: (String newValue) {
-                final List<String> stringList = [
-                  _leftController.text,
-                  newValue,
-                  _rightController.text,
-                  _bottomController.text,
-                ];
-                value = createEdgeInsets(stringList);
-                notifyListeners();
-              },
-            ),
-          ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: textFields.last,
               ),
-              controller: _rightController,
-              onChanged: (String newValue) {
-                final List<String> stringList = [
-                  _leftController.text,
-                  _topController.text,
-                  newValue,
-                  _bottomController.text,
-                ];
-                value = createEdgeInsets(stringList);
-                notifyListeners();
-              },
-            ),
-          ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-              ),
-              controller: _bottomController,
-              onChanged: (String newValue) {
-                final List<String> stringList = [
-                  _leftController.text,
-                  _topController.text,
-                  _rightController.text,
-                  newValue,
-                ];
-                value = createEdgeInsets(stringList);
-                notifyListeners();
-              },
-            ),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  TextField _buildTextField({
+    required String label,
+    required TextEditingController controller,
+  }) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: label,
+        isDense: true,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+      ),
+      controller: controller,
+      onChanged: (String newValue) {
+        value = createEdgeInsets();
+        notifyListeners();
+      },
     );
   }
 }
