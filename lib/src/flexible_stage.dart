@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:widget_stage/src/widget_stage.dart';
 
 class FlexibleStage extends StatefulWidget {
   const FlexibleStage({
     super.key,
     required this.child,
+    required this.stageController,
   });
 
   final Widget child;
+  final StageController stageController;
 
   @override
   _ResizableWidgetState createState() => _ResizableWidgetState();
@@ -15,8 +18,8 @@ class FlexibleStage extends StatefulWidget {
 const ballDiameter = 22.0;
 
 class _ResizableWidgetState extends State<FlexibleStage> {
-  double height = 600;
-  double width = 800;
+  late double height = 600;
+  late double width = 800;
 
   double top = 50;
   double left = 50;
@@ -40,6 +43,14 @@ class _ResizableWidgetState extends State<FlexibleStage> {
   @override
   void initState() {
     super.initState();
+    widget.stageController.addListener(() {
+      if (widget.stageController.selectedWidget != null) {
+        setState(() {
+          height = widget.stageController.selectedWidget!.stageSize!.height;
+          width = widget.stageController.selectedWidget!.stageSize!.width;
+        });
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         top = currentConstraints!.maxHeight / 2 - height / 2;

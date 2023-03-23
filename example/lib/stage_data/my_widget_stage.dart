@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
 /// Defines everything you need to put it on the stage.
-class MyWidgetStageData implements WidgetStageData {
+class MyWidgetStageData extends WidgetStageData {
   MyWidgetStageData()
       : _color = ColorFieldConfiguratorNullable(value: null, name: 'color'),
         _text = StringFieldConfigurator(value: "My text", name: 'text'),
@@ -12,6 +12,9 @@ class MyWidgetStageData implements WidgetStageData {
 
   @override
   String get name => 'MyWidget';
+
+  @override
+  Size get stageSize => const Size(200, 200);
 
   final ColorFieldConfiguratorNullable _color;
   final StringFieldConfigurator _text;
