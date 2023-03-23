@@ -121,7 +121,11 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                     child: Container(
                       height: height,
                       width: width,
-                      color: Colors.black26,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ),
                       child: widget.child,
                     ),
                   ),
