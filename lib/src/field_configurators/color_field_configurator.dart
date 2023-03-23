@@ -10,12 +10,10 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return ColorPickerField(
-      color: value,
-      name: name,
-      isNullable: false,
-      onChanged: (Color? color) {
+  Widget build(BuildContext context) {
+    return ColorConfigurationWidget(
+      value: value,
+      updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
       },
     );
@@ -30,101 +28,130 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return ColorPickerField(
-      color: value,
-      name: name,
-      isNullable: true,
-      onChanged: (Color? color) {
-        value = color;
-        notifyListeners();
-      },
+  Widget build(BuildContext context) {
+    return ColorConfigurationWidget(
+      value: value,
+      updateValue: updateValue,
     );
   }
 }
 
-class ColorPickerField extends StatefulWidget {
-  const ColorPickerField({
+class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
+  const ColorConfigurationWidget({
     super.key,
-    required this.color,
-    required this.onChanged,
-    required this.name,
-    required this.isNullable,
+    required super.value,
+    required super.updateValue,
   });
 
-  final Color? color;
-  final ValueChanged<Color?> onChanged;
-  final String name;
-  final bool isNullable;
-
   @override
-  State<ColorPickerField> createState() => _ColorPickerFieldState();
+  State<ColorConfigurationWidget> createState() => _ColorConfigurationFieldState();
 }
 
-class _ColorPickerFieldState extends State<ColorPickerField> {
-  Color? _initialColor;
-
-  @override
-  void initState() {
-    super.initState();
-    _initialColor = widget.color;
-  }
+class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
+  late Color? color = widget.value;
 
   @override
   Widget build(BuildContext context) {
-    final border = () {
-      if (widget.color == Colors.transparent || widget.color == null) {
-        return Border.all(color: Colors.grey[600]!);
-      }
-    }();
-    return FieldConfiguratorWidget(
-      onNullTapped: () {
-        widget.onChanged(null);
-      },
-      name: widget.name,
-      isNullable: widget.isNullable,
-      child: GestureDetector(
-        onTap: () async {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Pick a color!'),
-                content: SingleChildScrollView(
-                  child: ColorPicker(
-                    pickerColor: widget.color ?? Colors.transparent,
-                    onColorChanged: widget.onChanged,
-                  ),
+    return GestureDetector(
+      onTap: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Pick a color!'),
+              content: SingleChildScrollView(
+                child: ColorPicker(
+                  pickerColor: widget.value ?? Colors.white,
+                  onColorChanged: (newColor) {
+                    color = newColor;
+                  },
                 ),
-                actions: <Widget>[
-                  ElevatedButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      widget.onChanged.call(_initialColor);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: const Text('Accept'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('Abort'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('Accept'),
+                  onPressed: () {
+                    widget.updateValue(color);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
         child: Container(
           height: 48,
           width: 48,
-          decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: BorderRadius.circular(8),
-            border: border,
+          foregroundDecoration: BoxDecoration(
+            // The actual color drawn over the chessboard pattern
+            color: widget.value,
+          ),
+          // The chessboard pattern
+          child: const CustomPaint(
+            foregroundPainter: ChessBoardPainter(
+              boxSize: 8,
+              // The color of the chessboard pattern
+              color: Colors.grey,
+            ),
+            child: ColoredBox(
+              // Background of the chessboard pattern
+              color: Colors.white,
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class ChessBoardPainter extends CustomPainter {
+  const ChessBoardPainter({
+    required this.color,
+    this.boxSize = 20,
+  });
+
+  final double boxSize;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.fill;
+
+    final maxVerticalBoxes = size.height / boxSize + 1;
+    final maxHorizontalBoxes = size.width / boxSize + 1;
+
+    for (int verticalBoxIndex = 0; verticalBoxIndex < maxVerticalBoxes; verticalBoxIndex++) {
+      for (int horizontalBoxIndex = 0;
+          horizontalBoxIndex < maxHorizontalBoxes;
+          horizontalBoxIndex = horizontalBoxIndex + 2) {
+        // Add a boxSize offset for every second row
+        final offset = (verticalBoxIndex % 2) * boxSize;
+        canvas.drawRect(
+          Rect.fromLTWH(
+            horizontalBoxIndex * boxSize + offset,
+            verticalBoxIndex * boxSize,
+            boxSize,
+            boxSize,
+          ),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

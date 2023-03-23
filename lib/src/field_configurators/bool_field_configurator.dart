@@ -9,15 +9,10 @@ class BoolFieldConfiguratorNullable extends FieldConfigurator<bool?> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return FieldConfiguratorWidget(
-      onNullTapped: () => updateValue(null),
-      name: name,
-      isNullable: true,
-      child: _ToggleButtons(
-        value: value,
-        onChanged: updateValue,
-      ),
+  Widget build(BuildContext context) {
+    return BoolFieldConfigurationWidget(
+      value: value,
+      updateValue: updateValue,
     );
   }
 }
@@ -30,36 +25,22 @@ class BoolFieldConfigurator extends FieldConfigurator<bool> {
   });
 
   @override
-  Widget builder(BuildContext context) {
-    return FieldConfiguratorWidget(
-      name: name,
-      isNullable: false,
-      child: _ToggleButtons(
-        value: value,
-        onChanged: (value) {
-          // TODO CHECK IF FALLBACK IS CORRECT
-          updateValue(value ?? false);
-        },
-      ),
+  Widget build(BuildContext context) {
+    return BoolFieldConfigurationWidget(
+      value: value,
+      updateValue: (value) {
+        updateValue(value ?? false);
+      },
     );
   }
 }
 
-class _ToggleButtons extends StatefulWidget {
-  const _ToggleButtons({
-    super.key,
-    required this.value,
-    required this.onChanged,
+class BoolFieldConfigurationWidget extends ConfigurationWidget<bool?> {
+  const BoolFieldConfigurationWidget({
+    required super.value,
+    required super.updateValue,
   });
 
-  final bool? value;
-  final void Function(bool?) onChanged;
-
-  @override
-  State<_ToggleButtons> createState() => _ToggleButtonsState();
-}
-
-class _ToggleButtonsState extends State<_ToggleButtons> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -67,15 +48,15 @@ class _ToggleButtonsState extends State<_ToggleButtons> {
       children: [
         Expanded(
           child: _ToggleButton(
-            isSelected: widget.value == true,
-            onTap: () => widget.onChanged(true),
+            isSelected: value == true,
+            onTap: () => updateValue(true),
             label: 'True',
           ),
         ),
         Expanded(
           child: _ToggleButton(
-            isSelected: widget.value == false,
-            onTap: () => widget.onChanged(false),
+            isSelected: value == false,
+            onTap: () => updateValue(false),
             label: 'False',
           ),
         ),

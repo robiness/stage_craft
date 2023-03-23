@@ -2,13 +2,13 @@ import 'package:example/widgets/my_other_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_stage/widget_stage.dart';
 
-class MyOtherWidgetStageData implements WidgetStageData {
+class MyOtherWidgetStageData extends WidgetStageData {
   MyOtherWidgetStageData()
       : _text = StringFieldConfigurator(value: 'MyOtherWidget', name: 'text'),
-        _padding = PaddingFieldConfigurator(value: EdgeInsets.zero, name: 'padding');
+        _padding = PaddingFieldConfiguratorNullable(value: null, name: 'padding');
 
   final StringFieldConfigurator _text;
-  final PaddingFieldConfigurator _padding;
+  final PaddingFieldConfiguratorNullable _padding;
 
   @override
   String get name => 'MyOtherWidget';

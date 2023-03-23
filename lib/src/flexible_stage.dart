@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:widget_stage/src/widget_stage.dart';
 
 class FlexibleStage extends StatefulWidget {
   const FlexibleStage({
     super.key,
     required this.child,
+    required this.stageController,
   });
 
   final Widget child;
+  final StageController stageController;
 
   @override
   _ResizableWidgetState createState() => _ResizableWidgetState();
@@ -15,8 +18,8 @@ class FlexibleStage extends StatefulWidget {
 const ballDiameter = 22.0;
 
 class _ResizableWidgetState extends State<FlexibleStage> {
-  double height = 600;
-  double width = 800;
+  late double height = 600;
+  late double width = 800;
 
   double top = 50;
   double left = 50;
@@ -40,11 +43,24 @@ class _ResizableWidgetState extends State<FlexibleStage> {
   @override
   void initState() {
     super.initState();
+    widget.stageController.addListener(() {
+      if (widget.stageController.selectedWidget != null) {
+        setState(() {
+          height = widget.stageController.selectedWidget!.stageSize!.height;
+          width = widget.stageController.selectedWidget!.stageSize!.width;
+          centerStage();
+        });
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        top = currentConstraints!.maxHeight / 2 - height / 2;
-        left = currentConstraints!.maxWidth / 2 - width / 2;
-      });
+      centerStage();
+    });
+  }
+
+  void centerStage() {
+    setState(() {
+      top = currentConstraints!.maxHeight / 2 - height / 2;
+      left = currentConstraints!.maxWidth / 2 - width / 2;
     });
   }
 
@@ -113,24 +129,19 @@ class _ResizableWidgetState extends State<FlexibleStage> {
                   padding: const EdgeInsets.all(handlePadding),
                   child: GestureDetector(
                     onPanUpdate: (details) {
-                      final dx = details.delta.dx;
-                      final dy = details.delta.dy;
-                      final newWidth = width + dx;
-                      final newHeight = height + dy;
-                      if (left + dx >= 0 &&
-                          (newWidth + left) <= (currentConstraints!.maxWidth - 70) &&
-                          top + dy >= 0 &&
-                          (newHeight + top) <= (currentConstraints!.maxHeight - 70)) {
-                        setState(() {
-                          top += details.delta.dy;
-                          left += details.delta.dx;
-                        });
-                      }
+                      setState(() {
+                        top += details.delta.dy;
+                        left += details.delta.dx;
+                      });
                     },
                     child: Container(
                       height: height,
                       width: width,
-                      color: Colors.black26,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ),
                       child: widget.child,
                     ),
                   ),

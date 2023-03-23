@@ -2,18 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
 import 'package:widget_stage/src/widget_stage.dart';
 
-/// Represents a String parameter for a widget on a [WidgetStage].
+/// Represents a nullable EdgeInsets parameter for a widget on a [WidgetStage].
+class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
+  PaddingFieldConfiguratorNullable({
+    required super.value,
+    required super.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PaddingFieldConfigurationWidget(
+      value: value,
+      updateValue: updateValue,
+    );
+  }
+}
+
+/// Represents an EdgeInsets parameter for a widget on a [WidgetStage].
 class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   PaddingFieldConfigurator({
     required super.value,
     required super.name,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    return PaddingFieldConfigurationWidget(
+      value: value,
+      updateValue: (value) {
+        updateValue(value ?? EdgeInsets.zero);
+      },
+    );
+  }
+}
+
+class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeInsets?> {
+  const PaddingFieldConfigurationWidget({
+    super.key,
+    required super.value,
+    required super.updateValue,
+  });
+
+  @override
+  State<PaddingFieldConfigurationWidget> createState() => _PaddingFieldConfigurationWidgetState();
+}
+
+class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurationWidget> {
   late final Map<String, TextEditingController> _controllerMap = {
-    "left": TextEditingController(text: value.left.toString()),
-    "top": TextEditingController(text: value.top.toString()),
-    "right": TextEditingController(text: value.right.toString()),
-    "bottom": TextEditingController(text: value.bottom.toString()),
+    "left": TextEditingController(text: widget.value?.left.toString()),
+    "top": TextEditingController(text: widget.value?.top.toString()),
+    "right": TextEditingController(text: widget.value?.right.toString()),
+    "bottom": TextEditingController(text: widget.value?.bottom.toString()),
   };
 
   EdgeInsets createEdgeInsets() {
@@ -28,46 +67,44 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   }
 
   @override
-  Widget builder(BuildContext context) {
+  Widget build(BuildContext context) {
     final textFields = _controllerMap.entries
-        .map((entry) => _buildTextField(
-              label: entry.key,
-              controller: entry.value,
-            ))
+        .map(
+          (entry) => _buildTextField(
+            label: entry.key,
+            controller: entry.value,
+          ),
+        )
         .toList();
 
-    return FieldConfiguratorWidget(
-      name: name,
-      isNullable: false,
-      child: Column(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: textFields.first,
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: textFields[1],
-              ),
-            ],
-          ),
-          const SizedBox(height: 8.0),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: textFields[2],
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: textFields.last,
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: textFields.first,
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: textFields[1],
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: textFields[2],
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: textFields.last,
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -87,8 +124,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
       ),
       controller: controller,
       onChanged: (String newValue) {
-        value = createEdgeInsets();
-        notifyListeners();
+        widget.updateValue(createEdgeInsets());
       },
     );
   }
