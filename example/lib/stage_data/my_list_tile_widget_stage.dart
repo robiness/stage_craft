@@ -105,6 +105,7 @@ class _MyTitleTileWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
+          color: tileColor,
         ),
         child: ListTile(
           title: Text(title),
