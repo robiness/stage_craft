@@ -33,28 +33,37 @@ class _WidgetStageState extends State<WidgetStage> {
 
     final List<Widget> stageConfiguratorWidgets = () {
       final stageConfigurators = configurators.where((element) => element.type == ArgumentType.stage).toList();
-      if (stageConfigurators.isEmpty) {
-        return <Widget>[];
-      }
+      if (stageConfigurators.isEmpty) return <Widget>[];
       return stageConfigurators.map((configurator) {
-        return _ArgumentSection(
-          configurator: configurator,
-          addHeader: configurator == stageConfigurators.first,
-          title: 'Stage Arguments',
+        if (configurator == stageConfigurators.first) {
+          return _LeadingConfigurationWidget(
+            configurator: configurator,
+            title: 'Stage Arguments',
+          );
+        }
+        return Padding(
+          padding: configurator == stageConfigurators.last ? const EdgeInsets.only(bottom: 12.0) : EdgeInsets.zero,
+          child: FieldConfiguratorWidget(
+            fieldConfigurator: configurator,
+            child: configurator.build(context),
+          ),
         );
       }).toList();
     }();
 
     final List<Widget> widgetConfiguratorWidgets = () {
       final widgetConfigurators = configurators.where((element) => element.type == ArgumentType.widget).toList();
-      if (widgetConfigurators.isEmpty) {
-        return <Widget>[];
-      }
+      if (widgetConfigurators.isEmpty) return <Widget>[];
       return widgetConfigurators.map((configurator) {
-        return _ArgumentSection(
-          configurator: configurator,
-          addHeader: configurator == widgetConfigurators.first,
-          title: 'Widget Arguments',
+        if (configurator == widgetConfigurators.first) {
+          return _LeadingConfigurationWidget(
+            configurator: configurator,
+            title: 'Widget Arguments',
+          );
+        }
+        return FieldConfiguratorWidget(
+          fieldConfigurator: configurator,
+          child: configurator.build(context),
         );
       }).toList();
     }();
@@ -64,6 +73,7 @@ class _WidgetStageState extends State<WidgetStage> {
         children: [
           Expanded(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Stage(
@@ -90,15 +100,14 @@ class _WidgetStageState extends State<WidgetStage> {
   }
 }
 
-class _ArgumentSection extends StatelessWidget {
-  const _ArgumentSection({
-    this.addHeader,
+class _LeadingConfigurationWidget extends StatelessWidget {
+  const _LeadingConfigurationWidget({
     required this.title,
     required this.configurator,
   });
 
   final FieldConfigurator configurator;
-  final bool? addHeader;
+
   final String title;
 
   @override
@@ -106,34 +115,26 @@ class _ArgumentSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (addHeader == true) ...[
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.grey.shade500),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ),
+        Container(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Colors.grey.shade400),
             ),
           ),
-          const SizedBox(height: 24.0),
-        ],
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FieldConfiguratorWidget(
-            fieldConfigurator: configurator,
-            child: configurator.build(context),
+          width: double.infinity,
+          child: Text(
+            textAlign: TextAlign.center,
+            title,
+            style: TextStyle(
+              color: Colors.grey.shade400,
+            ),
           ),
+        ),
+        const SizedBox(height: 24.0),
+        FieldConfiguratorWidget(
+          fieldConfigurator: configurator,
+          child: configurator.build(context),
         ),
       ],
     );
