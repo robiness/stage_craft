@@ -23,6 +23,7 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
   StringFieldConfigurator({
     required super.value,
     required super.name,
+    super.type,
   });
 
   @override

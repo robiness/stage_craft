@@ -23,6 +23,7 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
   IntFieldConfigurator({
     required super.value,
     required super.name,
+    super.type,
   });
 
   @override

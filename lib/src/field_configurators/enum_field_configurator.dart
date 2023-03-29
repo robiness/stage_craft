@@ -28,6 +28,7 @@ class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
     required super.value,
     required super.name,
     required this.enumValues,
+    super.type,
   });
 
   final List<T> enumValues;
