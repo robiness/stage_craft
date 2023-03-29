@@ -107,7 +107,6 @@ class _LeadingConfigurationWidget extends StatelessWidget {
   });
 
   final FieldConfigurator configurator;
-
   final String title;
 
   @override
