@@ -29,14 +29,12 @@ class _WidgetStageState extends State<WidgetStage> {
 
   @override
   Widget build(BuildContext context) {
-    final configurators = _stageController.selectedWidget?.fieldConfigurators ?? [];
-
     final List<Widget> stageConfiguratorWidgets = () {
-      final stageConfigurators = configurators.where((element) => element.type == ArgumentType.stage).toList();
+      final stageConfigurators = (_stageController.selectedWidget?.fieldConfigurators ?? []).stageConfigurators;
       if (stageConfigurators.isEmpty) return <Widget>[];
       return stageConfigurators.map((configurator) {
         if (configurator == stageConfigurators.first) {
-          return _LeadingConfigurationWidget(
+          return _LeadingFieldConfigurationWidget(
             configurator: configurator,
             title: 'Stage Arguments',
           );
@@ -52,11 +50,11 @@ class _WidgetStageState extends State<WidgetStage> {
     }();
 
     final List<Widget> widgetConfiguratorWidgets = () {
-      final widgetConfigurators = configurators.where((element) => element.type == ArgumentType.widget).toList();
+      final widgetConfigurators = (_stageController.selectedWidget?.fieldConfigurators ?? []).widgetConfigurators;
       if (widgetConfigurators.isEmpty) return <Widget>[];
       return widgetConfigurators.map((configurator) {
         if (configurator == widgetConfigurators.first) {
-          return _LeadingConfigurationWidget(
+          return _LeadingFieldConfigurationWidget(
             configurator: configurator,
             title: 'Widget Arguments',
           );
@@ -88,7 +86,10 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 400,
                   child: ConfigurationBar(
-                    fields: [...stageConfiguratorWidgets, ...widgetConfiguratorWidgets],
+                    fields: [
+                      ...stageConfiguratorWidgets,
+                      ...widgetConfiguratorWidgets,
+                    ],
                   ),
                 ),
               ],
@@ -100,8 +101,8 @@ class _WidgetStageState extends State<WidgetStage> {
   }
 }
 
-class _LeadingConfigurationWidget extends StatelessWidget {
-  const _LeadingConfigurationWidget({
+class _LeadingFieldConfigurationWidget extends StatelessWidget {
+  const _LeadingFieldConfigurationWidget({
     required this.title,
     required this.configurator,
   });
@@ -198,14 +199,14 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
   FieldConfigurator({
     required this.value,
     required this.name,
-    ArgumentType? type,
-  }) : type = type ?? ArgumentType.widget;
+    FieldConfiguratorType? type,
+  }) : type = type ?? FieldConfiguratorType.widget;
 
   T value;
 
   String name;
 
-  final ArgumentType type;
+  final FieldConfiguratorType type;
 
   bool get isNullable => null is T;
 
@@ -234,8 +235,19 @@ class StageController extends ChangeNotifier {
   }
 }
 
-/// Allows for separation of the configurators in the [ConfigurationBar] depending on whether they affect the widget on the stage or the stage itself (e.g. amount of the same widget to display in a list).
-enum ArgumentType {
+/// Allows for separation of the configurators in the [ConfigurationBar] depending on whether they affect the
+/// widget on the stage or the stage itself (e.g. amount of the same widget to display in a list).
+enum FieldConfiguratorType {
   widget,
   stage,
+}
+
+extension FieldConfiguratorListExtensions on List<FieldConfigurator> {
+  List<FieldConfigurator> get stageConfigurators => where((configurator) {
+        return configurator.type == FieldConfiguratorType.stage;
+      }).toList();
+
+  List<FieldConfigurator> get widgetConfigurators => where((configurator) {
+        return configurator.type == FieldConfiguratorType.widget;
+      }).toList();
 }
