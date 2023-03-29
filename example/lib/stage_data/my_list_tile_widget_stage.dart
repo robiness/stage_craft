@@ -3,16 +3,32 @@ import 'package:widget_stage/widget_stage.dart';
 
 class MyListTileWidgetStage extends WidgetStageData {
   MyListTileWidgetStage()
-      : _tileCount = IntFieldConfigurator(value: 1, name: 'tileCount', type: ArgumentType.stage),
-        _listPadding = PaddingFieldConfigurator(value: EdgeInsets.zero, name: 'listPadding', type: ArgumentType.stage),
+      : _tileCount = IntFieldConfigurator(
+          value: 1,
+          name: 'tileCount',
+          type: FieldConfiguratorType.stage,
+        ),
+        _listPadding = PaddingFieldConfigurator(
+          value: EdgeInsets.zero,
+          name: 'listPadding',
+          type: FieldConfiguratorType.stage,
+        ),
         _title = StringFieldConfigurator(value: 'My List Tile', name: 'title'),
-        _stageColor = ColorFieldConfigurator(value: Colors.transparent, name: 'stageColor', type: ArgumentType.stage),
+        _stageColor = ColorFieldConfigurator(
+          value: Colors.transparent,
+          name: 'stageColor',
+          type: FieldConfiguratorType.stage,
+        ),
         _circleColor = ColorFieldConfigurator(value: Colors.purple, name: 'circleColor'),
         _hoverColor = ColorFieldConfiguratorNullable(value: null, name: 'hoverColor'),
         _tileColor = ColorFieldConfiguratorNullable(value: Colors.cyan, name: 'tileColor'),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
         _borderRadius = DoubleFieldConfiguratorNullable(value: 10, name: 'borderRadius'),
-        _tileGap = DoubleFieldConfigurator(value: 0, name: 'tileSpace', type: ArgumentType.stage);
+        _tileGap = DoubleFieldConfigurator(
+          value: 0,
+          name: 'tileSpace',
+          type: FieldConfiguratorType.stage,
+        );
 
   @override
   List<FieldConfigurator> get fieldConfigurators {
