@@ -20,7 +20,6 @@ class MyListTileWidgetStage extends WidgetStageData {
           type: FieldConfiguratorType.stage,
         ),
         _circleColor = ColorFieldConfigurator(value: Colors.purple, name: 'circleColor'),
-        _hoverColor = ColorFieldConfiguratorNullable(value: null, name: 'hoverColor'),
         _tileColor = ColorFieldConfiguratorNullable(value: Colors.cyan, name: 'tileColor'),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
         _borderRadius = DoubleFieldConfiguratorNullable(value: 10, name: 'borderRadius'),
@@ -39,7 +38,6 @@ class MyListTileWidgetStage extends WidgetStageData {
       _tileGap,
       _stageColor,
       _circleColor,
-      _hoverColor,
       _tileColor,
       _borderRadius,
       _textColor,
@@ -56,7 +54,6 @@ class MyListTileWidgetStage extends WidgetStageData {
   final StringFieldConfigurator _title;
   final ColorFieldConfigurator _stageColor;
   final ColorFieldConfigurator _circleColor;
-  final ColorFieldConfiguratorNullable _hoverColor;
   final ColorFieldConfiguratorNullable _textColor;
   final ColorFieldConfiguratorNullable _tileColor;
 
@@ -74,7 +71,6 @@ class MyListTileWidgetStage extends WidgetStageData {
               title: _title.value,
               index: index,
               circleColor: _circleColor.value,
-              hoverColor: _hoverColor.value,
               tileColor: _tileColor.value,
               borderRadius: _borderRadius.value,
               textColor: _textColor.value,
@@ -92,7 +88,6 @@ class _MyTitleTileWidget extends StatelessWidget {
     required this.title,
     required this.circleColor,
     this.tileColor,
-    this.hoverColor,
     this.borderRadius,
     this.textColor,
   });
@@ -100,27 +95,27 @@ class _MyTitleTileWidget extends StatelessWidget {
   final String title;
   final Color circleColor;
   final Color? tileColor;
-  final Color? hoverColor;
   final int index;
   final double? borderRadius;
   final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: tileColor,
-        borderRadius: BorderRadius.circular(borderRadius ?? 0),
-      ),
-      child: ListTile(
-        title: Text(title),
-        leading: CircleAvatar(
-          radius: 15,
-          backgroundColor: circleColor,
-          child: Text(
-            '${index + 1}',
-            style: TextStyle(
-              color: textColor,
+    return Material(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius ?? 0),
+        ),
+        child: ListTile(
+          title: Text(title),
+          leading: CircleAvatar(
+            radius: 15,
+            backgroundColor: circleColor,
+            child: Text(
+              '${index + 1}',
+              style: TextStyle(
+                color: textColor,
+              ),
             ),
           ),
         ),
