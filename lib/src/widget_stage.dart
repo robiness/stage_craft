@@ -124,11 +124,14 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
   FieldConfigurator({
     required this.value,
     required this.name,
-  });
+    ArgumentType? type,
+  }) : type = type ?? ArgumentType.widget;
 
   T value;
 
   String name;
+
+  final ArgumentType type;
 
   bool get isNullable => null is T;
 
@@ -155,4 +158,10 @@ class StageController extends ChangeNotifier {
     }
     notifyListeners();
   }
+}
+
+/// Allows for separation of the configurators in the [ConfigurationBar] depending on whether they affect the widget on the stage or the stage itself (e.g. amount of the same widget to display in a list).
+enum ArgumentType {
+  widget,
+  stage,
 }
