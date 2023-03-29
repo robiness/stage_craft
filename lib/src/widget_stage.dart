@@ -37,39 +37,10 @@ class _WidgetStageState extends State<WidgetStage> {
         return <Widget>[];
       }
       return stageConfigurators.map((configurator) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (configurator == stageConfigurators.first) ...[
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade500),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Center(
-                    child: Text(
-                      'Widget Configurators',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24.0),
-            ],
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FieldConfiguratorWidget(
-                fieldConfigurator: configurator,
-                child: configurator.build(context),
-              ),
-            ),
-          ],
+        return _ArgumentSection(
+          configurator: configurator,
+          addHeader: configurator == stageConfigurators.first,
+          title: 'Stage Arguments',
         );
       }).toList();
     }();
@@ -80,35 +51,10 @@ class _WidgetStageState extends State<WidgetStage> {
         return <Widget>[];
       }
       return widgetConfigurators.map((configurator) {
-        return Column(
-          children: [
-            if (configurator == widgetConfigurators.first) ...[
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade500),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Center(
-                    child: Text(
-                      'Widget Configurators',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24.0),
-            ],
-            FieldConfiguratorWidget(
-              fieldConfigurator: configurator,
-              child: configurator.build(context),
-            ),
-          ],
+        return _ArgumentSection(
+          configurator: configurator,
+          addHeader: configurator == widgetConfigurators.first,
+          title: 'Widget Arguments',
         );
       }).toList();
     }();
@@ -140,6 +86,56 @@ class _WidgetStageState extends State<WidgetStage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ArgumentSection extends StatelessWidget {
+  const _ArgumentSection({
+    this.addHeader,
+    required this.title,
+    required this.configurator,
+  });
+
+  final FieldConfigurator configurator;
+  final bool? addHeader;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (addHeader == true) ...[
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey.shade500),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24.0),
+        ],
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FieldConfiguratorWidget(
+            fieldConfigurator: configurator,
+            child: configurator.build(context),
+          ),
+        ),
+      ],
     );
   }
 }
