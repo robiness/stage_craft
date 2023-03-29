@@ -29,6 +29,90 @@ class _WidgetStageState extends State<WidgetStage> {
 
   @override
   Widget build(BuildContext context) {
+    final configurators = _stageController.selectedWidget?.fieldConfigurators ?? [];
+
+    final List<Widget> stageConfiguratorWidgets = () {
+      final stageConfigurators = configurators.where((element) => element.type == ArgumentType.stage).toList();
+      if (stageConfigurators.isEmpty) {
+        return <Widget>[];
+      }
+      return stageConfigurators.map((configurator) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (configurator == stageConfigurators.first) ...[
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade500),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Center(
+                    child: Text(
+                      'Widget Configurators',
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24.0),
+            ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FieldConfiguratorWidget(
+                fieldConfigurator: configurator,
+                child: configurator.build(context),
+              ),
+            ),
+          ],
+        );
+      }).toList();
+    }();
+
+    final List<Widget> widgetConfiguratorWidgets = () {
+      final widgetConfigurators = configurators.where((element) => element.type == ArgumentType.widget).toList();
+      if (widgetConfigurators.isEmpty) {
+        return <Widget>[];
+      }
+      return widgetConfigurators.map((configurator) {
+        return Column(
+          children: [
+            if (configurator == widgetConfigurators.first) ...[
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade500),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Center(
+                    child: Text(
+                      'Widget Configurators',
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24.0),
+            ],
+            FieldConfiguratorWidget(
+              fieldConfigurator: configurator,
+              child: configurator.build(context),
+            ),
+          ],
+        );
+      }).toList();
+    }();
+
     return Scaffold(
       body: Column(
         children: [
@@ -48,13 +132,7 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 400,
                   child: ConfigurationBar(
-                    fields: _stageController.selectedWidget?.fieldConfigurators.map((configurator) {
-                          return FieldConfiguratorWidget(
-                            fieldConfigurator: configurator,
-                            child: configurator.build(context),
-                          );
-                        }).toList() ??
-                        [],
+                    fields: [...stageConfiguratorWidgets, ...widgetConfiguratorWidgets],
                   ),
                 ),
               ],
