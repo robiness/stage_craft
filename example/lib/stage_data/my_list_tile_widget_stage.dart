@@ -67,13 +67,12 @@ class MyListTileWidgetStage extends WidgetStageData {
         separatorBuilder: (_, __) => SizedBox(height: _tileGap.value),
         itemBuilder: (context, index) {
           return _MyTitleTileWidget(
-              title: _title.value,
-              index: index,
-              circleColor: _circleColor.value,
-              tileColor: _tileColor.value,
-              borderRadius: _borderRadius.value,
-              textColor: _textColor.value,
-            ),
+            title: _title.value,
+            index: index,
+            circleColor: _circleColor.value,
+            tileColor: _tileColor.value,
+            borderRadius: _borderRadius.value,
+            textColor: _textColor.value,
           );
         },
       ),
