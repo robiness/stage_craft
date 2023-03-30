@@ -29,42 +29,8 @@ class _WidgetStageState extends State<WidgetStage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> stageConfiguratorWidgets = () {
-      final stageConfigurators = _stageController.selectedWidget?.stageConfigurators ?? [];
-      if (stageConfigurators.isEmpty) return <Widget>[];
-      return stageConfigurators.map((configurator) {
-        if (configurator == stageConfigurators.first) {
-          return _LeadingFieldConfigurationWidget(
-            configurator: configurator,
-            title: 'Stage Arguments',
-          );
-        }
-        return Padding(
-          padding: configurator == stageConfigurators.last ? const EdgeInsets.only(bottom: 12.0) : EdgeInsets.zero,
-          child: FieldConfiguratorWidget(
-            fieldConfigurator: configurator,
-            child: configurator.build(context),
-          ),
-        );
-      }).toList();
-    }();
-
-    final List<Widget> widgetConfiguratorWidgets = () {
-      final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators ?? [];
-      if (widgetConfigurators.isEmpty) return <Widget>[];
-      return widgetConfigurators.map((configurator) {
-        if (configurator == widgetConfigurators.first) {
-          return _LeadingFieldConfigurationWidget(
-            configurator: configurator,
-            title: 'Widget Arguments',
-          );
-        }
-        return FieldConfiguratorWidget(
-          fieldConfigurator: configurator,
-          child: configurator.build(context),
-        );
-      }).toList();
-    }();
+    final stageConfigurators = _stageController.selectedWidget?.stageConfigurators ?? [];
+    final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators ?? [];
 
     return Scaffold(
       body: Column(
@@ -87,8 +53,17 @@ class _WidgetStageState extends State<WidgetStage> {
                   width: 400,
                   child: ConfigurationBar(
                     fields: [
-                      ...stageConfiguratorWidgets,
-                      ...widgetConfiguratorWidgets,
+                      _ConfiguratorGroup(
+                        title: 'Stage Arguments',
+                        configurators: stageConfigurators,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _ConfiguratorGroup(
+                        title: 'Widget Arguments',
+                        configurators: widgetConfigurators,
+                      ),
                     ],
                   ),
                 ),
@@ -101,14 +76,14 @@ class _WidgetStageState extends State<WidgetStage> {
   }
 }
 
-class _LeadingFieldConfigurationWidget extends StatelessWidget {
-  const _LeadingFieldConfigurationWidget({
+class _ConfiguratorGroup extends StatelessWidget {
+  const _ConfiguratorGroup({
     required this.title,
-    required this.configurator,
+    this.configurators,
   });
 
-  final FieldConfigurator configurator;
   final String title;
+  final List<FieldConfigurator>? configurators;
 
   @override
   Widget build(BuildContext context) {
@@ -131,11 +106,18 @@ class _LeadingFieldConfigurationWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 24.0),
-        FieldConfiguratorWidget(
-          fieldConfigurator: configurator,
-          child: configurator.build(context),
+        const SizedBox(
+          height: 8,
         ),
+        ...?configurators?.map((configurator) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: FieldConfiguratorWidget(
+              fieldConfigurator: configurator,
+              child: configurator.build(context),
+            ),
+          );
+        }),
       ],
     );
   }
