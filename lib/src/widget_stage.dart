@@ -29,11 +29,15 @@ class _WidgetStageState extends State<WidgetStage> {
 
   @override
   Widget build(BuildContext context) {
+    final stageConfigurators = _stageController.selectedWidget?.stageConfigurators ?? [];
+    final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators ?? [];
+
     return Scaffold(
       body: Column(
         children: [
           Expanded(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Stage(
@@ -48,13 +52,19 @@ class _WidgetStageState extends State<WidgetStage> {
                 SizedBox(
                   width: 400,
                   child: ConfigurationBar(
-                    fields: _stageController.selectedWidget?.fieldConfigurators.map((configurator) {
-                          return FieldConfiguratorWidget(
-                            fieldConfigurator: configurator,
-                            child: configurator.build(context),
-                          );
-                        }).toList() ??
-                        [],
+                    fields: [
+                      _ConfiguratorGroup(
+                        title: 'Stage Arguments',
+                        configurators: stageConfigurators,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _ConfiguratorGroup(
+                        title: 'Widget Arguments',
+                        configurators: widgetConfigurators,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -62,6 +72,53 @@ class _WidgetStageState extends State<WidgetStage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ConfiguratorGroup extends StatelessWidget {
+  const _ConfiguratorGroup({
+    required this.title,
+    this.configurators,
+  });
+
+  final String title;
+  final List<FieldConfigurator>? configurators;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Colors.grey.shade400),
+            ),
+          ),
+          width: double.infinity,
+          child: Text(
+            textAlign: TextAlign.center,
+            title,
+            style: TextStyle(
+              color: Colors.grey.shade400,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        ...?configurators?.map((configurator) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: FieldConfiguratorWidget(
+              fieldConfigurator: configurator,
+              child: configurator.build(context),
+            ),
+          );
+        }),
+      ],
     );
   }
 }
@@ -146,12 +203,18 @@ class StageController extends ChangeNotifier {
   WidgetStageData? get selectedWidget => _selectedWidget;
 
   void selectWidget(WidgetStageData selectedWidget) {
-    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
-      fieldConfigurator.removeListener(notifyListeners);
+    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
+      widgetConfigurator.removeListener(notifyListeners);
+    }
+    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
+      stageConfigurator.removeListener(notifyListeners);
     }
     _selectedWidget = selectedWidget;
-    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
-      fieldConfigurator.addListener(notifyListeners);
+    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
+      widgetConfigurator.addListener(notifyListeners);
+    }
+    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
+      stageConfigurator.addListener(notifyListeners);
     }
     notifyListeners();
   }
