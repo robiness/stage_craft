@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:widget_stage/src/field_configurators/field_configurator_widget.dart';
-import 'package:widget_stage/src/flexible_stage.dart';
-import 'package:widget_stage/widget_stage.dart';
+import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
+import 'package:stage_craft/src/flexible_stage.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 /// The stage where all widgets can be put on.
 class WidgetStage extends StatefulWidget {

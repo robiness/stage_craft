@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widget_stage/widget_stage.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 class MyListTileWidgetStage extends WidgetStageData {
   MyListTileWidgetStage()

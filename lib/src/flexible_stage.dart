@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widget_stage/src/widget_stage.dart';
+import 'package:stage_craft/src/widget_stage.dart';
 
 class FlexibleStage extends StatefulWidget {
   const FlexibleStage({
