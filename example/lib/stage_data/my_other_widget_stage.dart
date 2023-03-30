@@ -1,6 +1,6 @@
 import 'package:example/widgets/my_other_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:widget_stage/widget_stage.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 class MyOtherWidgetStageData extends WidgetStageData {
   MyOtherWidgetStageData()
