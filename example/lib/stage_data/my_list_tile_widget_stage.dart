@@ -61,13 +61,12 @@ class MyListTileWidgetStage extends WidgetStageData {
   Widget widgetBuilder(BuildContext context) {
     return ColoredBox(
       color: _stageColor.value,
-      child: ListView.builder(
+      child: ListView.separated(
         padding: _listPadding.value,
         itemCount: _tileCount.value,
+        separatorBuilder: (_, __) => SizedBox(height: _tileGap.value),
         itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: _tileGap.value),
-            child: _MyTitleTileWidget(
+          return _MyTitleTileWidget(
               title: _title.value,
               index: index,
               circleColor: _circleColor.value,
