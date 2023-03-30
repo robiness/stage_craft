@@ -24,7 +24,6 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   PaddingFieldConfigurator({
     required super.value,
     required super.name,
-    super.type,
   });
 
   @override

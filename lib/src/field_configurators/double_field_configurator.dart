@@ -23,7 +23,6 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
   DoubleFieldConfigurator({
     required super.value,
     required super.name,
-    super.type,
   });
 
   @override

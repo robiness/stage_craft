@@ -7,7 +7,6 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   ColorFieldConfigurator({
     required super.value,
     required super.name,
-    super.type,
   });
 
   @override

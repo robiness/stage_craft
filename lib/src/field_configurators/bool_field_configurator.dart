@@ -22,7 +22,6 @@ class BoolFieldConfigurator extends FieldConfigurator<bool> {
   BoolFieldConfigurator({
     required super.value,
     required super.name,
-    super.type,
   });
 
   @override

@@ -22,10 +22,13 @@ class MyOtherWidgetStageData extends WidgetStageData {
   }
 
   @override
-  List<FieldConfigurator> get fieldConfigurators {
+  List<FieldConfigurator> get widgetConfigurators {
     return [
       _text,
       _padding,
     ];
   }
+
+  @override
+  List<FieldConfigurator> get stageConfigurators => [];
 }

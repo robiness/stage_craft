@@ -71,7 +71,14 @@ abstract class WidgetStageData {
   /// Return the widget you want to put on stage and use
   Widget widgetBuilder(BuildContext context);
 
-  List<FieldConfigurator> get fieldConfigurators;
+  /// [FieldConfigurator]s that affect arguments of the widget displayed on the stage,
+  /// as opposed to [stageConfigurators] which affect its surroundings or the stage itself.
+  List<FieldConfigurator> get widgetConfigurators;
+
+  /// [FieldConfigurator]s that affect the stage itself and/or provide additional configurations
+  /// surrounding the [Widget] on the stage (e.g. outer [Padding] or a counter, in case the [Widget] is
+  /// an [Iterable].
+  List<FieldConfigurator> get stageConfigurators;
 
   Size? get stageSize => const Size(600, 800);
 }

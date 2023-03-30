@@ -32,7 +32,7 @@ class MyWidgetStageData extends WidgetStageData {
   }
 
   @override
-  List<FieldConfigurator> get fieldConfigurators {
+  List<FieldConfigurator> get widgetConfigurators {
     return [
       _color,
       _text,
@@ -40,4 +40,7 @@ class MyWidgetStageData extends WidgetStageData {
       _nullableBool,
     ];
   }
+
+  @override
+  List<FieldConfigurator> get stageConfigurators => [];
 }

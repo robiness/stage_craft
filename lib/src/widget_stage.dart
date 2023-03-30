@@ -30,7 +30,7 @@ class _WidgetStageState extends State<WidgetStage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> stageConfiguratorWidgets = () {
-      final stageConfigurators = (_stageController.selectedWidget?.fieldConfigurators ?? []).stageConfigurators;
+      final stageConfigurators = _stageController.selectedWidget?.stageConfigurators ?? [];
       if (stageConfigurators.isEmpty) return <Widget>[];
       return stageConfigurators.map((configurator) {
         if (configurator == stageConfigurators.first) {
@@ -50,7 +50,7 @@ class _WidgetStageState extends State<WidgetStage> {
     }();
 
     final List<Widget> widgetConfiguratorWidgets = () {
-      final widgetConfigurators = (_stageController.selectedWidget?.fieldConfigurators ?? []).widgetConfigurators;
+      final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators ?? [];
       if (widgetConfigurators.isEmpty) return <Widget>[];
       return widgetConfigurators.map((configurator) {
         if (configurator == widgetConfigurators.first) {
@@ -199,14 +199,11 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
   FieldConfigurator({
     required this.value,
     required this.name,
-    FieldConfiguratorType? type,
-  }) : type = type ?? FieldConfiguratorType.widget;
+  });
 
   T value;
 
   String name;
-
-  final FieldConfiguratorType type;
 
   bool get isNullable => null is T;
 
@@ -224,30 +221,19 @@ class StageController extends ChangeNotifier {
   WidgetStageData? get selectedWidget => _selectedWidget;
 
   void selectWidget(WidgetStageData selectedWidget) {
-    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
-      fieldConfigurator.removeListener(notifyListeners);
+    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
+      widgetConfigurator.removeListener(notifyListeners);
+    }
+    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
+      stageConfigurator.removeListener(notifyListeners);
     }
     _selectedWidget = selectedWidget;
-    for (final fieldConfigurator in _selectedWidget?.fieldConfigurators ?? <FieldConfigurator>[]) {
-      fieldConfigurator.addListener(notifyListeners);
+    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
+      widgetConfigurator.addListener(notifyListeners);
+    }
+    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
+      stageConfigurator.addListener(notifyListeners);
     }
     notifyListeners();
   }
-}
-
-/// Allows for separation of the configurators in the [ConfigurationBar] depending on whether they affect the
-/// widget on the stage or the stage itself (e.g. amount of the same widget to display in a list).
-enum FieldConfiguratorType {
-  widget,
-  stage,
-}
-
-extension FieldConfiguratorListExtensions on List<FieldConfigurator> {
-  List<FieldConfigurator> get stageConfigurators => where((configurator) {
-        return configurator.type == FieldConfiguratorType.stage;
-      }).toList();
-
-  List<FieldConfigurator> get widgetConfigurators => where((configurator) {
-        return configurator.type == FieldConfiguratorType.widget;
-      }).toList();
 }

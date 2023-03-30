@@ -3,44 +3,35 @@ import 'package:widget_stage/widget_stage.dart';
 
 class MyListTileWidgetStage extends WidgetStageData {
   MyListTileWidgetStage()
-      : _tileCount = IntFieldConfigurator(
-          value: 1,
-          name: 'tileCount',
-          type: FieldConfiguratorType.stage,
-        ),
-        _listPadding = PaddingFieldConfigurator(
-          value: EdgeInsets.zero,
-          name: 'listPadding',
-          type: FieldConfiguratorType.stage,
-        ),
+      : _tileCount = IntFieldConfigurator(value: 1, name: 'tileCount'),
+        _listPadding = PaddingFieldConfigurator(value: EdgeInsets.zero, name: 'listPadding'),
         _title = StringFieldConfigurator(value: 'My List Tile', name: 'title'),
-        _stageColor = ColorFieldConfigurator(
-          value: Colors.transparent,
-          name: 'stageColor',
-          type: FieldConfiguratorType.stage,
-        ),
+        _stageColor = ColorFieldConfigurator(value: Colors.transparent, name: 'stageColor'),
         _circleColor = ColorFieldConfigurator(value: Colors.purple, name: 'circleColor'),
         _tileColor = ColorFieldConfiguratorNullable(value: Colors.cyan, name: 'tileColor'),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
         _borderRadius = DoubleFieldConfiguratorNullable(value: 10, name: 'borderRadius'),
-        _tileGap = DoubleFieldConfigurator(
-          value: 0,
-          name: 'tileSpace',
-          type: FieldConfiguratorType.stage,
-        );
+        _tileGap = DoubleFieldConfigurator(value: 0, name: 'tileSpace');
 
   @override
-  List<FieldConfigurator> get fieldConfigurators {
+  List<FieldConfigurator> get widgetConfigurators {
     return [
-      _tileCount,
-      _listPadding,
       _title,
-      _tileGap,
-      _stageColor,
       _circleColor,
       _tileColor,
       _borderRadius,
       _textColor,
+    ];
+  }
+
+  @override
+  List<FieldConfigurator> get stageConfigurators {
+    return [
+      _tileCount,
+      _tileGap,
+      _listPadding,
+      _stageColor,
+      _circleColor,
     ];
   }
 
