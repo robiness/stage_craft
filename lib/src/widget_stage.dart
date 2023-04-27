@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
 import 'package:stage_craft/src/flexible_stage.dart';
-import 'package:stage_craft/stage_craft.dart';
+import 'package:stage_craft/src/stage_settings.dart';
+import 'package:stage_craft/src/widget_stage_data.dart';
 
 /// The stage where all widgets can be put on.
 class WidgetStage extends StatefulWidget {
@@ -29,49 +30,41 @@ class _WidgetStageState extends State<WidgetStage> {
 
   @override
   Widget build(BuildContext context) {
-    final stageConfigurators = _stageController.selectedWidget?.stageConfigurators ?? [];
-    final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators ?? [];
+    final stageConfigurators = _stageController.selectedWidget?.stageConfigurators;
+    final widgetConfigurators = _stageController.selectedWidget?.widgetConfigurators;
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Stage(
-                    stageController: _stageController,
-                    child: _stageController.selectedWidget?.widgetBuilder(context) ?? const SizedBox(),
-                  ),
-                ),
-                VerticalDivider(
-                  color: Colors.grey.withOpacity(0.2),
-                  thickness: 1,
-                ),
-                SizedBox(
-                  width: 400,
-                  child: ConfigurationBar(
-                    fields: [
-                      _ConfiguratorGroup(
-                        title: 'Stage Arguments',
-                        configurators: stageConfigurators,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _ConfiguratorGroup(
-                        title: 'Widget Arguments',
-                        configurators: widgetConfigurators,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Stage(
+            stageController: _stageController,
+            child: _stageController.selectedWidget?.widgetBuilder(context) ?? const SizedBox(),
           ),
-        ],
-      ),
+        ),
+        VerticalDivider(
+          color: Colors.grey.withOpacity(0.2),
+          thickness: 1,
+        ),
+        SizedBox(
+          width: 400,
+          child: ConfigurationBar(
+            fields: [
+              _ConfiguratorGroup(
+                title: 'Stage Arguments',
+                configurators: stageConfigurators,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              _ConfiguratorGroup(
+                title: 'Widget Arguments',
+                configurators: widgetConfigurators,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -136,12 +129,26 @@ class Stage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FlexibleStage(
-        stageController: stageController,
-        child: Center(
-          child: child,
-        ),
+    return ColoredBox(
+      color: stageController.backgroundColor,
+      child: Stack(
+        children: [
+          Center(
+            child: FlexibleStage(
+              stageController: stageController,
+              child: Center(
+                child: child,
+              ),
+            ),
+          ),
+          Positioned(
+            right: 20,
+            bottom: 20,
+            child: StageSettingsWidget(
+              stageController: stageController,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -203,19 +210,26 @@ class StageController extends ChangeNotifier {
   WidgetStageData? get selectedWidget => _selectedWidget;
 
   void selectWidget(WidgetStageData selectedWidget) {
-    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
-      widgetConfigurator.removeListener(notifyListeners);
-    }
-    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
-      stageConfigurator.removeListener(notifyListeners);
+    if (_selectedWidget == selectedWidget) {
+      for (final configurator in _selectedWidget!.allConfigurators) {
+        configurator.removeListener(notifyListeners);
+      }
     }
     _selectedWidget = selectedWidget;
-    for (final widgetConfigurator in _selectedWidget?.widgetConfigurators ?? <FieldConfigurator>[]) {
-      widgetConfigurator.addListener(notifyListeners);
+    if (_selectedWidget == selectedWidget) {
+      for (final configurator in _selectedWidget!.allConfigurators) {
+        configurator.addListener(notifyListeners);
+      }
     }
-    for (final stageConfigurator in _selectedWidget?.stageConfigurators ?? <FieldConfigurator>[]) {
-      stageConfigurator.addListener(notifyListeners);
-    }
+    notifyListeners();
+  }
+
+  Color _backgroundColor = Colors.white;
+
+  Color get backgroundColor => _backgroundColor;
+
+  void setBackgroundColor(Color color) {
+    _backgroundColor = color;
     notifyListeners();
   }
 }

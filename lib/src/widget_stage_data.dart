@@ -81,4 +81,6 @@ abstract class WidgetStageData {
   List<FieldConfigurator> get stageConfigurators;
 
   Size? get stageSize => const Size(600, 800);
+
+  List<FieldConfigurator> get allConfigurators => [...widgetConfigurators, ...stageConfigurators];
 }
