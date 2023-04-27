@@ -16,7 +16,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final StageController _stageController = StageController();
+
+  final ThemeData theme = ThemeData.dark();
+
+  late final StageController _stageController = StageController(theme: theme);
 
   final widgetsOnStage = [
     MyWidgetStageData(),
@@ -28,9 +31,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      darkTheme: ThemeData.dark(),
+      theme: theme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: theme.colorScheme.background,
         body: Row(
           children: [
             SizedBox(

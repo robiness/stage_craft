@@ -18,11 +18,12 @@ class WidgetStage extends StatefulWidget {
 }
 
 class _WidgetStageState extends State<WidgetStage> {
-  late final StageController _stageController = widget.controller ?? StageController();
+  late final StageController _stageController;
 
   @override
   void initState() {
     super.initState();
+    _stageController = widget.controller ?? StageController(theme: Theme.of(context));
     _stageController.addListener(() {
       setState(() {});
     });
@@ -205,6 +206,12 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
 }
 
 class StageController extends ChangeNotifier {
+  StageController({
+    required this.theme,
+  });
+
+  final ThemeData theme;
+
   WidgetStageData? _selectedWidget;
 
   WidgetStageData? get selectedWidget => _selectedWidget;
@@ -224,12 +231,17 @@ class StageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Color _backgroundColor = Colors.white;
+  late Color _backgroundColor = theme.colorScheme.background;
 
   Color get backgroundColor => _backgroundColor;
 
   void setBackgroundColor(Color color) {
     _backgroundColor = color;
+    notifyListeners();
+  }
+
+  void resetBackgroundColor() {
+    _backgroundColor = theme.colorScheme.background;
     notifyListeners();
   }
 }

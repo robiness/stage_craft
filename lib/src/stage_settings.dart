@@ -38,8 +38,9 @@ class StageSettingsWidget extends StatelessWidget {
                         ),
                         actions: <Widget>[
                           ElevatedButton(
-                            child: const Text('Abort'),
+                            child: const Text('Reset'),
                             onPressed: () {
+                              stageController.resetBackgroundColor();
                               Navigator.of(context).pop();
                             },
                           ),
