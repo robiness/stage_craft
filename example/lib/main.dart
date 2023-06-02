@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  final ThemeData theme = ThemeData.dark();
+  final ThemeData theme = ThemeData.light();
 
   late final StageController _stageController = StageController(theme: theme);
 
@@ -34,7 +34,6 @@ class _MyAppState extends State<MyApp> {
       theme: theme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: theme.colorScheme.background,
         body: Row(
           children: [
             SizedBox(

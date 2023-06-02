@@ -23,7 +23,12 @@ class _WidgetStageState extends State<WidgetStage> {
   @override
   void initState() {
     super.initState();
-    _stageController = widget.controller ?? StageController(theme: Theme.of(context));
+    _stageController = widget.controller ??
+        StageController(
+          theme: Theme.of(context),
+          stageSize: const Size(600, 800),
+          stagePosition: const Offset(50, 50),
+        );
     _stageController.addListener(() {
       setState(() {});
     });
@@ -52,15 +57,12 @@ class _WidgetStageState extends State<WidgetStage> {
           child: ConfigurationBar(
             fields: [
               _ConfiguratorGroup(
-                title: 'Stage Arguments',
-                configurators: stageConfigurators,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              _ConfiguratorGroup(
                 title: 'Widget Arguments',
                 configurators: widgetConfigurators,
+              ),
+              _ConfiguratorGroup(
+                title: 'Stage Arguments',
+                configurators: stageConfigurators,
               ),
             ],
           ),
@@ -208,13 +210,22 @@ abstract class FieldConfigurator<T> extends ChangeNotifier {
 class StageController extends ChangeNotifier {
   StageController({
     required this.theme,
-  });
+    Size? stageSize,
+    Offset? stagePosition,
+  })  : stageSize = stageSize ?? const Size(600, 800),
+        stagePosition = stagePosition ?? const Offset(50, 50);
 
   final ThemeData theme;
 
   WidgetStageData? _selectedWidget;
 
   WidgetStageData? get selectedWidget => _selectedWidget;
+
+  // The size of the stage.
+  Size stageSize;
+
+  // The position of the stage on the screen.
+  Offset stagePosition;
 
   void selectWidget(WidgetStageData selectedWidget) {
     if (_selectedWidget == selectedWidget) {

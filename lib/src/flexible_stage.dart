@@ -18,17 +18,47 @@ class FlexibleStage extends StatefulWidget {
 const ballDiameter = 22.0;
 
 class _ResizableWidgetState extends State<FlexibleStage> {
-  late double height = 600;
-  late double width = 800;
-
-  double top = 50;
-  double left = 50;
-
-  BoxConstraints? currentConstraints;
+  late BoxConstraints? _currentConstraints;
 
   bool _isDragging = false;
 
   static const handlePadding = 32.0;
+
+  double get height => widget.stageController.stageSize.height;
+
+  set height(double newHeight) {
+    widget.stageController.stageSize = Size(
+      widget.stageController.stageSize.width,
+      newHeight,
+    );
+  }
+
+  double get width => widget.stageController.stageSize.width;
+
+  set width(double newWidth) {
+    widget.stageController.stageSize = Size(
+      newWidth,
+      widget.stageController.stageSize.height,
+    );
+  }
+
+  double get top => widget.stageController.stagePosition.dy;
+
+  set top(double newTop) {
+    widget.stageController.stagePosition = Offset(
+      widget.stageController.stagePosition.dx,
+      newTop,
+    );
+  }
+
+  double get left => widget.stageController.stagePosition.dx;
+
+  set left(double newWidth) {
+    widget.stageController.stagePosition = Offset(
+      newWidth,
+      widget.stageController.stagePosition.dy,
+    );
+  }
 
   void onDrag(double dx, double dy) {
     final newHeight = height + dy;
@@ -43,15 +73,6 @@ class _ResizableWidgetState extends State<FlexibleStage> {
   @override
   void initState() {
     super.initState();
-    widget.stageController.addListener(() {
-      if (widget.stageController.selectedWidget != null) {
-        setState(() {
-          height = widget.stageController.selectedWidget!.stageSize!.height;
-          width = widget.stageController.selectedWidget!.stageSize!.width;
-          centerStage();
-        });
-      }
-    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       centerStage();
     });
@@ -59,8 +80,8 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   void centerStage() {
     setState(() {
-      top = currentConstraints!.maxHeight / 2 - height / 2;
-      left = currentConstraints!.maxWidth / 2 - width / 2;
+      top = _currentConstraints!.maxHeight / 2 - height / 2;
+      left = _currentConstraints!.maxWidth / 2 - width / 2;
     });
   }
 
@@ -86,7 +107,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   void dragRight(double dx, double dy) {
     final newWidth = width + dx;
-    if (newWidth + left < currentConstraints!.maxWidth - 70) {
+    if (newWidth + left < _currentConstraints!.maxWidth - 70) {
       setState(() {
         width = newWidth > 0 ? newWidth : 0;
       });
@@ -105,7 +126,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   void dragDown(double dx, double dy) {
     final newHeight = height + dy;
-    if (newHeight + top < currentConstraints!.maxHeight - 70) {
+    if (newHeight + top < _currentConstraints!.maxHeight - 70) {
       setState(() {
         height = newHeight > 0 ? newHeight : 0;
       });
@@ -116,7 +137,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        currentConstraints = constraints;
+        _currentConstraints = constraints;
         return CustomPaint(
           painter: GridRaster(),
           child: Stack(
