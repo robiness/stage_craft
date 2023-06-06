@@ -13,7 +13,7 @@ class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
   @override
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -29,7 +29,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   @override
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
-      value: value,
+        configurator: this,
       updateValue: (value) => updateValue(value ?? EdgeInsets.zero),
     );
   }
@@ -38,7 +38,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
 class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeInsets?> {
   const PaddingFieldConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -49,11 +49,11 @@ class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeIn
 class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurationWidget> {
   @override
   Widget build(BuildContext context) {
-    final padding = widget.value ?? EdgeInsets.zero;
+    final padding = widget.configurator.value ?? EdgeInsets.zero;
     return Column(
       children: [
         _PaddingField(
-          value: widget.value?.top,
+          value: padding.top,
           onChanged: (value) {
             setState(() {
               final newValue = padding.copyWith(top: value);
@@ -67,7 +67,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _PaddingField(
-              value: widget.value?.left,
+              value: padding.left,
               onChanged: (value) {
                 setState(() {
                   final newValue = padding.copyWith(left: value);
@@ -78,7 +78,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
             ),
             const SizedBox(width: 8.0),
             _PaddingField(
-              value: widget.value?.right,
+              value: padding.right,
               onChanged: (value) {
                 setState(() {
                   final newValue = padding.copyWith(right: value);
@@ -91,7 +91,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
         ),
         const SizedBox(height: 8.0),
         _PaddingField(
-          value: widget.value?.bottom,
+          value: padding.bottom,
           onChanged: (value) {
             setState(() {
               final newValue = padding.copyWith(bottom: value);

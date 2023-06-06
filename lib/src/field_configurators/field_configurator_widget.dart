@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stage_craft/src/widget_stage.dart';
 
-class FieldConfiguratorWidget<T> extends StatelessWidget {
+class FieldConfiguratorWidget<T> extends StatefulWidget {
   const FieldConfiguratorWidget({
     super.key,
     required this.fieldConfigurator,
@@ -13,6 +13,11 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
   final FieldConfigurator fieldConfigurator;
 
   @override
+  State<FieldConfiguratorWidget<T>> createState() => _FieldConfiguratorWidgetState<T>();
+}
+
+class _FieldConfiguratorWidgetState<T> extends State<FieldConfiguratorWidget<T>> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 12.0),
@@ -21,7 +26,7 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '${fieldConfigurator.name}:',
+              '${widget.fieldConfigurator.name}:',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -29,13 +34,13 @@ class FieldConfiguratorWidget<T> extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (fieldConfigurator.isNullable) ...[
+                if (widget.fieldConfigurator.isNullable) ...[
                   NullableButton(
-                    fieldConfigurator: fieldConfigurator,
+                    fieldConfigurator: widget.fieldConfigurator,
                   ),
                   const SizedBox(width: 4.0),
                 ],
-                Expanded(child: child),
+                Expanded(child: widget.child),
               ],
             ),
           ),
@@ -105,11 +110,11 @@ abstract class ConfigurationWidget<T> extends StatelessWidget {
 abstract class StatefulConfigurationWidget<T> extends StatefulWidget {
   const StatefulConfigurationWidget({
     super.key,
-    required this.value,
+    required this.configurator,
     required this.updateValue,
   });
 
-  final T value;
+  final FieldConfigurator<T> configurator;
   final void Function(T newValue) updateValue;
 }
 

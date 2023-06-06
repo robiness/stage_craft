@@ -13,7 +13,7 @@ class IntFieldConfiguratorNullable extends FieldConfigurator<int?> {
   @override
   Widget build(BuildContext context) {
     return IntFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -29,7 +29,7 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
   @override
   Widget build(BuildContext context) {
     return IntFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: (value) {
         updateValue(value ?? 0);
       },
@@ -40,7 +40,7 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
 class IntFieldConfigurationWidget extends StatefulConfigurationWidget<int?> {
   const IntFieldConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -49,8 +49,20 @@ class IntFieldConfigurationWidget extends StatefulConfigurationWidget<int?> {
 }
 
 class _IntFieldConfigurationWidgetState extends State<IntFieldConfigurationWidget> {
-  // for example
-  late final TextEditingController _controller = TextEditingController(text: widget.value.toString());
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController(
+      text: widget.configurator.value.toString(),
+    );
+    widget.configurator.addListener(() {
+      if(widget.configurator.value == null) {
+        _controller.text = '';
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

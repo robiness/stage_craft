@@ -12,7 +12,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   @override
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
       },
@@ -30,7 +30,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   @override
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -39,7 +39,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
 class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
   const ColorConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -48,7 +48,7 @@ class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
 }
 
 class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
-  late Color? color = widget.value;
+  late Color? color = widget.configurator.value;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
               title: const Text('Pick a color!'),
               content: SingleChildScrollView(
                 child: ColorPicker(
-                  pickerColor: widget.value ?? Colors.white,
+                  pickerColor: color ?? Colors.white,
                   onColorChanged: (newColor) {
                     color = newColor;
                   },
@@ -97,7 +97,7 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
               width: 38,
               foregroundDecoration: BoxDecoration(
                 // The actual color drawn over the chessboard pattern
-                color: widget.value,
+                color: widget.configurator.value,
               ),
               // The chessboard pattern
               child: const CustomPaint(

@@ -12,7 +12,7 @@ class StringFieldConfiguratorNullable extends FieldConfigurator<String?> {
   @override
   Widget build(BuildContext context) {
     return StringFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -28,7 +28,7 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
   @override
   Widget build(BuildContext context) {
     return StringFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: (value) {
         updateValue(value ?? '');
       },
@@ -39,7 +39,7 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
 class StringFieldConfigurationWidget extends StatefulConfigurationWidget<String?> {
   const StringFieldConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -48,7 +48,20 @@ class StringFieldConfigurationWidget extends StatefulConfigurationWidget<String?
 }
 
 class _StringFieldConfigurationWidgetState extends State<StringFieldConfigurationWidget> {
-  late final TextEditingController _controller = TextEditingController(text: widget.value);
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController(
+      text: widget.configurator.value.toString(),
+    );
+    widget.configurator.addListener(() {
+      if(widget.configurator.value == null) {
+        _controller.text = '';
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
