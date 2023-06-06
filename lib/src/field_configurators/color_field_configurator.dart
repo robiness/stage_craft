@@ -52,59 +52,65 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Pick a color!'),
-              content: SingleChildScrollView(
-                child: ColorPicker(
-                  pickerColor: widget.value ?? Colors.white,
-                  onColorChanged: (newColor) {
-                    color = newColor;
-                  },
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () async {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Pick a color!'),
+                content: SingleChildScrollView(
+                  child: ColorPicker(
+                    pickerColor: widget.value ?? Colors.white,
+                    onColorChanged: (newColor) {
+                      color = newColor;
+                    },
+                  ),
+                ),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: const Text('Abort'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Text('Accept'),
+                    onPressed: () {
+                      widget.updateValue(color);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              height: 38,
+              width: 38,
+              foregroundDecoration: BoxDecoration(
+                // The actual color drawn over the chessboard pattern
+                color: widget.value,
+              ),
+              // The chessboard pattern
+              child: const CustomPaint(
+                foregroundPainter: ChessBoardPainter(
+                  boxSize: 8,
+                  // The color of the chessboard pattern
+                  color: Colors.grey,
+                ),
+                child: ColoredBox(
+                  // Background of the chessboard pattern
+                  color: Colors.white,
                 ),
               ),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: const Text('Abort'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('Accept'),
-                  onPressed: () {
-                    widget.updateValue(color);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          height: 48,
-          width: 48,
-          foregroundDecoration: BoxDecoration(
-            // The actual color drawn over the chessboard pattern
-            color: widget.value,
-          ),
-          // The chessboard pattern
-          child: const CustomPaint(
-            foregroundPainter: ChessBoardPainter(
-              boxSize: 8,
-              // The color of the chessboard pattern
-              color: Colors.grey,
-            ),
-            child: ColoredBox(
-              // Background of the chessboard pattern
-              color: Colors.white,
             ),
           ),
         ),

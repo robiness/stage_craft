@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -53,19 +54,14 @@ class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfiguratio
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-      ),
+    return FieldConfiguratorInputField(
       controller: _controller,
-      onChanged: (newValue) {
-        widget.updateValue(
-          double.tryParse(newValue),
-        );
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[0-9,.]')),
+      ],
+      onChanged: (value) {
+        final replacedComma = value.replaceAll(',', '.');
+        widget.updateValue(double.tryParse(replacedComma));
       },
     );
   }

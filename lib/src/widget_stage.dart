@@ -56,14 +56,16 @@ class _WidgetStageState extends State<WidgetStage> {
           width: 400,
           child: ConfigurationBar(
             fields: [
-              _ConfiguratorGroup(
-                title: 'Widget Arguments',
-                configurators: widgetConfigurators,
-              ),
-              _ConfiguratorGroup(
-                title: 'Stage Arguments',
-                configurators: stageConfigurators,
-              ),
+              if (widgetConfigurators?.isNotEmpty == true)
+                _ConfiguratorGroup(
+                  title: 'Widget',
+                  configurators: widgetConfigurators,
+                ),
+              if (stageConfigurators?.isNotEmpty == true)
+                _ConfiguratorGroup(
+                  title: 'Stage',
+                  configurators: stageConfigurators,
+                ),
             ],
           ),
         ),
@@ -83,38 +85,49 @@ class _ConfiguratorGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(bottom: 4.0),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade400),
-            ),
-          ),
-          width: double.infinity,
-          child: Text(
-            textAlign: TextAlign.center,
-            title,
-            style: TextStyle(
-              color: Colors.grey.shade400,
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.blue.withOpacity(0.1),
+        border: Border.all(
+          color: Colors.blue.withOpacity(0.2),
         ),
-        const SizedBox(
-          height: 8,
-        ),
-        ...?configurators?.map((configurator) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: FieldConfiguratorWidget(
-              fieldConfigurator: configurator,
-              child: configurator.build(context),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+              child: Center(
+                child: Text(
+                  textAlign: TextAlign.center,
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
-          );
-        }),
-      ],
+            Divider(
+              color: Colors.blue.withOpacity(0.2),
+              thickness: 1,
+            ),
+            ...?configurators?.map((configurator) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: FieldConfiguratorWidget(
+                  fieldConfigurator: configurator,
+                  child: configurator.build(context),
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -242,7 +255,7 @@ class StageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  late Color _backgroundColor = theme.colorScheme.background;
+  late Color _backgroundColor = theme.canvasColor;
 
   Color get backgroundColor => _backgroundColor;
 
@@ -252,7 +265,7 @@ class StageController extends ChangeNotifier {
   }
 
   void resetBackgroundColor() {
-    _backgroundColor = theme.colorScheme.background;
+    _backgroundColor = theme.canvasColor;
     notifyListeners();
   }
 }

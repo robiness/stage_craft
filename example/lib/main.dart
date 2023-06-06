@@ -16,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final ThemeData theme = ThemeData.light();
 
   late final StageController _stageController = StageController(theme: theme);

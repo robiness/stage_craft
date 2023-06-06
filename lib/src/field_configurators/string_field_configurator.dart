@@ -52,14 +52,7 @@ class _StringFieldConfigurationWidgetState extends State<StringFieldConfiguratio
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-      ),
+    return FieldConfiguratorInputField(
       controller: _controller,
       onChanged: widget.updateValue,
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -53,19 +54,13 @@ class _IntFieldConfigurationWidgetState extends State<IntFieldConfigurationWidge
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-      ),
+    return FieldConfiguratorInputField(
       controller: _controller,
-      onChanged: (newValue) {
-        widget.updateValue(
-          int.tryParse(newValue),
-        );
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      onChanged: (value) {
+        widget.updateValue(int.tryParse(value));
       },
     );
   }
