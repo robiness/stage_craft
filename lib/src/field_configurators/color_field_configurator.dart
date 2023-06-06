@@ -52,44 +52,44 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () async {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Pick a color!'),
-                content: SingleChildScrollView(
-                  child: ColorPicker(
-                    pickerColor: widget.value ?? Colors.white,
-                    onColorChanged: (newColor) {
-                      color = newColor;
-                    },
-                  ),
+    return GestureDetector(
+      onTap: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Pick a color!'),
+              content: SingleChildScrollView(
+                child: ColorPicker(
+                  pickerColor: widget.value ?? Colors.white,
+                  onColorChanged: (newColor) {
+                    color = newColor;
+                  },
                 ),
-                actions: <Widget>[
-                  ElevatedButton(
-                    child: const Text('Abort'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: const Text('Accept'),
-                    onPressed: () {
-                      widget.updateValue(color);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Align(
-          alignment: Alignment.centerRight,
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('Abort'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('Accept'),
+                  onPressed: () {
+                    widget.updateValue(color);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Container(

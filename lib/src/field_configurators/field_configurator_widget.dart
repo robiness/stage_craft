@@ -66,7 +66,7 @@ class _NullableButtonState extends State<NullableButton> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
-      cursor: SystemMouseCursors.click,
+      cursor: isNull ? SystemMouseCursors.basic : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () => widget.fieldConfigurator.updateValue(null),
         child: Container(
