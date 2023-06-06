@@ -6,7 +6,6 @@ class MyListTileWidgetStage extends WidgetStageData {
       : _tileCount = IntFieldConfigurator(value: 1, name: 'tileCount'),
         _listPadding = PaddingFieldConfigurator(value: EdgeInsets.zero, name: 'listPadding'),
         _title = StringFieldConfigurator(value: 'My List Tile', name: 'title'),
-        _stageColor = ColorFieldConfigurator(value: Colors.transparent, name: 'stageColor'),
         _circleColor = ColorFieldConfigurator(value: Colors.purple, name: 'circleColor'),
         _tileColor = ColorFieldConfiguratorNullable(value: Colors.cyan, name: 'tileColor'),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
@@ -30,8 +29,6 @@ class MyListTileWidgetStage extends WidgetStageData {
       _tileCount,
       _tileGap,
       _listPadding,
-      _stageColor,
-      _circleColor,
     ];
   }
 
@@ -43,30 +40,26 @@ class MyListTileWidgetStage extends WidgetStageData {
   final DoubleFieldConfiguratorNullable _borderRadius;
   final PaddingFieldConfigurator _listPadding;
   final StringFieldConfigurator _title;
-  final ColorFieldConfigurator _stageColor;
   final ColorFieldConfigurator _circleColor;
   final ColorFieldConfiguratorNullable _textColor;
   final ColorFieldConfiguratorNullable _tileColor;
 
   @override
   Widget widgetBuilder(BuildContext context) {
-    return ColoredBox(
-      color: _stageColor.value,
-      child: ListView.separated(
-        padding: _listPadding.value,
-        itemCount: _tileCount.value,
-        separatorBuilder: (_, __) => SizedBox(height: _tileGap.value),
-        itemBuilder: (context, index) {
-          return _MyTitleTileWidget(
-            title: _title.value,
-            index: index,
-            circleColor: _circleColor.value,
-            tileColor: _tileColor.value,
-            borderRadius: _borderRadius.value,
-            textColor: _textColor.value,
-          );
-        },
-      ),
+    return ListView.separated(
+      padding: _listPadding.value,
+      itemCount: _tileCount.value,
+      separatorBuilder: (_, __) => SizedBox(height: _tileGap.value),
+      itemBuilder: (context, index) {
+        return _MyTitleTileWidget(
+          title: _title.value,
+          index: index,
+          circleColor: _circleColor.value,
+          tileColor: _tileColor.value,
+          borderRadius: _borderRadius.value,
+          textColor: _textColor.value,
+        );
+      },
     );
   }
 }

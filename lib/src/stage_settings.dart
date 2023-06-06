@@ -17,6 +17,13 @@ class StageSettingsWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFE0E0E0),
         borderRadius: BorderRadius.circular(8),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x33000000),
+            blurRadius: 4,
+            offset: Offset(2, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -60,6 +67,13 @@ class StageSettingsWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: stageController.backgroundColor,
                     shape: BoxShape.circle,
+                    boxShadow:  const [
+                      BoxShadow(
+                        color: Color(0x33000000),
+                        blurRadius: 1,
+                        offset: Offset(-0.5, -0.5),
+                      ),
+                    ],
                   ),
                 ),
               ),
