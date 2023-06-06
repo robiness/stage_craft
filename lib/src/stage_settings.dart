@@ -67,7 +67,7 @@ class StageSettingsWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: stageController.backgroundColor,
                     shape: BoxShape.circle,
-                    boxShadow:  const [
+                    boxShadow: const [
                       BoxShadow(
                         color: Color(0x33000000),
                         blurRadius: 1,

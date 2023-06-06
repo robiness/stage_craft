@@ -163,7 +163,7 @@ class Stage extends StatelessWidget {
             child: StageSettingsWidget(
               stageController: stageController,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -225,7 +225,7 @@ class StageController extends ChangeNotifier {
     required this.theme,
     Size? stageSize,
     Offset? stagePosition,
-  })  : stageSize = stageSize ?? const Size(600, 800),
+  })  : _stageSize = stageSize ?? const Size(600, 800),
         stagePosition = stagePosition ?? const Offset(50, 50);
 
   final ThemeData theme;
@@ -235,10 +235,26 @@ class StageController extends ChangeNotifier {
   WidgetStageData? get selectedWidget => _selectedWidget;
 
   // The size of the stage.
-  Size stageSize;
+  Size _stageSize;
+
+  Size get stageSize => _stageSize;
+
+  set stageSize(Size size) {
+    _stageSize = size;
+    notifyListeners();
+  }
 
   // The position of the stage on the screen.
   Offset stagePosition;
+
+  double _scale = 1;
+
+  double get scale => _scale;
+
+  set scale(double scale) {
+    _scale = scale;
+    notifyListeners();
+  }
 
   void selectWidget(WidgetStageData selectedWidget) {
     if (_selectedWidget == selectedWidget) {
