@@ -29,7 +29,6 @@ class MyListTileWidgetStage extends WidgetStageData {
       _tileCount,
       _tileGap,
       _listPadding,
-      _circleColor,
     ];
   }
 
