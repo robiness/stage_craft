@@ -239,6 +239,14 @@ class StageController extends ChangeNotifier {
 
   Size get stageSize => _stageSize;
 
+  void setWidth(double width) {
+    stageSize = Size(
+      width,
+      stageSize.height,
+    );
+    notifyListeners();
+  }
+
   set stageSize(Size size) {
     _stageSize = size;
     notifyListeners();

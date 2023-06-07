@@ -38,13 +38,6 @@ class _ResizableWidgetState extends State<FlexibleStage> {
 
   double get width => widget.stageController.stageSize.width;
 
-  set width(double newWidth) {
-    widget.stageController.stageSize = Size(
-      newWidth,
-      widget.stageController.stageSize.height,
-    );
-  }
-
   double get scale => widget.stageController.scale;
 
   double get top => widget.stageController.stagePosition.dy;
@@ -95,7 +88,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
     if (left + dx > 0 && newWidth > 0) {
       setState(() {
         left += dx;
-        width = newWidth > 0 ? newWidth : 0;
+        widget.stageController.setWidth(newWidth > 0 ? newWidth : 0);
       });
     }
   }
@@ -104,7 +97,7 @@ class _ResizableWidgetState extends State<FlexibleStage> {
     final newWidth = width + dx;
     if (newWidth + left < _currentConstraints!.maxWidth * (1 / scale) - 70) {
       setState(() {
-        width = newWidth > 0 ? newWidth : 0;
+        widget.stageController.setWidth(newWidth.clamp(0, double.infinity).toDouble());
       });
     }
   }
@@ -396,8 +389,8 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
         });
       },
       child: SizedBox(
-        width: 300,
-        height: 50,
+        width: 300 * (1 / widget.controller.scale),
+        height: 40 * (1 / widget.controller.scale),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 24, right: 24),
           child: _showEditButtons
@@ -406,6 +399,7 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
                     SizeInput(
                       controller: _heightController,
                       focusNode: _heightFocusNode,
+                      stageController: widget.controller,
                       onSubmitted: (value) {
                         widget.controller.stageSize = Size(
                           widget.controller.stageSize.width,
@@ -414,15 +408,16 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
                       },
                       isHovered: _showEditButtons,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         'x',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 14 * (1 / widget.controller.scale)),
                       ),
                     ),
                     SizeInput(
                       controller: _widthController,
+                      stageController: widget.controller,
                       focusNode: _widthFocusNode,
                       onSubmitted: (value) {
                         widget.controller.stageSize = Size(
@@ -551,18 +546,19 @@ class SizeInput extends StatelessWidget {
     required this.controller,
     required this.onSubmitted,
     required this.focusNode,
+    required this.stageController,
   });
 
   final bool isHovered;
   final void Function(String value) onSubmitted;
   final TextEditingController controller;
+  final StageController stageController;
   final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 30,
-      width: 100,
+      width: 60 * (1 / stageController.scale),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.blue.withOpacity(0.1),
@@ -572,9 +568,12 @@ class SizeInput extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 8.0 * (1 / stageController.scale)),
           child: TextField(
             focusNode: focusNode,
+            style: TextStyle(
+              fontSize: 12 * (1 / stageController.scale),
+            ),
             decoration: const InputDecoration(
               isDense: true,
               border: InputBorder.none,
