@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final ThemeData theme = ThemeData.light();
 
-  late final StageController _stageController = StageController(theme: theme);
+  late final StageController _stageController = StageController();
 
   final widgetsOnStage = [
     MyWidgetStageData(),
@@ -49,8 +49,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Expanded(
-              child: WidgetStage(
-                controller: _stageController,
+              child: StageCraft(
+                stageController: _stageController,
               ),
             ),
           ],
