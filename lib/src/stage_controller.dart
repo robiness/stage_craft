@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stage_craft/src/widget_stage_data.dart';
 
@@ -37,9 +36,14 @@ class StageController extends ChangeNotifier {
 
   double get zoom => _zoom;
 
-  set zoom(double value) {
+  void setZoom({
+    required double value,
+  }) {
     if (_zoom != value) {
       _zoom = value;
+      transformationController.value.setEntry(0, 0, zoom);
+      transformationController.value.setEntry(1, 1, zoom);
+      transformationController.value.setEntry(2, 2, zoom);
       notifyListeners();
     }
   }
@@ -93,4 +97,6 @@ class StageController extends ChangeNotifier {
     _backgroundColor = initialBackgroundColor;
     notifyListeners();
   }
+
+  final TransformationController transformationController = TransformationController();
 }

@@ -18,7 +18,7 @@ class StageCraft extends StatelessWidget {
     double? handleBallSize,
   })  : stageSize = stageSize ?? const Size(600, 800),
         stagePosition = stagePosition ?? const Offset(50, 50),
-        handleBallSize = handleBallSize ?? 30;
+        handleBallSize = handleBallSize ?? 20;
 
   /// The [StageController] that controls the stage.
   ///

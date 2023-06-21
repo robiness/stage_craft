@@ -172,96 +172,111 @@ class _StageAreaState extends State<StageArea> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          _currentConstraints = constraints;
-          return InteractiveViewerWithZoomOut(
-            stageController: widget.stageController,
-            child: SizedBox(
-              height: constraints.maxHeight * 10,
-              width: constraints.maxWidth * 10,
-              child: CustomPaint(
-                painter: GridRaster(),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: widget.stageController.stagePosition.dx,
-                      top: widget.stageController.stagePosition.dy,
-                      child: GestureDetector(
-                        onPanUpdate: (details) {
-                          widget.stageController.stagePosition = Offset(
-                            widget.stageController.stagePosition.dx + details.delta.dx,
-                            widget.stageController.stagePosition.dy + details.delta.dy,
-                          );
-                        },
-                        child: Container(
-                          color: widget.stageController.backgroundColor,
-                          height: widget.stageController.stageSize.height,
-                          width: widget.stageController.stageSize.width,
-                          child: widget.stageController.selectedWidget?.widgetBuilder(context),
-                        ),
-                      ),
-                    ),
-                    if (widget.stageController.showBalls)
-                      ...handles.map((handle) {
-                        return StageHandleBall(
-                          handle: handle,
-                          controller: widget.stageController,
-                          size: handleBallSize,
-                          color: widget.handleBallColor,
-                          onDragStart: () => widget.stageController.isDragging = true,
-                          onDragEnd: () {
-                            widget.stageController.isDragging = false;
-                          },
-                        );
-                      }),
-                    Positioned(
-                      top: widget.stageController.stagePosition.dy +
-                          widget.stageController.stageSize.height -
-                          handleBallSize / 2 +
-                          widget.stageController.scale(40),
-                      left: widget.stageController.stagePosition.dx - handleBallSize / 2 + widget.stageController.scale(10),
-                      child: StageSizeIndicator(
-                        controller: widget.stageController,
-                      ),
-                    ),
-                    Positioned(
-                      top: widget.stageController.stagePosition.dy,
-                      left: widget.stageController.stagePosition.dx,
-                      child: MouseRegion(
-                        hitTestBehavior: HitTestBehavior.translucent,
-                        onEnter: (_) {
-                            widget.stageController.showBalls = true;
-                        },
-                        onExit: (_) {
-                          setState(() {
-                            if (widget.stageController.isDragging == false) {
-                              widget.stageController.showBalls = false;
-                            }
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(50),
-                          child: SizedBox(
-                            height: widget.stageController.stageSize.height,
-                            width: widget.stageController.stageSize.width,
+      child: Stack(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              _currentConstraints = constraints;
+              return InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                transformationController: widget.stageController.transformationController,
+                scaleEnabled: false,
+                constrained: false,
+                child: SizedBox(
+                  height: constraints.maxHeight * 10,
+                  width: constraints.maxWidth * 10,
+                  child: CustomPaint(
+                    painter: GridRaster(),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: widget.stageController.stagePosition.dx,
+                          top: widget.stageController.stagePosition.dy,
+                          child: GestureDetector(
+                            onPanUpdate: (details) {
+                              widget.stageController.stagePosition = Offset(
+                                widget.stageController.stagePosition.dx + details.delta.dx,
+                                widget.stageController.stagePosition.dy + details.delta.dy,
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                color: widget.stageController.backgroundColor,
+                              ),
+                              height: widget.stageController.stageSize.height,
+                              width: widget.stageController.stageSize.width,
+                              child: widget.stageController.selectedWidget?.widgetBuilder(context),
+                            ),
                           ),
                         ),
-                      ),
+                        if (widget.stageController.showBalls)
+                          ...handles.map((handle) {
+                            return StageHandleBall(
+                              handle: handle,
+                              controller: widget.stageController,
+                              size: handleBallSize,
+                              color: widget.handleBallColor,
+                              onDragStart: () => widget.stageController.isDragging = true,
+                              onDragEnd: () {
+                                widget.stageController.isDragging = false;
+                              },
+                            );
+                          }),
+                        Positioned(
+                          top: widget.stageController.stagePosition.dy +
+                              widget.stageController.stageSize.height -
+                              handleBallSize / 2 +
+                              widget.stageController.scale(40),
+                          left: widget.stageController.stagePosition.dx -
+                              handleBallSize / 2 +
+                              widget.stageController.scale(10),
+                          child: StageSizeIndicator(
+                            controller: widget.stageController,
+                          ),
+                        ),
+                        Positioned(
+                          top: widget.stageController.stagePosition.dy,
+                          left: widget.stageController.stagePosition.dx,
+                          child: MouseRegion(
+                            hitTestBehavior: HitTestBehavior.translucent,
+                            onEnter: (_) {
+                              widget.stageController.showBalls = true;
+                            },
+                            onExit: (_) {
+                              setState(() {
+                                if (widget.stageController.isDragging == false) {
+                                  widget.stageController.showBalls = false;
+                                }
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(50),
+                              child: SizedBox(
+                                height: widget.stageController.stageSize.height,
+                                width: widget.stageController.stageSize.width,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      right: 20,
-                      bottom: 20,
-                      child: StageSettingsWidget(
-                        stageController: widget.stageController,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              );
+            },
+          ),
+          Positioned(
+            right: 20,
+            bottom: 20,
+            child: StageSettingsWidget(
+              stageController: widget.stageController,
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -363,51 +378,6 @@ class StageHandle {
     required this.position,
     required this.onDrag,
   });
-}
-
-class InteractiveViewerWithZoomOut extends StatefulWidget {
-  const InteractiveViewerWithZoomOut({
-    super.key,
-    required this.child,
-    required this.stageController,
-  });
-
-  final Widget child;
-  final StageController stageController;
-
-  @override
-  State<InteractiveViewerWithZoomOut> createState() => _InteractiveViewerWithZoomOutState();
-}
-
-class _InteractiveViewerWithZoomOutState extends State<InteractiveViewerWithZoomOut> {
-  final TransformationController _controller = TransformationController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Listener(
-      onPointerSignal: (signal) {
-        if (signal is PointerScrollEvent) {
-          final delta = signal.scrollDelta / 1000;
-          if (widget.stageController.zoom + delta.dy > 0.2) {
-            widget.stageController.zoom += delta.dy;
-            setState(() {
-              _controller.value.setEntry(0, 0, widget.stageController.zoom);
-              _controller.value.setEntry(1, 1, widget.stageController.zoom);
-              _controller.value.setEntry(2, 2, widget.stageController.zoom);
-            });
-          }
-        }
-      },
-      child: InteractiveViewer(
-        minScale: 0.1,
-        maxScale: 5,
-        transformationController: _controller,
-        scaleEnabled: false,
-        constrained: false,
-        child: widget.child,
-      ),
-    );
-  }
 }
 
 class GridRaster extends CustomPainter {

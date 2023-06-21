@@ -44,6 +44,7 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
                 title: 'Widget',
                 configurators: widgetConfigurators,
               ),
+            const SizedBox(height: 16),
             if (stageConfigurators?.isNotEmpty == true)
               _ConfiguratorGroup(
                 title: 'Stage',

@@ -34,6 +34,9 @@ class StageSettingsWidget extends StatelessWidget {
               children: [
                 const Text('Zoom'),
                 Text(stageController.zoom.toStringAsFixed(2)),
+                ZoomSlider(
+                  stageController: stageController,
+                ),
               ],
             ),
           ),
@@ -154,21 +157,23 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           offset: const Offset(0, -20),
           child: Align(
             alignment: Alignment.bottomRight,
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFE0E0E0),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x33000000),
-                    blurRadius: 4,
-                    offset: Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: widget.option,
+            child: Material(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0E0E0),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x33000000),
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: widget.option,
+                ),
               ),
             ),
           ),
@@ -176,5 +181,38 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       },
     );
     Overlay.of(context).insert(_overlayEntry!);
+  }
+}
+
+class ZoomSlider extends StatefulWidget {
+  const ZoomSlider({
+    super.key,
+    required this.stageController,
+  });
+
+  final StageController stageController;
+
+  @override
+  State<ZoomSlider> createState() => _ZoomSliderState();
+}
+
+class _ZoomSliderState extends State<ZoomSlider> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      child: Slider(
+        min: 0.1,
+        max: 2,
+        value: widget.stageController.zoom,
+        onChanged: (double value) {
+          setState(() {
+            widget.stageController.setZoom(
+              value: value,
+            );
+          });
+        },
+      ),
+    );
   }
 }
