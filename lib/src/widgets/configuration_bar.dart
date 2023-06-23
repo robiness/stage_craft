@@ -37,20 +37,22 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
       width: 400,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            if (widgetConfigurators?.isNotEmpty == true)
-              _ConfiguratorGroup(
-                title: 'Widget',
-                configurators: widgetConfigurators,
-              ),
-            const SizedBox(height: 16),
-            if (stageConfigurators?.isNotEmpty == true)
-              _ConfiguratorGroup(
-                title: 'Stage',
-                configurators: stageConfigurators,
-              ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (widgetConfigurators?.isNotEmpty == true)
+                _ConfiguratorGroup(
+                  title: 'Widget',
+                  configurators: widgetConfigurators,
+                ),
+              const SizedBox(height: 16),
+              if (stageConfigurators?.isNotEmpty == true)
+                _ConfiguratorGroup(
+                  title: 'Stage',
+                  configurators: stageConfigurators,
+                ),
+            ],
+          ),
         ),
       ),
     );
