@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
-import 'package:stage_craft/stage_craft.dart';
+
+import 'package:flutter/widgets.dart';
+import 'package:stage_craft/src/field_configurators/field_configurator.dart';
 
 class BoolFieldConfiguratorNullable extends FieldConfigurator<bool?> {
   BoolFieldConfiguratorNullable({
@@ -82,9 +82,9 @@ class _ToggleButton extends StatelessWidget {
 
     final fillColor = () {
       if (isSelected) {
-        return Colors.blue;
+        return const Color(0xFF195E96);
       }
-      return isHovered ? Colors.blue.withOpacity(0.3) : Colors.transparent;
+      return isHovered ? const Color(0xFF195E96).withOpacity(0.3) : const Color(0x00000000);
     }();
 
     return MouseRegion(

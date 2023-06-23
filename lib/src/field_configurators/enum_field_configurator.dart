@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
-import 'package:stage_craft/src/widget_stage.dart';
+import 'package:stage_craft/src/field_configurators/field_configurator.dart';
 
 /// Represents a nullable enum parameter for a widget on a [WidgetStage].
 class EnumFieldConfiguratorNullable<T extends Enum> extends FieldConfigurator<T?> {

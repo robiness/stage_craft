@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
-import 'package:stage_craft/src/widget_stage.dart';
+import 'package:stage_craft/src/field_configurators/field_configurator.dart';
 
 /// Represents a nullable EdgeInsets parameter for a widget on a [WidgetStage].
 class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
@@ -29,7 +28,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   @override
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
-        configurator: this,
+      configurator: this,
       updateValue: (value) => updateValue(value ?? EdgeInsets.zero),
     );
   }

@@ -1,6 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stage_craft/src/widget_stage.dart';
+import 'package:flutter/widgets.dart';
+
+export 'bool_field_configurator.dart';
+export 'color_field_configurator.dart';
+export 'double_field_configurator.dart';
+export 'enum_field_configurator.dart';
+export 'int_field_configurator.dart';
+export 'padding_field_configurator.dart';
+export 'string_field_configurator.dart';
+
+/// Representing a single parameter of a widget on stage.
+/// The [builder] returns a field for example a TextField to live update the widget.´
+/// @see [StringFieldConfigurator] or [ColorFieldConfigurator]
+abstract class FieldConfigurator<T> extends ChangeNotifier {
+  FieldConfigurator({
+    required this.value,
+    required this.name,
+  });
+
+  T value;
+
+  String name;
+
+  bool get isNullable => null is T;
+
+  void updateValue(T value) {
+    this.value = value;
+    notifyListeners();
+  }
+
+  Widget build(BuildContext context);
+}
 
 class FieldConfiguratorWidget<T> extends StatefulWidget {
   const FieldConfiguratorWidget({
@@ -45,52 +76,6 @@ class _FieldConfiguratorWidgetState<T> extends State<FieldConfiguratorWidget<T>>
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class NullableButton extends StatefulWidget {
-  const NullableButton({
-    super.key,
-    required this.fieldConfigurator,
-  });
-
-  final FieldConfigurator fieldConfigurator;
-
-  @override
-  State<NullableButton> createState() => _NullableButtonState();
-}
-
-class _NullableButtonState extends State<NullableButton> {
-  bool _isHovering = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final isNull = widget.fieldConfigurator.value == null;
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      cursor: isNull ? SystemMouseCursors.basic : SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => widget.fieldConfigurator.updateValue(null),
-        child: Container(
-          decoration: BoxDecoration(
-            color: isNull || _isHovering ? Colors.blue.withOpacity(0.2) : Colors.transparent,
-            shape: BoxShape.circle,
-            border: Border.all(color: isNull ? Colors.blue : Colors.grey),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Center(
-              child: Text(
-                'null',
-                textScaleFactor: 0.6,
-                style: TextStyle(color: isNull ? Colors.blue : Colors.grey),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -163,6 +148,52 @@ class _FieldConfiguratorInputFieldState extends State<FieldConfiguratorInputFiel
               keyboardType: TextInputType.number,
               controller: widget.controller,
               onChanged: widget.onChanged,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NullableButton extends StatefulWidget {
+  const NullableButton({
+    super.key,
+    required this.fieldConfigurator,
+  });
+
+  final FieldConfigurator fieldConfigurator;
+
+  @override
+  State<NullableButton> createState() => _NullableButtonState();
+}
+
+class _NullableButtonState extends State<NullableButton> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isNull = widget.fieldConfigurator.value == null;
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      cursor: isNull ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => widget.fieldConfigurator.updateValue(null),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isNull || _isHovering ? Colors.blue.withOpacity(0.2) : Colors.transparent,
+            shape: BoxShape.circle,
+            border: Border.all(color: isNull ? Colors.blue : Colors.grey),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Center(
+              child: Text(
+                'null',
+                textScaleFactor: 0.6,
+                style: TextStyle(color: isNull ? Colors.blue : Colors.grey),
+              ),
             ),
           ),
         ),

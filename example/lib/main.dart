@@ -1,3 +1,4 @@
+import 'package:example/stage_data/my_app_stage_data.dart';
 import 'package:example/stage_data/my_list_tile_widget_stage.dart';
 import 'package:example/stage_data/my_other_widget_stage.dart';
 import 'package:example/stage_data/my_widget_stage.dart';
@@ -18,12 +19,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final ThemeData theme = ThemeData.light();
 
-  late final StageController _stageController = StageController(theme: theme);
+  late final StageController _stageController = StageController(
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  );
 
   final widgetsOnStage = [
     MyWidgetStageData(),
     MyOtherWidgetStageData(),
     MyListTileWidgetStage(),
+    MyAppStageData(),
   ];
 
   @override
@@ -49,8 +53,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Expanded(
-              child: WidgetStage(
-                controller: _stageController,
+              child: StageCraft(
+                stageController: _stageController,
               ),
             ),
           ],

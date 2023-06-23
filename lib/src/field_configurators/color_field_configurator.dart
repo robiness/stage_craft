@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class ColorFieldConfigurator extends FieldConfigurator<Color> {
