@@ -6,9 +6,11 @@ class StageSettingsWidget extends StatelessWidget {
   const StageSettingsWidget({
     super.key,
     required this.stageController,
+    required this.constraints,
   });
 
   final StageController stageController;
+  final BoxConstraints? constraints;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +31,9 @@ class StageSettingsWidget extends StatelessWidget {
         children: [
           SettingsWidget(
             iconPath: 'assets/ruler.png',
-            option: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Zoom'),
-                Text(stageController.zoom.toStringAsFixed(2)),
-                ZoomSlider(
-                  stageController: stageController,
-                ),
-              ],
+            option: ZoomSlider(
+              constraints: constraints,
+              stageController: stageController,
             ),
           ),
           SizedBox(
@@ -188,9 +184,11 @@ class ZoomSlider extends StatefulWidget {
   const ZoomSlider({
     super.key,
     required this.stageController,
+    required this.constraints,
   });
 
   final StageController stageController;
+  final BoxConstraints? constraints;
 
   @override
   State<ZoomSlider> createState() => _ZoomSliderState();
@@ -199,20 +197,28 @@ class ZoomSlider extends StatefulWidget {
 class _ZoomSliderState extends State<ZoomSlider> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      child: Slider(
-        min: 0.1,
-        max: 2,
-        value: widget.stageController.zoom,
-        onChanged: (double value) {
-          setState(() {
-            widget.stageController.setZoom(
-              value: value,
-            );
-          });
-        },
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Zoom'),
+        Text(widget.stageController.zoom.toStringAsFixed(2),),
+        SizedBox(
+          width: 300,
+          child: Slider(
+            min: 0.1,
+            max: 2,
+            value: widget.stageController.zoom,
+            onChanged: (double value) {
+              setState(() {
+                widget.stageController.setZoom(
+                  value: value,
+                  constraints: widget.constraints,
+                );
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }

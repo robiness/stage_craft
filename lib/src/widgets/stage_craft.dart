@@ -9,16 +9,18 @@ import 'package:stage_craft/src/widgets/stage_area.dart';
 /// Use this to create a stage for your widgets.
 ///
 class StageCraft extends StatelessWidget {
-  const StageCraft({
+  StageCraft({
     super.key,
     required this.stageController,
     this.widgets = const [],
     Size? stageSize,
-    Offset? stagePosition,
-    double? handleBallSize,
+    StageCraftSettings? settings,
   })  : stageSize = stageSize ?? const Size(600, 800),
-        stagePosition = stagePosition ?? const Offset(50, 50),
-        handleBallSize = handleBallSize ?? 20;
+        settings = settings ??
+            StageCraftSettings(
+              handleBallSize: 20,
+              handleBallColor: const Color(0xFF185DE3).withOpacity(0.8),
+            );
 
   /// The [StageController] that controls the stage.
   ///
@@ -28,11 +30,8 @@ class StageCraft extends StatelessWidget {
   /// The size of the stage.
   final Size stageSize;
 
-  /// The position of the stage.
-  final Offset stagePosition;
-
   /// The size of the handle balls.
-  final double handleBallSize;
+  final StageCraftSettings settings;
 
   final List<WidgetStageData> widgets;
 
@@ -42,8 +41,7 @@ class StageCraft extends StatelessWidget {
       children: [
         StageArea(
           stageController: stageController,
-          handleBallSize: handleBallSize,
-          handleBallColor: const Color(0xFF185DE3).withOpacity(0.8),
+          settings: settings,
         ),
         ConfigurationBar(
           controller: stageController,
@@ -51,4 +49,16 @@ class StageCraft extends StatelessWidget {
       ],
     );
   }
+}
+
+class StageCraftSettings {
+  const StageCraftSettings({
+    required this.handleBallSize,
+    required this.handleBallColor,
+    this.initialBackgroundColor,
+  });
+
+  final Color? initialBackgroundColor;
+  final Color handleBallColor;
+  final double handleBallSize;
 }

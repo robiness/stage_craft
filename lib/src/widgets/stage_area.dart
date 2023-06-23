@@ -1,6 +1,4 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stage_craft/src/stage_settings.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -8,21 +6,19 @@ class StageArea extends StatefulWidget {
   const StageArea({
     super.key,
     required this.stageController,
-    required this.handleBallSize,
-    required this.handleBallColor,
+    required this.settings,
   });
 
   final StageController stageController;
-  final double handleBallSize;
-  final Color handleBallColor;
+  final StageCraftSettings settings;
 
   @override
   State<StageArea> createState() => _StageAreaState();
 }
 
 class _StageAreaState extends State<StageArea> {
-  late BoxConstraints? _currentConstraints;
-  late double handleBallSize = widget.stageController.scale(widget.handleBallSize);
+  BoxConstraints? _currentConstraints;
+  late double handleBallSize = widget.stageController.scale(widget.settings.handleBallSize);
 
   late final List<StageHandle> handles = [
     // top left
@@ -164,7 +160,7 @@ class _StageAreaState extends State<StageArea> {
     super.initState();
     widget.stageController.addListener(() {
       setState(() {
-        handleBallSize = widget.stageController.scale(widget.handleBallSize);
+        handleBallSize = widget.stageController.scale(widget.settings.handleBallSize);
       });
     });
   }
@@ -184,8 +180,8 @@ class _StageAreaState extends State<StageArea> {
                 scaleEnabled: false,
                 constrained: false,
                 child: SizedBox(
-                  height: constraints.maxHeight * 10,
-                  width: constraints.maxWidth * 10,
+                  height: _currentConstraints!.maxHeight * 10,
+                  width: _currentConstraints!.maxWidth * 10,
                   child: CustomPaint(
                     painter: GridRaster(),
                     child: Stack(
@@ -219,7 +215,7 @@ class _StageAreaState extends State<StageArea> {
                               handle: handle,
                               controller: widget.stageController,
                               size: handleBallSize,
-                              color: widget.handleBallColor,
+                              color: widget.settings.handleBallColor,
                               onDragStart: () => widget.stageController.isDragging = true,
                               onDragEnd: () {
                                 widget.stageController.isDragging = false;
@@ -273,6 +269,7 @@ class _StageAreaState extends State<StageArea> {
             right: 20,
             bottom: 20,
             child: StageSettingsWidget(
+              constraints: _currentConstraints,
               stageController: widget.stageController,
             ),
           ),

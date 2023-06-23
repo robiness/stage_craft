@@ -38,8 +38,9 @@ class StageController extends ChangeNotifier {
 
   void setZoom({
     required double value,
+    required BoxConstraints? constraints,
   }) {
-    if (_zoom != value) {
+    if (_zoom != value && constraints != null) {
       _zoom = value;
       transformationController.value.setEntry(0, 0, zoom);
       transformationController.value.setEntry(1, 1, zoom);
