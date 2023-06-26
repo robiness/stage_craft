@@ -43,8 +43,11 @@ class StageCraft extends StatelessWidget {
           stageController: stageController,
           settings: settings,
         ),
-        ConfigurationBar(
-          controller: stageController,
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfigurationBar(
+            controller: stageController,
+          ),
         ),
       ],
     );
