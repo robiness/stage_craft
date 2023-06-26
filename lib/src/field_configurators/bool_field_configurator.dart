@@ -1,5 +1,4 @@
-
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:stage_craft/src/field_configurators/field_configurator.dart';
 
 class BoolFieldConfiguratorNullable extends FieldConfigurator<bool?> {
@@ -47,17 +46,18 @@ class BoolFieldConfigurationWidget extends ConfigurationWidget<bool?> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: _ToggleButton(
+          child: BoolButton(
             isSelected: value == true,
             onTap: () => updateValue(true),
-            label: 'True',
+            label: 'true',
           ),
         ),
+        const SizedBox(width: 4),
         Expanded(
-          child: _ToggleButton(
+          child: BoolButton(
             isSelected: value == false,
             onTap: () => updateValue(false),
-            label: 'False',
+            label: 'false',
           ),
         ),
       ],
@@ -65,8 +65,9 @@ class BoolFieldConfigurationWidget extends ConfigurationWidget<bool?> {
   }
 }
 
-class _ToggleButton extends StatelessWidget {
-  const _ToggleButton({
+class BoolButton extends StatefulWidget {
+  const BoolButton({
+    super.key,
     required this.isSelected,
     required this.onTap,
     required this.label,
@@ -77,35 +78,35 @@ class _ToggleButton extends StatelessWidget {
   final String label;
 
   @override
+  State<BoolButton> createState() => _BoolButtonState();
+}
+
+class _BoolButtonState extends State<BoolButton> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    bool isHovered = false;
-
-    final fillColor = () {
-      if (isSelected) {
-        return const Color(0xFF195E96);
-      }
-      return isHovered ? const Color(0xFF195E96).withOpacity(0.3) : const Color(0x00000000);
-    }();
-
     return MouseRegion(
-      onEnter: (event) {
-        isHovered = true;
-      },
-      onExit: (event) {
-        isHovered = false;
-      },
-      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      cursor: widget.isSelected ? SystemMouseCursors.basic : SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+        onTap: widget.onTap,
+        child: Container(
           decoration: BoxDecoration(
-            color: fillColor,
+            color: widget.isSelected || _isHovering ? Colors.blue.withOpacity(0.2) : Colors.transparent,
+            borderRadius: BorderRadius.circular(2),
+            border: Border.all(
+              color: widget.isSelected ? Colors.blue : Colors.grey,
+            ),
           ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(label),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Center(
+              child: Text(
+                widget.label,
+                style: TextStyle(color: widget.isSelected ? Colors.blue : Colors.grey),
+              ),
             ),
           ),
         ),
