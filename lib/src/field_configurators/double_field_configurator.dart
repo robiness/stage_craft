@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
+import 'package:flutter/services.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 /// Represents a nullable double parameter for a widget on a [WidgetStage].
@@ -12,7 +12,7 @@ class DoubleFieldConfiguratorNullable extends FieldConfigurator<double?> {
   @override
   Widget build(BuildContext context) {
     return DoubleFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -28,7 +28,7 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
   @override
   Widget build(BuildContext context) {
     return DoubleFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: (value) {
         updateValue(value ?? 0.0);
       },
@@ -39,7 +39,7 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
 class DoubleFieldConfigurationWidget extends StatefulConfigurationWidget<double?> {
   const DoubleFieldConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -48,24 +48,32 @@ class DoubleFieldConfigurationWidget extends StatefulConfigurationWidget<double?
 }
 
 class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfigurationWidget> {
-  // for example
-  late final TextEditingController _controller = TextEditingController(text: widget.value.toString());
+
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController(
+      text: widget.configurator.value.toString(),
+    );
+    widget.configurator.addListener(() {
+      if(widget.configurator.value == null) {
+        _controller.text = '';
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-      ),
+    return FieldConfiguratorInputField(
       controller: _controller,
-      onChanged: (newValue) {
-        widget.updateValue(
-          double.tryParse(newValue),
-        );
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[0-9,.]')),
+      ],
+      onChanged: (value) {
+        final replacedComma = value.replaceAll(',', '.');
+        widget.updateValue(double.tryParse(replacedComma));
       },
     );
   }

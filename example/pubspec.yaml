@@ -11,15 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  lint: ^2.0.1
 
   stage_craft:
     path: ../
 
 
 dev_dependencies:
-  flutter_lints: ^2.0.0
-
+  lint: ^2.1.2
   flutter_test:
     sdk: flutter
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stage_craft/src/field_configurators/field_configurator_widget.dart';
-import 'package:stage_craft/src/widget_stage.dart';
+import 'package:stage_craft/src/field_configurators/field_configurator.dart';
 
 /// Represents a nullable EdgeInsets parameter for a widget on a [WidgetStage].
 class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
@@ -13,7 +12,7 @@ class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
   @override
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: updateValue,
     );
   }
@@ -29,7 +28,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   @override
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
-      value: value,
+      configurator: this,
       updateValue: (value) => updateValue(value ?? EdgeInsets.zero),
     );
   }
@@ -38,7 +37,7 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
 class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeInsets?> {
   const PaddingFieldConfigurationWidget({
     super.key,
-    required super.value,
+    required super.configurator,
     required super.updateValue,
   });
 
@@ -49,68 +48,56 @@ class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeIn
 class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurationWidget> {
   @override
   Widget build(BuildContext context) {
-    final padding = widget.value ?? EdgeInsets.zero;
+    final padding = widget.configurator.value ?? EdgeInsets.zero;
     return Column(
       children: [
-        SizedBox(
-          width: 80,
-          child: _PaddingField(
-            value: widget.value?.top,
-            onChanged: (value) {
-              setState(() {
-                final newValue = padding.copyWith(top: value);
-                widget.updateValue(newValue);
-              });
-            },
-            label: 'top',
-          ),
+        _PaddingField(
+          value: padding.top,
+          onChanged: (value) {
+            setState(() {
+              final newValue = padding.copyWith(top: value);
+              widget.updateValue(newValue);
+            });
+          },
+          label: 'top',
         ),
         const SizedBox(height: 8.0),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 60,
-              child: _PaddingField(
-                value: widget.value?.left,
-                onChanged: (value) {
-                  setState(() {
-                    final newValue = padding.copyWith(left: value);
-                    widget.updateValue(newValue);
-                  });
-                },
-                label: 'left',
-              ),
+            _PaddingField(
+              value: padding.left,
+              onChanged: (value) {
+                setState(() {
+                  final newValue = padding.copyWith(left: value);
+                  widget.updateValue(newValue);
+                });
+              },
+              label: 'left',
             ),
             const SizedBox(width: 8.0),
-            SizedBox(
-              width: 60,
-              child: _PaddingField(
-                value: widget.value?.right,
-                onChanged: (value) {
-                  setState(() {
-                    final newValue = padding.copyWith(right: value);
-                    widget.updateValue(newValue);
-                  });
-                },
-                label: 'right',
-              ),
+            _PaddingField(
+              value: padding.right,
+              onChanged: (value) {
+                setState(() {
+                  final newValue = padding.copyWith(right: value);
+                  widget.updateValue(newValue);
+                });
+              },
+              label: 'right',
             ),
           ],
         ),
         const SizedBox(height: 8.0),
-        SizedBox(
-          width: 80,
-          child: _PaddingField(
-            value: widget.value?.bottom,
-            onChanged: (value) {
-              setState(() {
-                final newValue = padding.copyWith(bottom: value);
-                widget.updateValue(newValue);
-              });
-            },
-            label: 'bottom',
-          ),
+        _PaddingField(
+          value: padding.bottom,
+          onChanged: (value) {
+            setState(() {
+              final newValue = padding.copyWith(bottom: value);
+              widget.updateValue(newValue);
+            });
+          },
+          label: 'bottom',
         ),
       ],
     );
@@ -154,24 +141,19 @@ class _PaddingFieldState extends State<_PaddingField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      inputFormatters: <TextInputFormatter>[
-        // Allow only digits, dot and 1 decimal
-        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d?')),
-      ],
-      decoration: InputDecoration(
-        labelText: widget.label,
-        isDense: true,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
+    return SizedBox(
+      height: 30,
+      width: 60,
+      child: FieldConfiguratorInputField(
+        controller: _controller,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp('[0-9,.]')),
+        ],
+        onChanged: (value) {
+          final replacedComma = value.replaceAll(',', '.');
+          widget.onChanged(double.tryParse(replacedComma) ?? 0);
+        },
       ),
-      controller: _controller,
-      onChanged: (value) {
-        widget.onChanged.call(double.tryParse(value) ?? 0);
-      },
     );
   }
 }
