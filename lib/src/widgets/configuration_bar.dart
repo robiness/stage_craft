@@ -5,10 +5,15 @@ import 'package:stage_craft/src/stage_controller.dart';
 class ConfigurationBar extends StatefulWidget {
   const ConfigurationBar({
     super.key,
+    this.configurationBarFooter,
     required this.controller,
   });
 
+  /// The controller of the stage.
   final StageController controller;
+
+  /// An optional footer of the configuration bar.
+  final Widget? configurationBarFooter;
 
   @override
   State<ConfigurationBar> createState() => _ConfigurationBarState();
@@ -51,6 +56,7 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
                   title: 'Stage',
                   configurators: stageConfigurators,
                 ),
+              if (widget.configurationBarFooter != null) widget.configurationBarFooter!
             ],
           ),
         ),
