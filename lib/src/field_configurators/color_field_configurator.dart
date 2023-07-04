@@ -191,38 +191,35 @@ class _ColorPicker extends StatelessWidget {
           const Text('Color Samples'),
           const SizedBox(height: 16.0),
           Wrap(
-            spacing: 18,
+            spacing: 24,
             runSpacing: 10,
             children: colorSamples!.map(
               (sample) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () => onColorChanged(sample.color),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: sample.color,
-                              shape: BoxShape.circle,
+                return MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => onColorChanged(sample.color),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: sample.color,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        if (sample.name != null) ...[
+                          const SizedBox(height: 6.0),
+                          Text(
+                            sample.name!,
+                            style: const TextStyle(
+                              fontSize: 10,
                             ),
                           ),
-                          if (sample.name != null) ...[
-                            const SizedBox(height: 6.0),
-                            Text(
-                              sample.name!,
-                              style: const TextStyle(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ]
-                        ],
-                      ),
+                        ]
+                      ],
                     ),
                   ),
                 );
