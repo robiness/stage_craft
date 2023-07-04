@@ -271,7 +271,7 @@ class _ColorPicker extends StatelessWidget {
 ///
 /// Used as optional parameters in [ColorFieldConfigurator] and [ColorFieldConfiguratorNullable].
 /// ```
-/// // Creating a ColorSample
+/// Creating a ColorSample
 /// const ColorSample sample = ColorSample(color: Colors.blue, name: "MyColors.blue");
 /// ```
 class ColorSample {
