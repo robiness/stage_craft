@@ -30,7 +30,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
     this.colorSamples,
   });
 
-  final List<Color>? colorSamples;
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
     this.colorSamples,
   });
 
-  final List<Color>? colorSamples;
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
                   content: SingleChildScrollView(
                     child: _ColorPicker(
                       color: color ?? Colors.white,
-                      sampleColors: colorSamples,
+                      colorSamples: colorSamples,
                       onColorChanged: (newColor) => setState(() => color = newColor),
                     ),
                   ),
@@ -168,12 +168,12 @@ class ChessBoardPainter extends CustomPainter {
 
 class _ColorPicker extends StatelessWidget {
   const _ColorPicker({
-    this.sampleColors,
+    this.colorSamples,
     this.color,
     required this.onColorChanged,
   });
 
-  final List<Color>? sampleColors;
+  final List<ColorSample>? colorSamples;
   final Color? color;
   final void Function(Color color) onColorChanged;
 
@@ -186,27 +186,42 @@ class _ColorPicker extends StatelessWidget {
           pickerColor: color ?? Colors.white,
           onColorChanged: onColorChanged,
         ),
-        if (sampleColors?.isNotEmpty == true) ...[
+        if (colorSamples?.isNotEmpty == true) ...[
           const SizedBox(height: 32.0),
           const Text('Color Samples'),
-          const SizedBox(height: 8.0),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: sampleColors!.map(
+          const SizedBox(height: 16.0),
+          Wrap(
+            spacing: 18,
+            runSpacing: 10,
+            children: colorSamples!.map(
               (sampleColor) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
-                      onTap: () => onColorChanged(sampleColor),
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: sampleColor,
-                          shape: BoxShape.circle,
-                        ),
+                      onTap: () => onColorChanged(sampleColor.color),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: sampleColor.color,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          if (sampleColor.name != null) ...[
+                            const SizedBox(height: 6.0),
+                            Text(
+                              sampleColor.name!,
+                              style: const TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                          ]
+                        ],
                       ),
                     ),
                   ),
@@ -218,4 +233,13 @@ class _ColorPicker extends StatelessWidget {
       ],
     );
   }
+}
+
+class ColorSample {
+  const ColorSample({
+    required this.color,
+    this.name,
+  });
+  final String? name;
+  final Color color;
 }
