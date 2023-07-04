@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart' as picker;
 
-/// A `_ColorPicker` widget presents a color picking interface with two modes of color selection.
+/// A color picking interface with two modes of color selection.
 ///
 /// The widget provides a complete color picker that allows free selection of any color. In addition,
 /// it also presents a list of predefined color samples to quickly select from if [colorSamples] are provided.
 ///
 /// ```
-/// Creating a _ColorPicker widget
-/// _ColorPicker(
+/// Creating a ColorPicker widget
+/// ColorPicker(
 ///   colorSamples: [ColorSample(color: Colors.blue, name: 'Blue')],
 ///   color: Colors.red,
 ///   onColorChanged: (color) {
