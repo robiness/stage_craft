@@ -44,6 +44,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
 
 class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
   const ColorConfigurationWidget({
+    super.key,
     required super.value,
     required super.updateValue,
     this.colorSamples,
