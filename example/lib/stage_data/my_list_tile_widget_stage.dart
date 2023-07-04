@@ -11,7 +11,7 @@ class MyListTileWidgetStage extends WidgetStageData {
         _tileColor = ColorFieldConfiguratorNullable(
           value: Colors.cyan,
           name: 'tileColor',
-          colorSamples: ExampleData.sampleColors,
+          colorSamples: ExampleData.colorSamples,
         ),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
         _borderRadius = DoubleFieldConfiguratorNullable(value: 10, name: 'borderRadius'),

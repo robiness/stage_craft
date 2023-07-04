@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class ExampleData {
-  static const sampleColors = [
+  static const colorSamples = [
     ColorSample(
       color: Colors.teal,
       name: 'StgColors.teal',
