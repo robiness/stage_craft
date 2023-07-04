@@ -63,13 +63,12 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
+                  scrollable: true,
                   title: const Text('Pick a color!'),
-                  content: SingleChildScrollView(
-                    child: _ColorPicker(
-                      color: color ?? Colors.white,
-                      colorSamples: colorSamples,
-                      onColorChanged: (newColor) => setState(() => color = newColor),
-                    ),
+                  content: _ColorPicker(
+                    color: color ?? Colors.white,
+                    colorSamples: colorSamples,
+                    onColorChanged: (newColor) => setState(() => color = newColor),
                   ),
                   actions: <Widget>[
                     ElevatedButton(
@@ -194,13 +193,13 @@ class _ColorPicker extends StatelessWidget {
             spacing: 18,
             runSpacing: 10,
             children: colorSamples!.map(
-              (sampleColor) {
+              (sample) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
-                      onTap: () => onColorChanged(sampleColor.color),
+                      onTap: () => onColorChanged(sample.color),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -208,14 +207,14 @@ class _ColorPicker extends StatelessWidget {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: sampleColor.color,
+                              color: sample.color,
                               shape: BoxShape.circle,
                             ),
                           ),
-                          if (sampleColor.name != null) ...[
+                          if (sample.name != null) ...[
                             const SizedBox(height: 6.0),
                             Text(
-                              sampleColor.name!,
+                              sample.name!,
                               style: const TextStyle(
                                 fontSize: 10,
                               ),
