@@ -59,10 +59,10 @@ class ColorPicker extends StatelessWidget {
             runSpacing: 10,
             children: colorSamples!.map(
               (sample) {
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => onColorChanged.call(sample.color),
+                return GestureDetector(
+                  onTap: () => onColorChanged.call(sample.color),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
