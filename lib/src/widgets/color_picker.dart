@@ -25,8 +25,7 @@ class ColorPicker extends StatelessWidget {
   /// The [color] parameter represents the currently selected color in the [ColorPicker]. If not provided,
   /// the color picker will default to white.
   ///
-  /// The [onColorChanged] parameter is a callback that will be called when a new color is selected, either
-  /// from the [ColorPicker] or from the color samples. This parameter is required.
+  /// The required [onColorChanged] parameter is a callback that will be called when a new color is selected.
   const ColorPicker({
     this.colorSamples,
     this.color,
