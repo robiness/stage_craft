@@ -175,7 +175,7 @@ class ChessBoardPainter extends CustomPainter {
 /// it also presents a list of predefined color samples to quickly select from if [colorSamples] are provided.
 ///
 /// ```
-/// // Creating a _ColorPicker widget
+/// Creating a _ColorPicker widget
 /// _ColorPicker(
 ///   colorSamples: [ColorSample(color: Colors.blue, name: 'Blue')],
 ///   color: Colors.red,
