@@ -59,6 +59,7 @@ class ColorPicker extends StatelessWidget {
             runSpacing: 10,
             children: colorSamples!.map(
               (sample) {
+                final isSelected = sample.color == color;
                 return GestureDetector(
                   onTap: () => onColorChanged.call(sample.color),
                   child: MouseRegion(
@@ -67,11 +68,33 @@ class ColorPicker extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 30,
-                          height: 30,
+                          width: 38,
+                          height: 38,
                           decoration: BoxDecoration(
-                            color: sample.color,
+                            color: isSelected ? Colors.blue : Colors.transparent,
                             shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Container(
+                              width: 34,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                color: isSelected ? Colors.white : Colors.transparent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: sample.color,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         if (sample.name != null) ...[
