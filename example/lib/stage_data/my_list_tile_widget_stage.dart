@@ -1,3 +1,4 @@
+import 'package:example/stage_data/example_data.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -7,7 +8,11 @@ class MyListTileWidgetStage extends WidgetStageData {
         _listPadding = PaddingFieldConfigurator(value: EdgeInsets.zero, name: 'listPadding'),
         _title = StringFieldConfigurator(value: 'My List Tile', name: 'title'),
         _circleColor = ColorFieldConfigurator(value: Colors.purple, name: 'circleColor'),
-        _tileColor = ColorFieldConfiguratorNullable(value: Colors.cyan, name: 'tileColor'),
+        _tileColor = ColorFieldConfiguratorNullable(
+          value: Colors.cyan,
+          name: 'tileColor',
+          colorSamples: ExampleData.sampleColors,
+        ),
         _textColor = ColorFieldConfiguratorNullable(value: Colors.white, name: 'textColor'),
         _borderRadius = DoubleFieldConfiguratorNullable(value: 10, name: 'borderRadius'),
         _tileGap = DoubleFieldConfigurator(value: 0, name: 'tileSpace');

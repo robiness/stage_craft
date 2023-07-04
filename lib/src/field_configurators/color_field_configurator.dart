@@ -9,7 +9,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
     this.colorSamples,
   });
 
-  final List<Color>? colorSamples;
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +18,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
       updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
       },
+      colorSamples: colorSamples,
     );
   }
 }
