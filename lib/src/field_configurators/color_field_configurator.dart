@@ -6,7 +6,10 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
   ColorFieldConfigurator({
     required super.value,
     required super.name,
+    this.colorSamples,
   });
+
+  final List<Color>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,17 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   ColorFieldConfiguratorNullable({
     required super.value,
     required super.name,
+    this.colorSamples,
   });
+
+  final List<Color>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
       configurator: this,
       updateValue: updateValue,
+      colorSamples: colorSamples,
     );
   }
 }
@@ -40,7 +47,10 @@ class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
     super.key,
     required super.configurator,
     required super.updateValue,
+    this.colorSamples,
   });
+
+  final List<Color>? colorSamples;
 
   @override
   State<ColorConfigurationWidget> createState() => _ColorConfigurationFieldState();
@@ -48,6 +58,7 @@ class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
 
 class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
   late Color? color = widget.configurator.value;
+  late Color? initialColor = widget.configurator.value;
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +70,21 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
             return AlertDialog(
               title: const Text('Pick a color!'),
               content: SingleChildScrollView(
-                child: ColorPicker(
-                  pickerColor: color ?? Colors.white,
-                  onColorChanged: (newColor) {
-                    color = newColor;
-                  },
+                child: Column(
+                  children: [
+                    SampleColorPicker(
+                      initialColor: color ?? Colors.white,
+                      sampleColors: widget.colorSamples,
+                      onColorChanged: (newColor) => color = newColor,
+                    )
+                  ],
                 ),
               ),
               actions: <Widget>[
                 ElevatedButton(
                   child: const Text('Abort'),
                   onPressed: () {
+                    color = initialColor;
                     Navigator.of(context).pop();
                   },
                 ),
@@ -158,5 +173,93 @@ class ChessBoardPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
+  }
+}
+
+class SampleColorPicker extends StatefulWidget {
+  const SampleColorPicker({
+    super.key,
+    this.sampleColors,
+    this.initialColor,
+    required this.onColorChanged,
+  });
+
+  final List<Color>? sampleColors;
+  final Color? initialColor;
+  final void Function(Color color) onColorChanged;
+
+  @override
+  State<SampleColorPicker> createState() => _SampleColorPickerState();
+}
+
+class _SampleColorPickerState extends State<SampleColorPicker> {
+  late Color selectedColor;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedColor = widget.initialColor ?? Colors.white;
+  }
+
+  @override
+  void didUpdateWidget(SampleColorPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialColor != widget.initialColor) {
+      setState(() {
+        selectedColor = widget.initialColor ?? Colors.white;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ColorPicker(
+          pickerColor: selectedColor,
+          onColorChanged: (newColor) {
+            widget.onColorChanged(newColor);
+            setState(() {
+              selectedColor = newColor;
+            });
+          },
+        ),
+        if (widget.sampleColors?.isNotEmpty == true) ...[
+          const SizedBox(height: 32.0),
+          Text('Color Samples'),
+          const SizedBox(height: 8.0),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: widget.sampleColors!.map(
+              (sampleColor) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onColorChanged(sampleColor);
+                        setState(() {
+                          selectedColor = sampleColor;
+                        });
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: sampleColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ).toList(),
+          ),
+        ]
+      ],
+    );
   }
 }
