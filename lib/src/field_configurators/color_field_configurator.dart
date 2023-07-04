@@ -68,19 +68,23 @@ class _ColorConfigurationWidget extends ConfigurationWidget<Color?> {
                   content: _ColorPicker(
                     color: color ?? Colors.white,
                     colorSamples: colorSamples,
-                    onColorChanged: (newColor) => setState(() => color = newColor),
+                    onColorChanged: (newColor) {
+                      setState(() {
+                        color = newColor;
+                      });
+                    },
                   ),
                   actions: <Widget>[
                     ElevatedButton(
+                      onPressed: Navigator.of(context).pop,
                       child: const Text('Abort'),
-                      onPressed: () => Navigator.of(context).pop(),
                     ),
                     ElevatedButton(
-                      child: const Text('Accept'),
                       onPressed: () {
                         updateValue(color);
                         Navigator.of(context).pop();
                       },
+                      child: const Text('Accept'),
                     ),
                   ],
                 );
