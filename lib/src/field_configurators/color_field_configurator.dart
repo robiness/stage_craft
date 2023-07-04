@@ -12,7 +12,7 @@ class ColorFieldConfigurator extends FieldConfigurator<Color> {
 
   @override
   Widget build(BuildContext context) {
-    return _ColorConfigurationWidget(
+    return ColorConfigurationWidget(
       value: value,
       updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
@@ -34,7 +34,7 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
 
   @override
   Widget build(BuildContext context) {
-    return _ColorConfigurationWidget(
+    return ColorConfigurationWidget(
       value: value,
       updateValue: updateValue,
       colorSamples: colorSamples,
@@ -42,8 +42,8 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   }
 }
 
-class _ColorConfigurationWidget extends ConfigurationWidget<Color?> {
-  const _ColorConfigurationWidget({
+class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
+  const ColorConfigurationWidget({
     required super.value,
     required super.updateValue,
     this.colorSamples,
