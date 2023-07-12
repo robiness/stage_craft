@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class ColorFieldConfigurator extends FieldConfigurator<Color> {
   ColorFieldConfigurator({
     required super.value,
     required super.name,
+    this.colorSamples,
   });
+
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
-      configurator: this,
+      value: value,
       updateValue: (Color? color) {
         updateValue(color ?? Colors.transparent);
       },
+      colorSamples: colorSamples,
     );
   }
 }
@@ -24,30 +27,30 @@ class ColorFieldConfiguratorNullable extends FieldConfigurator<Color?> {
   ColorFieldConfiguratorNullable({
     required super.value,
     required super.name,
+    this.colorSamples,
   });
+
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
     return ColorConfigurationWidget(
-      configurator: this,
+      value: value,
       updateValue: updateValue,
+      colorSamples: colorSamples,
     );
   }
 }
 
-class ColorConfigurationWidget extends StatefulConfigurationWidget<Color?> {
+class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
   const ColorConfigurationWidget({
     super.key,
-    required super.configurator,
+    required super.value,
     required super.updateValue,
+    this.colorSamples,
   });
 
-  @override
-  State<ColorConfigurationWidget> createState() => _ColorConfigurationFieldState();
-}
-
-class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
-  late Color? color = widget.configurator.value;
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget build(BuildContext context) {
@@ -56,31 +59,36 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Pick a color!'),
-              content: SingleChildScrollView(
-                child: ColorPicker(
-                  pickerColor: color ?? Colors.white,
-                  onColorChanged: (newColor) {
-                    color = newColor;
-                  },
-                ),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: const Text('Abort'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('Accept'),
-                  onPressed: () {
-                    widget.updateValue(color);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+            Color? color = value;
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  scrollable: true,
+                  title: const Text('Pick a color!'),
+                  content: ColorPicker(
+                    color: color ?? Colors.white,
+                    colorSamples: colorSamples,
+                    onColorChanged: (newColor) {
+                      setState(() {
+                        color = newColor;
+                      });
+                    },
+                  ),
+                  actions: <Widget>[
+                    ElevatedButton(
+                      onPressed: Navigator.of(context).pop,
+                      child: const Text('Abort'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        updateValue(color);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Accept'),
+                    ),
+                  ],
+                );
+              },
             );
           },
         );
@@ -96,7 +104,7 @@ class _ColorConfigurationFieldState extends State<ColorConfigurationWidget> {
               width: 38,
               foregroundDecoration: BoxDecoration(
                 // The actual color drawn over the chessboard pattern
-                color: widget.configurator.value,
+                color: value,
               ),
               // The chessboard pattern
               child: const CustomPaint(

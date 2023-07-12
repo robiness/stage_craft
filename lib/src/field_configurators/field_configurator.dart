@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 export 'bool_field_configurator.dart';
 export 'color_field_configurator.dart';
