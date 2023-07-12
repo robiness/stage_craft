@@ -12,7 +12,7 @@ class StageCraft extends StatelessWidget {
   StageCraft({
     super.key,
     required this.stageController,
-    this.widgets = const [],
+    this.configurationBarFooter,
     Size? stageSize,
     StageCraftSettings? settings,
   })  : stageSize = stageSize ?? const Size(600, 800),
@@ -33,7 +33,8 @@ class StageCraft extends StatelessWidget {
   /// The size of the handle balls.
   final StageCraftSettings settings;
 
-  final List<WidgetStageData> widgets;
+  /// An optional footer of the configuration bar.
+  final Widget? configurationBarFooter;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,7 @@ class StageCraft extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: ConfigurationBar(
             controller: stageController,
+            configurationBarFooter: configurationBarFooter,
           ),
         ),
       ],
