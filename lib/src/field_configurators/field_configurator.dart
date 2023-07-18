@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 export 'bool_field_configurator.dart';
 export 'color_field_configurator.dart';
@@ -43,10 +44,12 @@ class FieldConfiguratorWidget<T> extends StatefulWidget {
   final FieldConfigurator fieldConfigurator;
 
   @override
-  State<FieldConfiguratorWidget<T>> createState() => _FieldConfiguratorWidgetState<T>();
+  State<FieldConfiguratorWidget<T>> createState() =>
+      _FieldConfiguratorWidgetState<T>();
 }
 
-class _FieldConfiguratorWidgetState<T> extends State<FieldConfiguratorWidget<T>> {
+class _FieldConfiguratorWidgetState<T>
+    extends State<FieldConfiguratorWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -115,10 +118,12 @@ class FieldConfiguratorInputField extends StatefulWidget {
   final void Function(String value)? onChanged;
 
   @override
-  State<FieldConfiguratorInputField> createState() => _FieldConfiguratorInputFieldState();
+  State<FieldConfiguratorInputField> createState() =>
+      _FieldConfiguratorInputFieldState();
 }
 
-class _FieldConfiguratorInputFieldState extends State<FieldConfiguratorInputField> {
+class _FieldConfiguratorInputFieldState
+    extends State<FieldConfiguratorInputField> {
   bool _isHovering = false;
 
   @override
@@ -133,7 +138,9 @@ class _FieldConfiguratorInputFieldState extends State<FieldConfiguratorInputFiel
             color: Colors.blue.withOpacity(0.1),
             borderRadius: BorderRadius.circular(2),
             border: Border.all(
-              color: _isHovering ? Colors.blue.withOpacity(0.5) : Colors.transparent,
+              color: _isHovering
+                  ? Colors.blue.withOpacity(0.5)
+                  : Colors.transparent,
             ),
           ),
           child: Padding(
@@ -179,19 +186,28 @@ class _NullableButtonState extends State<NullableButton> {
       cursor: isNull ? SystemMouseCursors.basic : SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () => widget.fieldConfigurator.updateValue(null),
-        child: Container(
-          decoration: BoxDecoration(
-            color: isNull || _isHovering ? Colors.blue.withOpacity(0.2) : Colors.transparent,
-            shape: BoxShape.circle,
-            border: Border.all(color: isNull ? Colors.blue : Colors.grey),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Center(
-              child: Text(
-                'null',
-                textScaleFactor: 0.6,
-                style: TextStyle(color: isNull ? Colors.blue : Colors.grey),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: isNull || _isHovering
+                  ? Colors.blue.withOpacity(0.2)
+                  : Colors.transparent,
+              border: Border.all(color: isNull ? Colors.blue : Colors.grey),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                width: 30,
+                child: Center(
+                  child: Text(
+                    'null',
+                    style: TextStyle(
+                      color: isNull ? Colors.blue : Colors.grey,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

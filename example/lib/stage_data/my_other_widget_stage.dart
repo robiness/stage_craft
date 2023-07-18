@@ -4,8 +4,14 @@ import 'package:stage_craft/stage_craft.dart';
 
 class MyOtherWidgetStageData extends WidgetStageData {
   MyOtherWidgetStageData()
-      : _text = StringFieldConfigurator(value: 'MyOtherWidget', name: 'text'),
-        _padding = PaddingFieldConfiguratorNullable(value: null, name: 'padding');
+      : _text = StringFieldConfigurator(
+          value: 'MyOtherWidget',
+          name: 'text',
+        ),
+        _padding = PaddingFieldConfiguratorNullable(
+          value: null,
+          name: 'padding',
+        );
 
   final StringFieldConfigurator _text;
   final PaddingFieldConfiguratorNullable _padding;
