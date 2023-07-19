@@ -12,26 +12,24 @@ import 'package:stage_craft/stage_craft.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    final StageController controller = StageController();
-    await tester.pumpWidgetData(controller);
-    controller.selectWidget(MyOtherWidgetStageData());
-    await tester.pumpAndSettle();
-    expect(find.text('MyOtherWidget'), findsOneWidget);
+    await tester.pumpWidgetData(MyOtherWidgetStageData());
+    expect(find.text('MyOtherWidget'), findsNWidgets(2));
   });
 }
 
 extension WidgetTesterExtension on WidgetTester {
   Future<void> pumpWidgetData(
-    StageController controller,
+    WidgetStageData stageData,
   ) async {
     await pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: StageCraft(
-            stageController: controller,
+            stageData: stageData,
           ),
         ),
       ),
     );
+    await pumpAndSettle();
   }
 }

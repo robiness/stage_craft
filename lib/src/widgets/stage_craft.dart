@@ -8,13 +8,14 @@ import 'package:stage_craft/src/widgets/stage_area.dart';
 ///
 /// Use this to create a stage for your widgets.
 ///
-class StageCraft extends StatelessWidget {
+class StageCraft extends StatefulWidget {
   StageCraft({
     super.key,
-    required this.stageController,
+    this.stageController,
     this.configurationBarFooter,
     Size? stageSize,
     StageCraftSettings? settings,
+    this.stageData,
   })  : stageSize = stageSize ?? const Size(600, 800),
         settings = settings ??
             StageCraftSettings(
@@ -25,7 +26,7 @@ class StageCraft extends StatelessWidget {
   /// The [StageController] that controls the stage.
   ///
   /// Create one above the [StageCraft] widget and pass it here to react to stage events or set stage properties.
-  final StageController stageController;
+  final StageController? stageController;
 
   /// The size of the stage.
   final Size stageSize;
@@ -36,19 +37,37 @@ class StageCraft extends StatelessWidget {
   /// An optional footer of the configuration bar.
   final Widget? configurationBarFooter;
 
+  /// The initially selected stage data.
+  final WidgetStageData? stageData;
+
+  @override
+  State<StageCraft> createState() => _StageCraftState();
+}
+
+class _StageCraftState extends State<StageCraft> {
+  late final _stageController = widget.stageController ?? StageController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.stageData != null) {
+      _stageController.selectWidget(widget.stageData!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         StageArea(
-          stageController: stageController,
-          settings: settings,
+          stageController: _stageController,
+          settings: widget.settings,
         ),
         Align(
           alignment: Alignment.topCenter,
           child: ConfigurationBar(
-            controller: stageController,
-            configurationBarFooter: configurationBarFooter,
+            controller: _stageController,
+            configurationBarFooter: widget.configurationBarFooter,
           ),
         ),
       ],
