@@ -13,7 +13,7 @@ import 'package:stage_craft/stage_craft.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     await tester.pumpWidgetData(MyOtherWidgetStageData());
-    expect(find.text('MyOtherWidget'), findsNWidgets(2));
+    expect(find.text('MyOtherWidget'), findsOneWidget);
   });
 }
 
