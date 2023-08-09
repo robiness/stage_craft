@@ -31,6 +31,12 @@ class _MyAppState extends State<MyApp> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _stageController.selectWidget(widgetsOnStage.first);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
