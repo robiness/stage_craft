@@ -8,7 +8,7 @@ class StageController extends ChangeNotifier {
     Color? backgroundColor,
   })  : initialBackgroundColor = backgroundColor ?? const Color(0xFFE0E0E0),
         _stagePosition = stagePosition ?? const Offset(50, 50),
-        _stageSize = stageSize ?? const Size(300, 400);
+        _stageSize = stageSize ?? const Size(400, 800);
 
   Offset _stagePosition;
 
@@ -75,6 +75,9 @@ class StageController extends ChangeNotifier {
       for (final configurator in _selectedWidget!.allConfigurators) {
         configurator.addListener(notifyListeners);
       }
+    }
+    if (selectedWidget.stageSize != null) {
+      stageSize = selectedWidget.stageSize!;
     }
     notifyListeners();
   }

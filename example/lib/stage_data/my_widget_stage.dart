@@ -16,7 +16,7 @@ class MyWidgetStageData extends WidgetStageData {
   String get name => 'MyWidget';
 
   @override
-  Size get stageSize => const Size(200, 200);
+  Size get stageSize => const Size(400, 200);
 
   final ColorFieldConfiguratorNullable _color;
   final ColorFieldConfiguratorNullable _borderColor;

@@ -15,11 +15,10 @@ class StageCraft extends StatefulWidget {
     super.key,
     this.stageController,
     this.configurationBarFooter,
-    Size? stageSize,
+    this.stageSize,
     StageCraftSettings? settings,
     this.stageData,
-  })  : stageSize = stageSize ?? const Size(600, 800),
-        settings = settings ??
+  }) : settings = settings ??
             StageCraftSettings(
               handleBallSize: 20,
               handleBallColor: const Color(0xFF185DE3).withOpacity(0.8),
@@ -31,7 +30,7 @@ class StageCraft extends StatefulWidget {
   final StageController? stageController;
 
   /// The size of the stage.
-  final Size stageSize;
+  final Size? stageSize;
 
   /// The size of the handle balls.
   final StageCraftSettings settings;
@@ -52,6 +51,9 @@ class _StageCraftState extends State<StageCraft> {
   @override
   void initState() {
     super.initState();
+    if (widget.stageSize != null) {
+      _stageController.stageSize = widget.stageSize!;
+    }
     if (widget.stageData != null) {
       _stageController.selectWidget(widget.stageData!);
     }
