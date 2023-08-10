@@ -161,6 +161,10 @@ class _StageAreaState extends State<StageArea> {
     widget.stageController.addListener(() {
       setState(() {
         handleBallSize = widget.stageController.scale(widget.settings.handleBallSize);
+        widget.stageController.stagePosition = Offset(
+          (_currentConstraints!.maxWidth / 2) - (widget.stageController.stageSize.width / 2),
+          (_currentConstraints!.maxHeight / 2) - (widget.stageController.stageSize.height / 2),
+        );
       });
     });
     // center the stage in the middle of the available space
