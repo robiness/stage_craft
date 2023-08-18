@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stage_craft/src/stage_controller.dart';
 import 'package:stage_craft/src/widget_stage_data.dart';
@@ -68,7 +69,7 @@ class _StageCraftState extends State<StageCraft> {
           settings: widget.settings,
         ),
         // In tests we don't want to show the configuration bar because find() would find widgets in it.
-        if (!Platform.environment.containsKey('FLUTTER_TEST'))
+        if (!kIsWeb && !Platform.environment.containsKey('FLUTTER_TEST'))
           Align(
             alignment: Alignment.topCenter,
             child: ConfigurationBar(
