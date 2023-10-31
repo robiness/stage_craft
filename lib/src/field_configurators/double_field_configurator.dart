@@ -48,7 +48,6 @@ class DoubleFieldConfigurationWidget extends StatefulConfigurationWidget<double?
 }
 
 class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfigurationWidget> {
-
   late final TextEditingController _controller;
 
   @override
@@ -57,7 +56,7 @@ class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfiguratio
       text: widget.configurator.value.toString(),
     );
     widget.configurator.addListener(() {
-      if(widget.configurator.value == null) {
+      if (widget.configurator.value == null) {
         _controller.text = '';
       }
     });
@@ -69,7 +68,7 @@ class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfiguratio
     return FieldConfiguratorInputField(
       controller: _controller,
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp('[0-9,.]')),
+        FilteringTextInputFormatter.allow(RegExp('-?[0-9.,]')),
       ],
       onChanged: (value) {
         final replacedComma = value.replaceAll(',', '.');
