@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  window_manager: ^0.3.5
   stage_craft:
     path: ../
+  window_manager: ^0.3.5
 
 
 dev_dependencies:

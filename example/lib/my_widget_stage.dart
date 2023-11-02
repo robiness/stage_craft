@@ -1,10 +1,9 @@
-import 'package:example/stage_data/my_other_widget_stage.dart';
+import 'package:example/stage_data/my_widget_stage.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
-  final StageController controller = StageController();
   WidgetsFlutterBinding.ensureInitialized();
   // Must add this line.
   await windowManager.ensureInitialized();
@@ -26,10 +25,9 @@ Future<void> main() async {
     MaterialApp(
       home: Scaffold(
         body: StageCraft(
-          stageController: controller,
+          stageData: MyWidgetStageData(),
         ),
       ),
     ),
   );
-  controller.selectWidget(MyOtherWidgetStageData());
 }
