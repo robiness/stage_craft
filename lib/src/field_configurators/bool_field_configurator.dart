@@ -9,7 +9,7 @@ class BoolFieldConfiguratorNullable extends FieldConfigurator<bool?> {
 
   @override
   Widget build(BuildContext context) {
-    return BoolFieldConfigurationWidget(
+    return BoolConfigurationWidget(
       value: value,
       updateValue: updateValue,
     );
@@ -25,7 +25,7 @@ class BoolFieldConfigurator extends FieldConfigurator<bool> {
 
   @override
   Widget build(BuildContext context) {
-    return BoolFieldConfigurationWidget(
+    return BoolConfigurationWidget(
       value: value,
       updateValue: (value) {
         updateValue(value ?? false);
@@ -34,8 +34,8 @@ class BoolFieldConfigurator extends FieldConfigurator<bool> {
   }
 }
 
-class BoolFieldConfigurationWidget extends ConfigurationWidget<bool?> {
-  const BoolFieldConfigurationWidget({
+class BoolConfigurationWidget extends ConfigurationWidget<bool?> {
+  const BoolConfigurationWidget({
     required super.value,
     required super.updateValue,
   });
