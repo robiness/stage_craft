@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 /// Defines everything you need to put it on the stage.
-class MyWidgetStageData extends WidgetStageData {
+class MyWidgetStageData extends StageData {
   MyWidgetStageData()
       : _color = ColorFieldConfiguratorNullable(value: null, name: 'color'),
         _borderColor = ColorFieldConfiguratorNullable(value: null, name: 'borderColor'),

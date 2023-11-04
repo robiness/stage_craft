@@ -19,7 +19,7 @@ void main() {
 
 extension WidgetTesterExtension on WidgetTester {
   Future<void> pumpWidgetData(
-    WidgetStageData stageData,
+    StageData stageData,
   ) async {
     await pumpWidget(
       MaterialApp(

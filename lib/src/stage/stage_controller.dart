@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:stage_craft/src/widget_stage_data.dart';
+import 'package:stage_craft/src/stage/stage_data.dart';
 
 class StageController extends ChangeNotifier {
   StageController({
@@ -64,7 +64,7 @@ class StageController extends ChangeNotifier {
 
   double scale(double value) => value * (1 / zoom);
 
-  void selectWidget(WidgetStageData selectedWidget) {
+  void selectWidget(StageData selectedWidget) {
     if (_selectedWidget == selectedWidget) {
       for (final configurator in _selectedWidget!.allConfigurators) {
         configurator.removeListener(notifyListeners);
@@ -82,9 +82,9 @@ class StageController extends ChangeNotifier {
     notifyListeners();
   }
 
-  WidgetStageData? _selectedWidget;
+  StageData? _selectedWidget;
 
-  WidgetStageData? get selectedWidget => _selectedWidget;
+  StageData? get selectedWidget => _selectedWidget;
 
   final Color initialBackgroundColor;
 

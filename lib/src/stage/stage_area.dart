@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stage_craft/src/stage_settings.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class StageArea extends StatefulWidget {

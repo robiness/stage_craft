@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:stage_craft/src/stage_controller.dart';
-import 'package:stage_craft/src/widget_stage_data.dart';
+import 'package:stage_craft/src/stage/stage_area.dart';
+import 'package:stage_craft/src/stage/stage_controller.dart';
+import 'package:stage_craft/src/stage/stage_data.dart';
 import 'package:stage_craft/src/widgets/configuration_bar.dart';
-import 'package:stage_craft/src/widgets/stage_area.dart';
 import 'package:universal_io/io.dart';
 
 /// The [StageCraft] widget is the main widget of the StageCraft package.
@@ -38,7 +38,7 @@ class StageCraft extends StatefulWidget {
   final Widget? configurationBarFooter;
 
   /// The initially selected stage data.
-  final WidgetStageData? stageData;
+  final StageData? stageData;
 
   @override
   State<StageCraft> createState() => _StageCraftState();
