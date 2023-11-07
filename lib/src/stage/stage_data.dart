@@ -62,8 +62,7 @@ import 'package:stage_craft/stage_craft.dart';
 ///     ];
 ///   }
 /// ```
-abstract class WidgetStageData extends ChangeNotifier {
-
+abstract class StageData extends ChangeNotifier {
   /// The name of the widget.
   String get name;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/field_configurators/field_configurator.dart';
-import 'package:stage_craft/src/stage_controller.dart';
+import 'package:stage_craft/src/stage/stage_controller.dart';
 
 class ConfigurationBar extends StatefulWidget {
   const ConfigurationBar({
@@ -30,10 +30,8 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
     widgetConfigurators = widget.controller.selectedWidget?.widgetConfigurators;
     widget.controller.addListener(() {
       setState(() {
-        stageConfigurators =
-            widget.controller.selectedWidget?.stageConfigurators;
-        widgetConfigurators =
-            widget.controller.selectedWidget?.widgetConfigurators;
+        stageConfigurators = widget.controller.selectedWidget?.stageConfigurators;
+        widgetConfigurators = widget.controller.selectedWidget?.widgetConfigurators;
       });
     });
   }
@@ -58,8 +56,7 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
                   title: 'Stage',
                   configurators: stageConfigurators,
                 ),
-              if (widget.configurationBarFooter != null)
-                widget.configurationBarFooter!
+              if (widget.configurationBarFooter != null) widget.configurationBarFooter!
             ],
           ),
         ),
@@ -93,8 +90,7 @@ class _ConfiguratorGroup extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
               child: Center(
                 child: Text(
                   textAlign: TextAlign.center,

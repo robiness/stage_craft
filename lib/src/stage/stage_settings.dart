@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:stage_craft/src/stage_controller.dart';
+import 'package:stage_craft/src/stage/stage_controller.dart';
 
 class StageSettingsWidget extends StatelessWidget {
   const StageSettingsWidget({
@@ -201,7 +201,9 @@ class _ZoomSliderState extends State<ZoomSlider> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text('Zoom'),
-        Text(widget.stageController.zoom.toStringAsFixed(2),),
+        Text(
+          widget.stageController.zoom.toStringAsFixed(2),
+        ),
         SizedBox(
           width: 300,
           child: Slider(

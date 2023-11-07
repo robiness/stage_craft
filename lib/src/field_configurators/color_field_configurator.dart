@@ -93,30 +93,27 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
           },
         );
       },
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              height: 38,
-              width: 38,
-              foregroundDecoration: BoxDecoration(
-                // The actual color drawn over the chessboard pattern
-                color: value,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            height: 38,
+            width: 38,
+            foregroundDecoration: BoxDecoration(
+              // The actual color drawn over the chessboard pattern
+              color: value,
+            ),
+            // The chessboard pattern
+            child: const CustomPaint(
+              foregroundPainter: ChessBoardPainter(
+                boxSize: 8,
+                // The color of the chessboard pattern
+                color: Colors.grey,
               ),
-              // The chessboard pattern
-              child: const CustomPaint(
-                foregroundPainter: ChessBoardPainter(
-                  boxSize: 8,
-                  // The color of the chessboard pattern
-                  color: Colors.grey,
-                ),
-                child: ColoredBox(
-                  // Background of the chessboard pattern
-                  color: Colors.white,
-                ),
+              child: ColoredBox(
+                // Background of the chessboard pattern
+                color: Colors.white,
               ),
             ),
           ),
