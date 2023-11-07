@@ -11,9 +11,8 @@ class IntFieldConfiguratorNullable extends FieldConfigurator<int?> {
 
   @override
   Widget build(BuildContext context) {
-    return IntFieldConfigurationWidget(
+    return IntFieldConfigurationWidget<int?>(
       configurator: this,
-      updateValue: updateValue,
     );
   }
 }
@@ -27,20 +26,16 @@ class IntFieldConfigurator extends FieldConfigurator<int> {
 
   @override
   Widget build(BuildContext context) {
-    return IntFieldConfigurationWidget(
+    return IntFieldConfigurationWidget<int>(
       configurator: this,
-      updateValue: (value) {
-        updateValue(value ?? 0);
-      },
     );
   }
 }
 
-class IntFieldConfigurationWidget extends StatefulConfigurationWidget<int?> {
+class IntFieldConfigurationWidget<T> extends StatefulConfigurationWidget<T> {
   const IntFieldConfigurationWidget({
     super.key,
     required super.configurator,
-    required super.updateValue,
   });
 
   @override
@@ -56,7 +51,7 @@ class _IntFieldConfigurationWidgetState extends State<IntFieldConfigurationWidge
       text: widget.configurator.value.toString(),
     );
     widget.configurator.addListener(() {
-      if(widget.configurator.value == null) {
+      if (widget.configurator.value == null) {
         _controller.text = '';
       }
     });
@@ -71,7 +66,7 @@ class _IntFieldConfigurationWidgetState extends State<IntFieldConfigurationWidge
         FilteringTextInputFormatter.digitsOnly,
       ],
       onChanged: (value) {
-        widget.updateValue(int.tryParse(value));
+        widget.configurator.updateValue(int.tryParse(value));
       },
     );
   }

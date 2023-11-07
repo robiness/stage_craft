@@ -45,12 +45,10 @@ class FieldConfiguratorWidget<T> extends StatefulWidget {
   final FieldConfigurator fieldConfigurator;
 
   @override
-  State<FieldConfiguratorWidget<T>> createState() =>
-      _FieldConfiguratorWidgetState<T>();
+  State<FieldConfiguratorWidget<T>> createState() => _FieldConfiguratorWidgetState<T>();
 }
 
-class _FieldConfiguratorWidgetState<T>
-    extends State<FieldConfiguratorWidget<T>> {
+class _FieldConfiguratorWidgetState<T> extends State<FieldConfiguratorWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -99,11 +97,9 @@ abstract class StatefulConfigurationWidget<T> extends StatefulWidget {
   const StatefulConfigurationWidget({
     super.key,
     required this.configurator,
-    required this.updateValue,
   });
 
   final FieldConfigurator<T> configurator;
-  final void Function(T newValue) updateValue;
 }
 
 class FieldConfiguratorInputField extends StatefulWidget {
@@ -119,12 +115,10 @@ class FieldConfiguratorInputField extends StatefulWidget {
   final void Function(String value)? onChanged;
 
   @override
-  State<FieldConfiguratorInputField> createState() =>
-      _FieldConfiguratorInputFieldState();
+  State<FieldConfiguratorInputField> createState() => _FieldConfiguratorInputFieldState();
 }
 
-class _FieldConfiguratorInputFieldState
-    extends State<FieldConfiguratorInputField> {
+class _FieldConfiguratorInputFieldState extends State<FieldConfiguratorInputField> {
   bool _isHovering = false;
 
   @override
@@ -139,9 +133,7 @@ class _FieldConfiguratorInputFieldState
             color: Colors.blue.withOpacity(0.1),
             borderRadius: BorderRadius.circular(2),
             border: Border.all(
-              color: _isHovering
-                  ? Colors.blue.withOpacity(0.5)
-                  : Colors.transparent,
+              color: _isHovering ? Colors.blue.withOpacity(0.5) : Colors.transparent,
             ),
           ),
           child: Padding(
@@ -191,9 +183,7 @@ class _NullableButtonState extends State<NullableButton> {
           padding: const EdgeInsets.all(4.0),
           child: Container(
             decoration: BoxDecoration(
-              color: isNull || _isHovering
-                  ? Colors.blue.withOpacity(0.2)
-                  : Colors.transparent,
+              color: isNull || _isHovering ? Colors.blue.withOpacity(0.2) : Colors.transparent,
               border: Border.all(color: isNull ? Colors.blue : Colors.grey),
               borderRadius: BorderRadius.circular(4),
             ),

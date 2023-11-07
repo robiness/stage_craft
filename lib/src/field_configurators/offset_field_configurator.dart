@@ -13,9 +13,6 @@ class OffsetFieldConfigurator extends FieldConfigurator<Offset> {
   Widget build(BuildContext context) {
     return OffsetFieldConfigurationWidget(
       configurator: this,
-      updateValue: (value) {
-        updateValue(value ?? Offset.zero);
-      },
     );
   }
 }
@@ -24,7 +21,6 @@ class OffsetFieldConfigurationWidget extends StatefulConfigurationWidget<Offset?
   const OffsetFieldConfigurationWidget({
     super.key,
     required super.configurator,
-    required super.updateValue,
   });
 
   @override
@@ -63,7 +59,7 @@ class _OffsetFieldConfigurationWidgetState extends State<OffsetFieldConfiguratio
             _OffsetTextField(
               controller: _xController,
               onChanged: (value) {
-                widget.updateValue(
+                widget.configurator.updateValue(
                   Offset(
                     double.tryParse(value) ?? 0.0,
                     widget.configurator.value!.dy,
@@ -77,7 +73,7 @@ class _OffsetFieldConfigurationWidgetState extends State<OffsetFieldConfiguratio
             _OffsetTextField(
               controller: _yController,
               onChanged: (value) {
-                widget.updateValue(
+                widget.configurator.updateValue(
                   Offset(
                     widget.configurator.value!.dx,
                     double.tryParse(value) ?? 0.0,

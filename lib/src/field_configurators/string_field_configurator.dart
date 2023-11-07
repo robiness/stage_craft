@@ -12,7 +12,6 @@ class StringFieldConfiguratorNullable extends FieldConfigurator<String?> {
   Widget build(BuildContext context) {
     return StringFieldConfigurationWidget(
       configurator: this,
-      updateValue: updateValue,
     );
   }
 }
@@ -28,9 +27,6 @@ class StringFieldConfigurator extends FieldConfigurator<String> {
   Widget build(BuildContext context) {
     return StringFieldConfigurationWidget(
       configurator: this,
-      updateValue: (value) {
-        updateValue(value ?? '');
-      },
     );
   }
 }
@@ -39,7 +35,6 @@ class StringFieldConfigurationWidget extends StatefulConfigurationWidget<String?
   const StringFieldConfigurationWidget({
     super.key,
     required super.configurator,
-    required super.updateValue,
   });
 
   @override
@@ -55,7 +50,7 @@ class _StringFieldConfigurationWidgetState extends State<StringFieldConfiguratio
       text: widget.configurator.value.toString(),
     );
     widget.configurator.addListener(() {
-      if(widget.configurator.value == null) {
+      if (widget.configurator.value == null) {
         _controller.text = '';
       }
     });
@@ -66,7 +61,7 @@ class _StringFieldConfigurationWidgetState extends State<StringFieldConfiguratio
   Widget build(BuildContext context) {
     return FieldConfiguratorInputField(
       controller: _controller,
-      onChanged: widget.updateValue,
+      onChanged: widget.configurator.updateValue,
     );
   }
 }

@@ -13,7 +13,6 @@ class DoubleFieldConfiguratorNullable extends FieldConfigurator<double?> {
   Widget build(BuildContext context) {
     return DoubleFieldConfigurationWidget(
       configurator: this,
-      updateValue: updateValue,
     );
   }
 }
@@ -29,9 +28,6 @@ class DoubleFieldConfigurator extends FieldConfigurator<double> {
   Widget build(BuildContext context) {
     return DoubleFieldConfigurationWidget(
       configurator: this,
-      updateValue: (value) {
-        updateValue(value ?? 0.0);
-      },
     );
   }
 }
@@ -40,7 +36,6 @@ class DoubleFieldConfigurationWidget extends StatefulConfigurationWidget<double?
   const DoubleFieldConfigurationWidget({
     super.key,
     required super.configurator,
-    required super.updateValue,
   });
 
   @override
@@ -72,7 +67,7 @@ class _DoubleFieldConfigurationWidgetState extends State<DoubleFieldConfiguratio
       ],
       onChanged: (value) {
         final replacedComma = value.replaceAll(',', '.');
-        widget.updateValue(double.tryParse(replacedComma));
+        widget.configurator.updateValue(double.tryParse(replacedComma));
       },
     );
   }

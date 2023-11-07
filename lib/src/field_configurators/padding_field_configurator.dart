@@ -13,7 +13,6 @@ class PaddingFieldConfiguratorNullable extends FieldConfigurator<EdgeInsets?> {
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
       configurator: this,
-      updateValue: updateValue,
     );
   }
 }
@@ -29,7 +28,6 @@ class PaddingFieldConfigurator extends FieldConfigurator<EdgeInsets> {
   Widget build(BuildContext context) {
     return PaddingFieldConfigurationWidget(
       configurator: this,
-      updateValue: (value) => updateValue(value ?? EdgeInsets.zero),
     );
   }
 }
@@ -38,7 +36,6 @@ class PaddingFieldConfigurationWidget extends StatefulConfigurationWidget<EdgeIn
   const PaddingFieldConfigurationWidget({
     super.key,
     required super.configurator,
-    required super.updateValue,
   });
 
   @override
@@ -56,7 +53,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
           onChanged: (value) {
             setState(() {
               final newValue = padding.copyWith(top: value);
-              widget.updateValue(newValue);
+              widget.configurator.updateValue(newValue);
             });
           },
           label: 'top',
@@ -70,7 +67,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
               onChanged: (value) {
                 setState(() {
                   final newValue = padding.copyWith(left: value);
-                  widget.updateValue(newValue);
+                  widget.configurator.updateValue(newValue);
                 });
               },
               label: 'left',
@@ -81,7 +78,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
               onChanged: (value) {
                 setState(() {
                   final newValue = padding.copyWith(right: value);
-                  widget.updateValue(newValue);
+                  widget.configurator.updateValue(newValue);
                 });
               },
               label: 'right',
@@ -94,7 +91,7 @@ class _PaddingFieldConfigurationWidgetState extends State<PaddingFieldConfigurat
           onChanged: (value) {
             setState(() {
               final newValue = padding.copyWith(bottom: value);
-              widget.updateValue(newValue);
+              widget.configurator.updateValue(newValue);
             });
           },
           label: 'bottom',

@@ -7,3 +7,4 @@ export 'int_field_configurator.dart';
 export 'offset_field_configurator.dart';
 export 'padding_field_configurator.dart';
 export 'string_field_configurator.dart';
+export 'string_list_configurator.dart';
