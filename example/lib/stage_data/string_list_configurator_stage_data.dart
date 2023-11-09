@@ -5,6 +5,9 @@ class StringListConfiguratorStageData extends StageData {
   final value = StringListConfigurator(value: ['jo', 'jojo2', 'jojojo'], name: 'value');
 
   @override
+  Size? get initialStageSize => const Size(300, 300);
+
+  @override
   String get name => 'StringListConfigurator';
 
   @override

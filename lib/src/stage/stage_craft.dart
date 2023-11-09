@@ -14,7 +14,7 @@ class StageCraft extends StatefulWidget {
     super.key,
     this.stageController,
     this.configurationBarFooter,
-    this.stageSize,
+    this.defaultStageSize,
     StageCraftSettings? settings,
     this.stageData,
   }) : settings = settings ??
@@ -29,7 +29,7 @@ class StageCraft extends StatefulWidget {
   final StageController? stageController;
 
   /// The size of the stage.
-  final Size? stageSize;
+  final Size? defaultStageSize;
 
   /// The size of the handle balls.
   final StageCraftSettings settings;
@@ -50,11 +50,13 @@ class _StageCraftState extends State<StageCraft> {
   @override
   void initState() {
     super.initState();
-    if (widget.stageSize != null) {
-      _stageController.stageSize = widget.stageSize!;
-    }
     if (widget.stageData != null) {
       _stageController.selectWidget(widget.stageData!);
+      _stageController.resizeStage(widget.stageData!.initialStageSize!);
+      return;
+    }
+    if (widget.defaultStageSize != null) {
+      _stageController.resizeStage(widget.defaultStageSize!);
     }
   }
 

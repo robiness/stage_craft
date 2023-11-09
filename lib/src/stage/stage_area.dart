@@ -292,21 +292,25 @@ class _StageAreaState extends State<StageArea> {
     final newWidth = controller.stageSize.width - dx;
     if (controller.stagePosition.dx + dx > 0 && newWidth > 0) {
       controller.stagePosition = Offset(controller.stagePosition.dx + dx, controller.stagePosition.dy);
-      controller.stageSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
+      final newSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
+      controller.resizeStage(newSize);
     }
   }
 
   void _dragRight({required double dx, required StageController controller}) {
     final newWidth = controller.stageSize.width + dx;
     if (newWidth + controller.stagePosition.dx < controller.scale(_currentConstraints!.maxWidth) - 50) {
-      controller.stageSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
+      final newSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
+      controller.resizeStage(newSize);
     }
   }
 
   void _dragUp({required double dy, required StageController controller}) {
     final newHeight = controller.stageSize.height - dy;
     if (controller.stagePosition.dy + dy > 0 && newHeight > 0) {
-      controller.stageSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
+      final newSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
+      controller.resizeStage(newSize);
+
       controller.stagePosition = Offset(controller.stagePosition.dx, controller.stagePosition.dy + dy);
     }
   }
@@ -314,7 +318,8 @@ class _StageAreaState extends State<StageArea> {
   void _dragDown({required double dy, required StageController controller}) {
     final newHeight = controller.stageSize.height + dy;
     if (newHeight + controller.stagePosition.dy < controller.scale(_currentConstraints!.maxHeight) - 50) {
-      controller.stageSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
+      final newSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
+      controller.resizeStage(newSize);
     }
   }
 }
@@ -492,10 +497,11 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
                       focusNode: _heightFocusNode,
                       stageController: widget.controller,
                       onSubmitted: (value) {
-                        widget.controller.stageSize = Size(
+                        final newSize = Size(
                           widget.controller.stageSize.width,
                           double.tryParse(value) ?? 0,
                         );
+                        widget.controller.resizeStage(newSize);
                       },
                       isHovered: _showEditButtons,
                     ),
@@ -511,10 +517,11 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
                       stageController: widget.controller,
                       focusNode: _widthFocusNode,
                       onSubmitted: (value) {
-                        widget.controller.stageSize = Size(
+                        final newSize = Size(
                           double.tryParse(value) ?? 0,
                           widget.controller.stageSize.height,
                         );
+                        widget.controller.resizeStage(newSize);
                       },
                       isHovered: _showEditButtons,
                     ),

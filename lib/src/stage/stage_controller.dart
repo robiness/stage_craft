@@ -4,11 +4,9 @@ import 'package:stage_craft/src/stage/stage_data.dart';
 class StageController extends ChangeNotifier {
   StageController({
     Offset? stagePosition,
-    Size? stageSize,
     Color? backgroundColor,
   })  : initialBackgroundColor = backgroundColor ?? const Color(0xFFE0E0E0),
-        _stagePosition = stagePosition ?? const Offset(50, 50),
-        _stageSize = stageSize ?? const Size(400, 800);
+        _stagePosition = stagePosition ?? const Offset(50, 50);
 
   Offset _stagePosition;
 
@@ -21,13 +19,13 @@ class StageController extends ChangeNotifier {
     }
   }
 
-  Size _stageSize;
+  Size _stageSize = Size.zero;
 
   Size get stageSize => _stageSize;
 
-  set stageSize(Size value) {
-    if (_stageSize != value) {
-      _stageSize = value;
+  void resizeStage(Size size) {
+    if (_stageSize != size) {
+      _stageSize = size;
       notifyListeners();
     }
   }
@@ -76,8 +74,8 @@ class StageController extends ChangeNotifier {
         configurator.addListener(notifyListeners);
       }
     }
-    if (selectedWidget.stageSize != null) {
-      stageSize = selectedWidget.stageSize!;
+    if (selectedWidget.initialStageSize != null) {
+      resizeStage(selectedWidget.initialStageSize!);
     }
     notifyListeners();
   }
