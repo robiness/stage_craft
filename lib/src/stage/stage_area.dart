@@ -208,9 +208,6 @@ class _StageAreaState extends State<StageArea> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
                                 color: widget.stageController.backgroundColor,
                               ),
                               height: widget.stageController.stageSize.height,
@@ -393,20 +390,22 @@ class StageHandle {
 }
 
 class GridRaster extends CustomPainter {
+  final rasterPaint = Paint()..color = const Color(0xFF646464).withOpacity(0.2);
+
   @override
   void paint(Canvas canvas, Size size) {
     for (var i = 0; i < size.width; i += 100) {
       canvas.drawLine(
         Offset(i.toDouble(), 0),
         Offset(i.toDouble(), size.height),
-        Paint()..color = const Color(0xFF646464).withOpacity(0.2),
+        rasterPaint,
       );
     }
     for (var i = 0; i < size.height; i += 100) {
       canvas.drawLine(
         Offset(0, i.toDouble()),
         Offset(size.width, i.toDouble()),
-        Paint()..color = const Color(0xFF646464).withOpacity(0.2),
+        rasterPaint,
       );
     }
   }
@@ -452,6 +451,8 @@ class _StageSizeIndicatorState extends State<StageSizeIndicator> {
     widget.controller.removeListener(_updateController);
     _widthFocusNode.removeListener(_textFieldsHaveFocus);
     _heightFocusNode.removeListener(_textFieldsHaveFocus);
+    _heightController.dispose();
+    _widthController.dispose();
     super.dispose();
   }
 

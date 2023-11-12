@@ -63,8 +63,13 @@ import 'package:stage_craft/stage_craft.dart';
 ///   }
 /// ```
 abstract class StageData extends ChangeNotifier {
+  StageData({
+    required this.name,
+    this.initialStageSize,
+  });
+
   /// The name of the widget.
-  String get name;
+  final String name;
 
   /// Return the widget you want to put on stage and use
   Widget widgetBuilder(BuildContext context);
@@ -78,7 +83,10 @@ abstract class StageData extends ChangeNotifier {
   /// an [Iterable].
   List<FieldConfigurator> get stageConfigurators;
 
-  Size? get initialStageSize => const Size(600, 800);
+  final Size? initialStageSize;
 
-  List<FieldConfigurator> get allConfigurators => [...widgetConfigurators, ...stageConfigurators];
+  List<FieldConfigurator> get allConfigurators => [
+        ...widgetConfigurators,
+        ...stageConfigurators,
+      ];
 }

@@ -1,7 +1,8 @@
-import 'package:example/stage_data/bool_field_configurator_stage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 import 'package:window_manager/window_manager.dart';
+
+import '../test/test_stage_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +21,11 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-
   runApp(
     MaterialApp(
       home: Scaffold(
         body: StageCraft(
-          stageData: BoolFieldConfiguratorStageData(),
+          stageData: TestStageData(),
         ),
       ),
     ),

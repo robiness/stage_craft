@@ -14,22 +14,14 @@ class StageCraft extends StatefulWidget {
     super.key,
     this.stageController,
     this.configurationBarFooter,
-    this.defaultStageSize,
     StageCraftSettings? settings,
     this.stageData,
-  }) : settings = settings ??
-            StageCraftSettings(
-              handleBallSize: 20,
-              handleBallColor: const Color(0xFF185DE3).withOpacity(0.8),
-            );
+  }) : settings = settings ?? const StageCraftSettings();
 
   /// The [StageController] that controls the stage.
   ///
   /// Create one above the [StageCraft] widget and pass it here to react to stage events or set stage properties.
   final StageController? stageController;
-
-  /// The size of the stage.
-  final Size? defaultStageSize;
 
   /// The size of the handle balls.
   final StageCraftSettings settings;
@@ -52,11 +44,11 @@ class _StageCraftState extends State<StageCraft> {
     super.initState();
     if (widget.stageData != null) {
       _stageController.selectWidget(widget.stageData!);
-      _stageController.resizeStage(widget.stageData!.initialStageSize!);
-      return;
-    }
-    if (widget.defaultStageSize != null) {
-      _stageController.resizeStage(widget.defaultStageSize!);
+      if (widget.stageData!.initialStageSize != null) {
+        _stageController.resizeStage(widget.stageData!.initialStageSize!);
+        return;
+      }
+      _stageController.resizeStage(widget.settings.defaultStageSize);
     }
   }
 
@@ -84,12 +76,17 @@ class _StageCraftState extends State<StageCraft> {
 
 class StageCraftSettings {
   const StageCraftSettings({
-    required this.handleBallSize,
-    required this.handleBallColor,
-    this.initialBackgroundColor,
-  });
+    double? handleBallSize,
+    Color? handleBallColor,
+    Color? initialBackgroundColor,
+    Size? defaultStageSize,
+  })  : handleBallSize = handleBallSize ?? 20,
+        initialBackgroundColor = initialBackgroundColor ?? const Color(0xFFE3E3E3),
+        handleBallColor = handleBallColor ?? const Color(0xCC185DE3),
+        defaultStageSize = defaultStageSize ?? const Size(400, 400);
 
-  final Color? initialBackgroundColor;
+  final Color initialBackgroundColor;
   final Color handleBallColor;
   final double handleBallSize;
+  final Size defaultStageSize;
 }

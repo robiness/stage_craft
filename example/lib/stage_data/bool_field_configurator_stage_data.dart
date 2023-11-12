@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class BoolFieldConfiguratorStageData extends StageData {
-  @override
-  String get name => 'BoolFieldConfiguration';
+  BoolFieldConfiguratorStageData({
+    super.initialStageSize,
+  }) : super(name: 'BoolFieldConfiguratorStageData');
 
   final value = BoolFieldConfigurator(value: true, name: 'value');
 

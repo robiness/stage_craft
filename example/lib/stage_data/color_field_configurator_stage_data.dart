@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class ColorFieldConfiguratorStageData extends StageData {
-  @override
-  String get name => 'ColorFieldConfiguration';
+  ColorFieldConfiguratorStageData({
+    super.initialStageSize,
+  }) : super(name: 'ColorFieldConfiguratorStageData');
 
   final value = ColorFieldConfigurator(value: const Color(0xFF000000), name: 'value');
 
