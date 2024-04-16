@@ -1,8 +1,8 @@
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/stage/stage_controller.dart';
+import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 
-class StageSettingsWidget extends StatefulWidget {
+class StageSettingsWidget extends StatelessWidget {
   const StageSettingsWidget({
     super.key,
     required this.stageController,
@@ -11,19 +11,6 @@ class StageSettingsWidget extends StatefulWidget {
 
   final StageController stageController;
   final BoxConstraints? constraints;
-
-  @override
-  State<StageSettingsWidget> createState() => _StageSettingsWidgetState();
-}
-
-class _StageSettingsWidgetState extends State<StageSettingsWidget> {
-  late final Color _initialColor =
-      widget.stageController.initialBackgroundColor;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,56 +32,22 @@ class _StageSettingsWidgetState extends State<StageSettingsWidget> {
           SettingsWidget(
             iconPath: 'assets/ruler.png',
             option: ZoomSlider(
-              constraints: widget.constraints,
-              stageController: widget.stageController,
+              constraints: constraints,
+              stageController: stageController,
             ),
           ),
           SizedBox(
             width: 60,
             child: Center(
-              child: GestureDetector(
-                onTap: () async {
-                  final color = await showColorPickerDialog(
-                    context,
-                    widget.stageController.backgroundColor,
-                    customColorSwatchesAndNames: {
-                      ColorTools.createPrimarySwatch(_initialColor):
-                          'Default Color',
-                    },
-                    title: Text(
-                      'Pick a color!',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    pickerTypeLabels: <ColorPickerType, String>{
-                      ColorPickerType.custom: 'Default',
-                    },
-                    heading: const SizedBox(height: 8.0),
-                    subheading: const SizedBox(height: 8.0),
-                    wheelSubheading: const SizedBox(height: 8.0),
-                    spacing: 2,
-                    showColorName: true,
-                    showMaterialName: true,
-                    runSpacing: 2,
-                    wheelDiameter: 165,
-                    enableOpacity: true,
-                    showColorCode: true,
-                    colorCodeHasColor: true,
-                    pickersEnabled: <ColorPickerType, bool>{
-                      ColorPickerType.wheel: true,
-                      ColorPickerType.custom: true,
-                    },
-                    constraints: const BoxConstraints(
-                      minHeight: 525,
-                      minWidth: 320,
-                      maxWidth: 320,
-                    ),
-                  );
-                  widget.stageController.setBackgroundColor(color);
+              child: StageCraftColorPicker(
+                initialColor: stageController.initialBackgroundColor,
+                onColorSelected: (Color color) {
+                  stageController.setBackgroundColor(color);
                 },
                 child: Container(
                   width: 30,
                   decoration: BoxDecoration(
-                    color: widget.stageController.backgroundColor,
+                    color: stageController.backgroundColor,
                     shape: BoxShape.circle,
                     boxShadow: const [
                       BoxShadow(
