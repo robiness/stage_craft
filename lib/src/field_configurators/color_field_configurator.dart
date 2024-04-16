@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 class ColorFieldConfigurator extends FieldConfigurator<Color> {
@@ -56,10 +55,9 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
   @override
   Widget build(BuildContext context) {
     return StageCraftColorPicker(
-      initialColor: value ?? Colors.transparent,
+      initialColor: value,
       onColorSelected: updateValue,
       colorSamples: colorSamples,
-      customColorTabLabel: 'Custom',
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: ClipRRect(

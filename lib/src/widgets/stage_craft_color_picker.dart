@@ -41,10 +41,10 @@ class StageCraftColorPicker extends StatefulWidget {
     super.key,
     this.colorSamples,
     required this.child,
-    this.initialColor = Colors.transparent,
+    Color? initialColor,
     this.onColorSelected,
     this.customColorTabLabel,
-  });
+  }) : _initialColor = initialColor ?? Colors.transparent;
 
   /// List of predefined color samples. Can be null.
   final List<ColorSample>? colorSamples;
@@ -53,7 +53,7 @@ class StageCraftColorPicker extends StatefulWidget {
   final Widget child;
 
   /// Initially selected color. Defaults to transparent if not provided.
-  final Color initialColor;
+  final Color _initialColor;
 
   /// Callback that is called when a new color is selected.
   final void Function(Color color)? onColorSelected;
@@ -66,13 +66,15 @@ class StageCraftColorPicker extends StatefulWidget {
 }
 
 class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
+  late Color _selectedColor;
   late final Map<ColorSwatch<Object>, String> _colorSwatches = {
-    ColorTools.createPrimarySwatch(widget.initialColor): 'Initial Color',
+    ColorTools.createPrimarySwatch(widget._initialColor): 'Initial Color',
   };
 
   @override
   void initState() {
     super.initState();
+    _selectedColor = widget._initialColor;
     if (widget.colorSamples?.isNotEmpty == true) {
       for (final sample in widget.colorSamples!) {
         _colorSwatches[ColorTools.createPrimarySwatch(sample.color)] =
@@ -81,20 +83,28 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
     }
   }
 
+  void _handleColorChange(Color color) {
+    setState(() {
+      _selectedColor = color;
+    });
+    widget.onColorSelected?.call(color);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final color = await showColorPickerDialog(
-          context,
-          widget.initialColor,
+        final currentColor = _selectedColor;
+        final didPickColor = await ColorPicker(
+          onColorChanged: _handleColorChange,
+          color: _selectedColor,
           customColorSwatchesAndNames: _colorSwatches,
           title: Text(
             'Pick a color!',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           pickerTypeLabels: <ColorPickerType, String>{
-            ColorPickerType.custom: widget.customColorTabLabel ?? 'Default',
+            ColorPickerType.custom: widget.customColorTabLabel ?? 'Custom',
           },
           heading: const SizedBox(height: 8.0),
           subheading: const SizedBox(height: 8.0),
@@ -107,17 +117,21 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
           enableOpacity: true,
           showColorCode: true,
           colorCodeHasColor: true,
-          pickersEnabled: <ColorPickerType, bool>{
+          pickersEnabled: const <ColorPickerType, bool>{
             ColorPickerType.wheel: true,
             ColorPickerType.custom: true,
           },
+        ).showPickerDialog(
+          context,
           constraints: const BoxConstraints(
             minHeight: 525,
             minWidth: 320,
             maxWidth: 320,
           ),
         );
-        widget.onColorSelected?.call(color);
+        if (!didPickColor) {
+          _handleColorChange(currentColor);
+        }
       },
       child: widget.child,
     );
