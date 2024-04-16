@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -16,15 +15,15 @@ class ColorFieldConfiguratorStageData extends StageData {
     ColorSample(color: Color(0xFFE9C46A), name: 'Saffron Yellow')
   ];
 
-  final backgroundColor = ColorFieldConfigurator(
-    value: Colors.red,
-    name: 'Background Color',
+  final outerBoxColor = ColorFieldConfigurator(
+    value: colorSamples[2].color,
+    name: 'Outer Box Color',
     colorSamples: colorSamples,
   );
 
-  final iconColor = ColorFieldConfigurator(
-    value: Colors.blue,
-    name: 'Icon color',
+  final innerBoxColor = ColorFieldConfiguratorNullable(
+    value: colorSamples[4].color,
+    name: 'Inner Box Color',
     colorSamples: colorSamples,
   );
 
@@ -33,8 +32,8 @@ class ColorFieldConfiguratorStageData extends StageData {
 
   @override
   List<FieldConfigurator> get widgetConfigurators => [
-        backgroundColor,
-        iconColor,
+        outerBoxColor,
+        innerBoxColor,
       ];
 
   @override
@@ -43,10 +42,13 @@ class ColorFieldConfiguratorStageData extends StageData {
       child: Container(
         width: 200,
         height: 200,
-        color: backgroundColor.value,
-        child: Icon(
-          Icons.add,
-          color: iconColor.value,
+        color: outerBoxColor.value,
+        child: Center(
+          child: Container(
+            color: innerBoxColor.value,
+            width: 100,
+            height: 100,
+          ),
         ),
       ),
     );
