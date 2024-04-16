@@ -13,7 +13,6 @@ dependencies:
   flex_color_picker: ^3.3.0
   flutter:
     sdk: flutter
-  flutter_colorpicker: ^1.0.3
   universal_io: ^2.0.0
 
 dev_dependencies:
