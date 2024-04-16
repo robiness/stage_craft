@@ -1,8 +1,8 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:stage_craft/src/stage/stage_controller.dart';
 
-class StageSettingsWidget extends StatelessWidget {
+class StageSettingsWidget extends StatefulWidget {
   const StageSettingsWidget({
     super.key,
     required this.stageController,
@@ -11,6 +11,19 @@ class StageSettingsWidget extends StatelessWidget {
 
   final StageController stageController;
   final BoxConstraints? constraints;
+
+  @override
+  State<StageSettingsWidget> createState() => _StageSettingsWidgetState();
+}
+
+class _StageSettingsWidgetState extends State<StageSettingsWidget> {
+  late final Color _initialColor =
+      widget.stageController.initialBackgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,49 +45,56 @@ class StageSettingsWidget extends StatelessWidget {
           SettingsWidget(
             iconPath: 'assets/ruler.png',
             option: ZoomSlider(
-              constraints: constraints,
-              stageController: stageController,
+              constraints: widget.constraints,
+              stageController: widget.stageController,
             ),
           ),
           SizedBox(
             width: 60,
             child: Center(
               child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Pick a color!'),
-                        content: SingleChildScrollView(
-                          child: ColorPicker(
-                            pickerColor: stageController.backgroundColor,
-                            onColorChanged: stageController.setBackgroundColor,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            child: const Text('Reset'),
-                            onPressed: () {
-                              stageController.resetBackgroundColor();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            child: const Text('Accept'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
+                onTap: () async {
+                  final color = await showColorPickerDialog(
+                    context,
+                    widget.stageController.backgroundColor,
+                    customColorSwatchesAndNames: {
+                      ColorTools.createPrimarySwatch(_initialColor):
+                          'Default Color',
                     },
+                    title: Text(
+                      'Pick a color!',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    pickerTypeLabels: <ColorPickerType, String>{
+                      ColorPickerType.custom: 'Default',
+                    },
+                    heading: const SizedBox(height: 8.0),
+                    subheading: const SizedBox(height: 8.0),
+                    wheelSubheading: const SizedBox(height: 8.0),
+                    spacing: 2,
+                    showColorName: true,
+                    showMaterialName: true,
+                    runSpacing: 2,
+                    wheelDiameter: 165,
+                    enableOpacity: true,
+                    showColorCode: true,
+                    colorCodeHasColor: true,
+                    pickersEnabled: <ColorPickerType, bool>{
+                      ColorPickerType.wheel: true,
+                      ColorPickerType.custom: true,
+                    },
+                    constraints: const BoxConstraints(
+                      minHeight: 525,
+                      minWidth: 320,
+                      maxWidth: 320,
+                    ),
                   );
+                  widget.stageController.setBackgroundColor(color);
                 },
                 child: Container(
                   width: 30,
                   decoration: BoxDecoration(
-                    color: stageController.backgroundColor,
+                    color: widget.stageController.backgroundColor,
                     shape: BoxShape.circle,
                     boxShadow: const [
                       BoxShadow(
