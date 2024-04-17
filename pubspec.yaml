@@ -6,11 +6,11 @@ publish_to: 'none'
 version: 0.0.5+1
 
 environment:
-  sdk: '>=2.19.2 <4.0.0'
+  sdk: '>=2.18.0 <4.0.0'
 
 dependencies:
   cupertino_icons: ^1.0.2
-  flex_color_picker: ^3.3.0
+  flex_color_picker: ^3.0.2
   flutter:
     sdk: flutter
   universal_io: ^2.0.0
@@ -18,7 +18,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^2.0.20
+  lint: ^2.0.0
 
 
 flutter:

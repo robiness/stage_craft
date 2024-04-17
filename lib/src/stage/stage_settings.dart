@@ -149,7 +149,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         );
       },
     );
-    Overlay.of(context).insert(_overlayEntry!);
+    Overlay.of(context)?.insert(_overlayEntry!);
   }
 }
 
