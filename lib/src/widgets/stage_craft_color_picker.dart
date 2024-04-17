@@ -43,8 +43,9 @@ class StageCraftColorPicker extends StatefulWidget {
     required this.child,
     Color? initialColor,
     this.onColorSelected,
-    this.customColorTabLabel,
-  }) : _initialColor = initialColor ?? Colors.transparent;
+    String? customColorTabLabel,
+  })  : initialColor = initialColor ?? Colors.transparent,
+        customColorTabLabel = customColorTabLabel ?? 'Default';
 
   /// List of predefined color samples. Can be null.
   final List<ColorSample>? colorSamples;
@@ -53,7 +54,7 @@ class StageCraftColorPicker extends StatefulWidget {
   final Widget child;
 
   /// Initially selected color. Defaults to transparent if not provided.
-  final Color _initialColor;
+  final Color initialColor;
 
   /// Callback that is called when a new color is selected.
   final void Function(Color color)? onColorSelected;
@@ -67,14 +68,29 @@ class StageCraftColorPicker extends StatefulWidget {
 
 class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
   late Color _selectedColor;
-  late final Map<ColorSwatch<Object>, String> _colorSwatches = {
-    ColorTools.createPrimarySwatch(widget._initialColor): 'Initial Color',
-  };
+  late Map<ColorSwatch<Object>, String> _colorSwatches;
 
   @override
   void initState() {
     super.initState();
-    _selectedColor = widget._initialColor;
+    _initializeColorPicker();
+  }
+
+  @override
+  void didUpdateWidget(StageCraftColorPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.colorSamples != widget.colorSamples ||
+        oldWidget.initialColor != widget.initialColor) {
+      _initializeColorPicker();
+    }
+  }
+
+  void _initializeColorPicker() {
+    _selectedColor = widget.initialColor;
+    _colorSwatches = {
+      ColorTools.createPrimarySwatch(widget.initialColor): 'Initial Color',
+    };
+
     if (widget.colorSamples?.isNotEmpty == true) {
       for (final sample in widget.colorSamples!) {
         _colorSwatches[ColorTools.createPrimarySwatch(sample.color)] =
