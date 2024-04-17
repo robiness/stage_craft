@@ -54,45 +54,10 @@ class ColorConfigurationWidget extends ConfigurationWidget<Color?> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            Color? color = value;
-            return StatefulBuilder(
-              builder: (context, setState) {
-                return AlertDialog(
-                  scrollable: true,
-                  title: const Text('Pick a color!'),
-                  content: ColorPicker(
-                    color: color ?? Colors.white,
-                    colorSamples: colorSamples,
-                    onColorChanged: (newColor) {
-                      setState(() {
-                        color = newColor;
-                      });
-                    },
-                  ),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      onPressed: Navigator.of(context).pop,
-                      child: const Text('Abort'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        updateValue(color);
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Accept'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        );
-      },
+    return StageCraftColorPicker(
+      initialColor: value,
+      onColorSelected: updateValue,
+      colorSamples: colorSamples,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: ClipRRect(
@@ -141,7 +106,9 @@ class ChessBoardPainter extends CustomPainter {
     final maxVerticalBoxes = size.height / boxSize + 1;
     final maxHorizontalBoxes = size.width / boxSize + 1;
 
-    for (int verticalBoxIndex = 0; verticalBoxIndex < maxVerticalBoxes; verticalBoxIndex++) {
+    for (int verticalBoxIndex = 0;
+        verticalBoxIndex < maxVerticalBoxes;
+        verticalBoxIndex++) {
       for (int horizontalBoxIndex = 0;
           horizontalBoxIndex < maxHorizontalBoxes;
           horizontalBoxIndex = horizontalBoxIndex + 2) {

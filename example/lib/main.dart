@@ -1,4 +1,4 @@
-import 'package:example/stage_data/string_list_configurator_stage_data.dart';
+import 'package:example/stage_data/color_field_configurator_stage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: StageCraft(
-          stageData: StringListConfiguratorStageData(),
+          stageData: ColorFieldConfiguratorStageData(),
         ),
       ),
     );

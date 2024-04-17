@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:stage_craft/src/stage/stage_controller.dart';
+import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 
 class StageSettingsWidget extends StatelessWidget {
   const StageSettingsWidget({
@@ -39,37 +39,10 @@ class StageSettingsWidget extends StatelessWidget {
           SizedBox(
             width: 60,
             child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Pick a color!'),
-                        content: SingleChildScrollView(
-                          child: ColorPicker(
-                            pickerColor: stageController.backgroundColor,
-                            onColorChanged: stageController.setBackgroundColor,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            child: const Text('Reset'),
-                            onPressed: () {
-                              stageController.resetBackgroundColor();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            child: const Text('Accept'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+              child: StageCraftColorPicker(
+                initialColor: stageController.initialBackgroundColor,
+                onColorSelected: (Color color) {
+                  stageController.setBackgroundColor(color);
                 },
                 child: Container(
                   width: 30,
@@ -176,7 +149,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         );
       },
     );
-    Overlay.of(context).insert(_overlayEntry!);
+    Overlay.of(context)?.insert(_overlayEntry!);
   }
 }
 
