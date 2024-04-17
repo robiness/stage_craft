@@ -96,6 +96,10 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
       onTap: () async {
         final currentColor = _selectedColor;
         final didPickColor = await ColorPicker(
+          actionButtons: const ColorPickerActionButtons(
+            dialogOkButtonLabel: 'Apply',
+          ),
+          showRecentColors: true,
           onColorChanged: _handleColorChange,
           color: _selectedColor,
           customColorSwatchesAndNames: _colorSwatches,
