@@ -31,7 +31,7 @@ class StageCraftColorPicker extends StatefulWidget {
   /// The [child] parameter is required and typically holds a widget that triggers the color picker dialog.
   ///
   /// The [initialColor] parameter represents the initially selected color when the picker is opened.
-  /// If not provided, it defaults to transparent.
+  /// If not provided, it defaults to blue.
   ///
   /// The [onColorSelected] parameter is a callback that will be called when a new color is selected.
   ///
@@ -44,7 +44,7 @@ class StageCraftColorPicker extends StatefulWidget {
     Color? initialColor,
     this.onColorSelected,
     String? customColorTabLabel,
-  })  : initialColor = initialColor ?? Colors.transparent,
+  })  : initialColor = initialColor ?? Colors.blue,
         customColorTabLabel = customColorTabLabel ?? 'Default';
 
   /// List of predefined color samples. Can be null.
@@ -53,7 +53,7 @@ class StageCraftColorPicker extends StatefulWidget {
   /// The widget displayed that triggers the color picker when interacted with.
   final Widget child;
 
-  /// Initially selected color. Defaults to transparent if not provided.
+  /// Initially selected color. Defaults to blue if not provided.
   final Color initialColor;
 
   /// Callback that is called when a new color is selected.
