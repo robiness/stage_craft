@@ -188,7 +188,6 @@ class _StageAreaState extends State<StageArea> {
                 maxScale: 5,
                 transformationController: widget.stageController.transformationController,
                 scaleEnabled: false,
-                constrained: false,
                 child: SizedBox(
                   height: _currentConstraints!.maxHeight * 10,
                   width: _currentConstraints!.maxWidth * 10,
@@ -241,29 +240,8 @@ class _StageAreaState extends State<StageArea> {
                             controller: widget.stageController,
                           ),
                         ),
-                        Positioned(
-                          top: widget.stageController.stagePosition.dy,
-                          left: widget.stageController.stagePosition.dx,
-                          child: MouseRegion(
-                            hitTestBehavior: HitTestBehavior.translucent,
-                            onEnter: (_) {
-                              widget.stageController.showBalls = true;
-                            },
-                            onExit: (_) {
-                              setState(() {
-                                if (widget.stageController.isDragging == false) {
-                                  widget.stageController.showBalls = false;
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(50),
-                              child: SizedBox(
-                                height: widget.stageController.stageSize.height,
-                                width: widget.stageController.stageSize.width,
-                              ),
-                            ),
-                          ),
+                        ShowBallsArea(
+                          stageController: widget.stageController,
                         ),
                       ],
                     ),
@@ -288,7 +266,8 @@ class _StageAreaState extends State<StageArea> {
   void _dragLeft({required double dx, required StageController controller}) {
     final newWidth = controller.stageSize.width - dx;
     if (controller.stagePosition.dx + dx > 0 && newWidth > 0) {
-      controller.stagePosition = Offset(controller.stagePosition.dx + dx, controller.stagePosition.dy);
+      controller.stagePosition =
+          Offset(controller.stagePosition.dx + dx / 2, controller.stagePosition.dy); // Adjust the stage position
       final newSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
       controller.resizeStage(newSize);
     }
@@ -318,6 +297,43 @@ class _StageAreaState extends State<StageArea> {
       final newSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
       controller.resizeStage(newSize);
     }
+  }
+}
+
+class ShowBallsArea extends StatelessWidget {
+  const ShowBallsArea({
+    super.key,
+    required this.stageController,
+  });
+
+  final StageController stageController;
+
+  static const int extension = 25;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: stageController.stagePosition.dy - extension,
+      left: stageController.stagePosition.dx - extension,
+      child: Container(
+        color: Colors.yellow.withOpacity(0.2),
+        child: MouseRegion(
+          hitTestBehavior: HitTestBehavior.translucent,
+          onEnter: (_) {
+            stageController.showBalls = true;
+          },
+          onExit: (_) {
+            if (stageController.isDragging == false) {
+              stageController.showBalls = false;
+            }
+          },
+          child: SizedBox(
+            height: stageController.stageSize.height + extension * 2,
+            width: stageController.stageSize.width + extension * 2,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -356,8 +372,8 @@ class StageHandleBall extends StatelessWidget {
           },
           onPanUpdate: (details) {
             handle.onDrag(
-              dx: details.delta.dx,
-              dy: details.delta.dy,
+              dx: details.delta.dx * 2,
+              dy: details.delta.dy * 2,
               controller: controller,
             );
           },
