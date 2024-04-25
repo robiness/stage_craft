@@ -6,11 +6,9 @@ class StageSettingsWidget extends StatelessWidget {
   const StageSettingsWidget({
     super.key,
     required this.stageController,
-    required this.constraints,
   });
 
   final StageController stageController;
-  final BoxConstraints? constraints;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,6 @@ class StageSettingsWidget extends StatelessWidget {
           SettingsWidget(
             iconPath: 'assets/ruler.png',
             option: ZoomSlider(
-              constraints: constraints,
               stageController: stageController,
             ),
           ),
@@ -184,11 +181,9 @@ class ZoomSlider extends StatefulWidget {
   const ZoomSlider({
     super.key,
     required this.stageController,
-    required this.constraints,
   });
 
   final StageController stageController;
-  final BoxConstraints? constraints;
 
   @override
   State<ZoomSlider> createState() => _ZoomSliderState();
@@ -214,7 +209,6 @@ class _ZoomSliderState extends State<ZoomSlider> {
               setState(() {
                 widget.stageController.setZoom(
                   value: value,
-                  constraints: widget.constraints,
                 );
               });
             },

@@ -3,14 +3,13 @@ import 'package:stage_craft/src/stage/stage_area.dart';
 import 'package:stage_craft/src/stage/stage_controller.dart';
 import 'package:stage_craft/src/stage/stage_data.dart';
 import 'package:stage_craft/src/widgets/configuration_bar.dart';
-import 'package:universal_io/io.dart';
 
 /// The [StageCraft] widget is the main widget of the StageCraft package.
 ///
 /// Use this to create a stage for your widgets.
 ///
 class StageCraft extends StatefulWidget {
-  StageCraft({
+  const StageCraft({
     super.key,
     this.stageController,
     this.configurationBarFooter,
@@ -53,6 +52,15 @@ class _StageCraftState extends State<StageCraft> {
   }
 
   @override
+  void dispose() {
+    if (widget.stageController == null) {
+      // If the user didn't provide a controller, we dispose it ourselves.
+      _stageController.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -61,14 +69,13 @@ class _StageCraftState extends State<StageCraft> {
           settings: widget.settings,
         ),
         // In tests we don't want to show the configuration bar because find() would find widgets in it.
-        if (!Platform.environment.containsKey('FLUTTER_TEST'))
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfigurationBar(
-              controller: _stageController,
-              configurationBarFooter: widget.configurationBarFooter,
-            ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfigurationBar(
+            controller: _stageController,
+            configurationBarFooter: widget.configurationBarFooter,
           ),
+        ),
       ],
     );
   }

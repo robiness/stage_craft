@@ -12,9 +12,19 @@ class StageController extends ChangeNotifier {
 
   Offset get stagePosition => _stagePosition;
 
+  BoxConstraints? _stageConstraints;
+  set stageConstraints(BoxConstraints? value) {
+    if (_stageConstraints != value) {
+      _stageConstraints = value;
+    }
+  }
+
+  BoxConstraints? get stageConstraints => _stageConstraints;
+
   set stagePosition(Offset value) {
     if (_stagePosition != value) {
       _stagePosition = value;
+      centerStage();
       notifyListeners();
     }
   }
@@ -26,8 +36,18 @@ class StageController extends ChangeNotifier {
   void resizeStage(Size size) {
     if (_stageSize != size) {
       _stageSize = size;
+      centerStage();
       notifyListeners();
     }
+  }
+
+  void centerStage() {
+    if (_stageConstraints == null) return;
+    stagePosition = Offset(
+      (_stageConstraints!.maxWidth / 2) - (stageSize.width / 2),
+      (_stageConstraints!.maxHeight / 2) - (stageSize.height / 2),
+    );
+    notifyListeners();
   }
 
   double _zoom = 1;
@@ -36,9 +56,8 @@ class StageController extends ChangeNotifier {
 
   void setZoom({
     required double value,
-    required BoxConstraints? constraints,
   }) {
-    if (_zoom != value && constraints != null) {
+    if (_zoom != value && stageConstraints != null) {
       _zoom = value;
       transformationController.value.setEntry(0, 0, zoom);
       transformationController.value.setEntry(1, 1, zoom);

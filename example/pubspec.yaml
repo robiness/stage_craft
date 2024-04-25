@@ -14,13 +14,13 @@ dependencies:
 
   stage_craft:
     path: ../
-  window_manager: ^0.3.7
+  window_manager: ^0.3.8
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^2.1.2
+  lint: ^2.3.0
 
 
 flutter:

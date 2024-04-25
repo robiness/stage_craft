@@ -16,7 +16,6 @@ class StageArea extends StatefulWidget {
 }
 
 class _StageAreaState extends State<StageArea> {
-  BoxConstraints? _currentConstraints;
   late double handleBallSize = widget.stageController.scale(widget.settings.handleBallSize);
 
   late final List<StageHandle> handles = [
@@ -160,18 +159,11 @@ class _StageAreaState extends State<StageArea> {
     widget.stageController.addListener(() {
       setState(() {
         handleBallSize = widget.stageController.scale(widget.settings.handleBallSize);
-        widget.stageController.stagePosition = Offset(
-          (_currentConstraints!.maxWidth / 2) - (widget.stageController.stageSize.width / 2),
-          (_currentConstraints!.maxHeight / 2) - (widget.stageController.stageSize.height / 2),
-        );
       });
     });
     // center the stage in the middle of the available space
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.stageController.stagePosition = Offset(
-        (_currentConstraints!.maxWidth / 2) - (widget.stageController.stageSize.width / 2),
-        (_currentConstraints!.maxHeight / 2) - (widget.stageController.stageSize.height / 2),
-      );
+      widget.stageController.centerStage();
     });
   }
 
@@ -182,15 +174,16 @@ class _StageAreaState extends State<StageArea> {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              _currentConstraints = constraints;
+              // TODO we might want to use a RenderObject to get the constraints
+              widget.stageController.stageConstraints = constraints;
               return InteractiveViewer(
                 minScale: 0.1,
                 maxScale: 5,
                 transformationController: widget.stageController.transformationController,
                 scaleEnabled: false,
                 child: SizedBox(
-                  height: _currentConstraints!.maxHeight * 10,
-                  width: _currentConstraints!.maxWidth * 10,
+                  height: constraints.maxHeight * 10,
+                  width: constraints.maxWidth * 10,
                   child: CustomPaint(
                     painter: GridRaster(),
                     child: Stack(
@@ -254,7 +247,6 @@ class _StageAreaState extends State<StageArea> {
             right: 20,
             bottom: 20,
             child: StageSettingsWidget(
-              constraints: _currentConstraints,
               stageController: widget.stageController,
             ),
           ),
@@ -275,7 +267,7 @@ class _StageAreaState extends State<StageArea> {
 
   void _dragRight({required double dx, required StageController controller}) {
     final newWidth = controller.stageSize.width + dx;
-    if (newWidth + controller.stagePosition.dx < controller.scale(_currentConstraints!.maxWidth) - 50) {
+    if (newWidth + controller.stagePosition.dx < controller.scale(controller.stageConstraints!.maxWidth) - 50) {
       final newSize = Size(newWidth > 0 ? newWidth : 0, controller.stageSize.height);
       controller.resizeStage(newSize);
     }
@@ -293,7 +285,7 @@ class _StageAreaState extends State<StageArea> {
 
   void _dragDown({required double dy, required StageController controller}) {
     final newHeight = controller.stageSize.height + dy;
-    if (newHeight + controller.stagePosition.dy < controller.scale(_currentConstraints!.maxHeight) - 50) {
+    if (newHeight + controller.stagePosition.dy < controller.scale(controller.stageConstraints!.maxHeight) - 50) {
       final newSize = Size(controller.stageSize.width, newHeight > 0 ? newHeight : 0);
       controller.resizeStage(newSize);
     }
@@ -315,22 +307,19 @@ class ShowBallsArea extends StatelessWidget {
     return Positioned(
       top: stageController.stagePosition.dy - extension,
       left: stageController.stagePosition.dx - extension,
-      child: Container(
-        color: Colors.yellow.withOpacity(0.2),
-        child: MouseRegion(
-          hitTestBehavior: HitTestBehavior.translucent,
-          onEnter: (_) {
-            stageController.showBalls = true;
-          },
-          onExit: (_) {
-            if (stageController.isDragging == false) {
-              stageController.showBalls = false;
-            }
-          },
-          child: SizedBox(
-            height: stageController.stageSize.height + extension * 2,
-            width: stageController.stageSize.width + extension * 2,
-          ),
+      child: MouseRegion(
+        hitTestBehavior: HitTestBehavior.translucent,
+        onEnter: (_) {
+          stageController.showBalls = true;
+        },
+        onExit: (_) {
+          if (stageController.isDragging == false) {
+            stageController.showBalls = false;
+          }
+        },
+        child: SizedBox(
+          height: stageController.stageSize.height + extension * 2,
+          width: stageController.stageSize.width + extension * 2,
         ),
       ),
     );
