@@ -1,4 +1,5 @@
 import 'package:example/new/stage/controls.dart';
+import 'package:example/new/stage/measure_grid.dart';
 import 'package:example/new/stage/ruler.dart';
 import 'package:example/new/stage/stage_constraints_handles.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,10 @@ class _StageState extends State<Stage> {
         builder: (context, constraints) {
           return Stack(
             children: [
+              if (!_settings.showRuler)
+                const Positioned.fill(
+                  child: MeasureGrid(size: 100),
+                ),
               StageRect(
                 rect: rect,
                 child: GestureDetector(
