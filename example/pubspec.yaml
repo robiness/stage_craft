@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_colorpicker: ^1.1.0
 
   stage_craft:
     path: ../

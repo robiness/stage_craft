@@ -1,30 +1,25 @@
-import 'package:example/stage_data/string_list_configurator_stage_data.dart';
+import 'package:example/new/new_example.dart';
+import 'package:example/new/stage/stage.dart';
 import 'package:flutter/material.dart';
-import 'package:stage_craft/stage_craft.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'StageCraft Demo',
-      theme: ThemeData.light(),
-      debugShowCheckedModeBanner: false,
+  runApp(
+    const MaterialApp(
       home: Scaffold(
-        body: StageCraft(
-          stageData: StringListConfiguratorStageData(),
+        body: ColoredBox(
+          color: Colors.grey,
+          child: Padding(
+            padding: EdgeInsets.all(84.0),
+            child: Stage(
+              child: FunkyContainer(
+                color: Colors.purpleAccent,
+                width: 100,
+                child: Text('Funky!'),
+              ),
+            ),
+          ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

@@ -1,25 +1,5 @@
-import 'package:example/new/stage.dart';
+import 'package:example/new/stage/stage.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(
-    const MaterialApp(
-      home: Scaffold(
-        body: Expanded(
-          child: ColoredBox(
-            color: Colors.grey,
-            child: Padding(
-              padding: EdgeInsets.all(84.0),
-              child: Stage(
-                child: MyContainerScene(),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 class MyContainerScene extends StatefulWidget {
   const MyContainerScene({super.key});
@@ -31,7 +11,7 @@ class MyContainerScene extends StatefulWidget {
 class _MyContainerSceneState extends State<MyContainerScene> {
   @override
   Widget build(BuildContext context) {
-    return const Scene(
+    return const Stage(
       child: FunkyContainer(
         color: Colors.purpleAccent,
         child: Text('Funky!'),
@@ -63,19 +43,24 @@ class _FunkyContainerState extends State<FunkyContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: _onFunkyTap,
-        child: Container(
-          height: widget.height,
-          width: widget.width,
-          decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: BorderRadius.circular(24),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        print('constraints: $constraints');
+        return Center(
+          child: GestureDetector(
+            onTap: _onFunkyTap,
+            child: Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                color: widget.color,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Center(child: widget.child),
+            ),
           ),
-          child: Center(child: widget.child),
-        ),
-      ),
+        );
+      },
     );
   }
 
