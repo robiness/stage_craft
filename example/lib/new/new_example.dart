@@ -1,6 +1,5 @@
-import 'package:example/new/controls/text_editing_control.dart';
-import 'package:example/new/stage/stage.dart';
 import 'package:flutter/material.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 class MyContainerStage extends StatefulWidget {
   const MyContainerStage({super.key});
@@ -12,7 +11,7 @@ class MyContainerStage extends StatefulWidget {
 class _MyContainerStageState extends State<MyContainerStage> {
   @override
   Widget build(BuildContext context) {
-    final textConfigurator = TextEditingControllerControl(
+    final textConfigurator = StringControl(
       initialValue: 'Hello, World!',
     );
     return Stage(
@@ -20,7 +19,6 @@ class _MyContainerStageState extends State<MyContainerStage> {
       builder: (context) {
         return FunkyContainer(
           color: Colors.purpleAccent,
-          controller: textConfigurator.controller,
           child: Text(textConfigurator.value),
         );
       },
@@ -66,9 +64,7 @@ class _FunkyContainerState extends State<FunkyContainer> {
                 color: widget.color,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: TextField(
-                controller: widget.controller,
-              ),
+              child: widget.child,
             ),
           ),
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stage_craft/stage_craft.dart';
+import 'package:stage_craft/src/_old/stage/stage_craft.dart';
+import 'package:stage_craft/src/_old/stage/stage_data.dart';
 
 import 'test_stage_data.dart';
 

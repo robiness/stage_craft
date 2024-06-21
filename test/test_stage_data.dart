@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:stage_craft/stage_craft.dart';
+import 'package:stage_craft/src/_old/field_configurators/field_configurators.dart';
+import 'package:stage_craft/src/_old/stage/stage_data.dart';
 
 class TestStageData extends StageData {
   TestStageData({

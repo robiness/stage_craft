@@ -1,8 +1,6 @@
+import 'package:example/new/new_example.dart';
 import 'package:flutter/material.dart';
-import 'package:stage_craft/stage_craft.dart';
 import 'package:window_manager/window_manager.dart';
-
-import '../test/test_stage_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,11 +20,9 @@ Future<void> main() async {
     await windowManager.focus();
   });
   runApp(
-    MaterialApp(
+    const MaterialApp(
       home: Scaffold(
-        body: StageCraft(
-          stageData: TestStageData(),
-        ),
+        body: MyContainerStage(),
       ),
     ),
   );

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spot/spot.dart';
-import 'package:stage_craft/stage_craft.dart';
+import 'package:stage_craft/src/_old/stage/stage_craft.dart';
 
 import 'pump_stage.dart';
 import 'test_stage_data.dart';
