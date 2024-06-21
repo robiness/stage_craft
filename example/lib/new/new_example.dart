@@ -1,21 +1,29 @@
+import 'package:example/new/controls/text_editing_control.dart';
 import 'package:example/new/stage/stage.dart';
 import 'package:flutter/material.dart';
 
-class MyContainerScene extends StatefulWidget {
-  const MyContainerScene({super.key});
+class MyContainerStage extends StatefulWidget {
+  const MyContainerStage({super.key});
 
   @override
-  State<MyContainerScene> createState() => _MyContainerSceneState();
+  State<MyContainerStage> createState() => _MyContainerStageState();
 }
 
-class _MyContainerSceneState extends State<MyContainerScene> {
+class _MyContainerStageState extends State<MyContainerStage> {
   @override
   Widget build(BuildContext context) {
-    return const Stage(
-      child: FunkyContainer(
-        color: Colors.purpleAccent,
-        child: Text('Funky!'),
-      ),
+    final textConfigurator = TextEditingControllerControl(
+      initialValue: 'Hello, World!',
+    );
+    return Stage(
+      controls: [textConfigurator],
+      builder: (context) {
+        return FunkyContainer(
+          color: Colors.purpleAccent,
+          controller: textConfigurator.controller,
+          child: Text(textConfigurator.value),
+        );
+      },
     );
   }
 }
@@ -27,12 +35,14 @@ class FunkyContainer extends StatefulWidget {
     this.height,
     this.width,
     this.child,
+    this.controller,
   });
 
   final Color? color;
   final double? height;
   final double? width;
   final Widget? child;
+  final TextEditingController? controller;
 
   @override
   State<FunkyContainer> createState() => _FunkyContainerState();
@@ -56,7 +66,9 @@ class _FunkyContainerState extends State<FunkyContainer> {
                 color: widget.color,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: Center(child: widget.child),
+              child: TextField(
+                controller: widget.controller,
+              ),
             ),
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:example/new/controls/control.dart';
 import 'package:example/new/stage/controls.dart';
 import 'package:example/new/stage/measure_grid.dart';
 import 'package:example/new/stage/ruler.dart';
@@ -7,14 +8,16 @@ import 'package:flutter/material.dart';
 class Stage extends StatefulWidget {
   const Stage({
     super.key,
-    required this.child,
+    required this.builder,
     this.initialWidth = 200,
     this.initialHeight = 300,
+    this.controls = const [],
   });
 
-  final Widget child;
+  final WidgetBuilder builder;
   final double initialWidth;
   final double initialHeight;
+  final List<ValueControl> controls;
 
   @override
   State<Stage> createState() => _StageState();
@@ -29,6 +32,11 @@ class _StageState extends State<Stage> {
   late Offset _dragStart;
 
   StageSettings _settings = StageSettings();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onPanStart(DragDownDetails details) {
     _dragStart = details.globalPosition;
@@ -96,54 +104,74 @@ class _StageState extends State<Stage> {
     final rect = Rect.fromLTWH(_left, _top, _width, _height);
     return ColoredBox(
       color: _settings.stageColor,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Stack(
-            children: [
-              if (!_settings.showRuler)
-                const Positioned.fill(
-                  child: MeasureGrid(size: 100),
-                ),
-              StageRect(
-                rect: rect,
-                child: GestureDetector(
-                  onPanDown: _onPanStart,
-                  onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.withOpacity(0.2),
+      child: MeasureGrid(
+        size: 100,
+        showGrid: !_settings.showRuler,
+        child: Row(
+          children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    children: [
+                      StageRect(
+                        rect: rect,
+                        child: GestureDetector(
+                          onPanDown: _onPanStart,
+                          onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.withOpacity(0.2),
+                              ),
+                            ),
+                            child: ListenableBuilder(
+                              listenable: Listenable.merge(widget.controls),
+                              builder: (context, child) {
+                                return widget.builder(context);
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    child: widget.child,
-                  ),
-                ),
-              ),
-              if (_settings.showRuler) Rulers(rect: rect, height: _height, width: _width),
-              StageConstraintsHandles(
-                rect: rect,
-                onPanUpdate: (details, alignment) {
-                  _onPanUpdate(details, constraints, alignment);
+                      if (_settings.showRuler) Rulers(rect: rect, height: _height, width: _width),
+                      StageConstraintsHandles(
+                        rect: rect,
+                        onPanUpdate: (details, alignment) {
+                          _onPanUpdate(details, constraints, alignment);
+                        },
+                        onPanStart: _onPanStart,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Controls(
+                            settings: _settings,
+                            onSettingsChanged: (settings) {
+                              setState(() {
+                                _settings = settings;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
                 },
-                onPanStart: _onPanStart,
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Controls(
-                    settings: _settings,
-                    onSettingsChanged: (settings) {
-                      setState(() {
-                        _settings = settings;
-                      });
-                    },
-                  ),
+            ),
+            if (widget.controls.isNotEmpty)
+              SizedBox(
+                width: 200,
+                child: ListView(
+                  children: widget.controls.map((e) {
+                    return e.builder(context);
+                  }).toList(),
                 ),
               ),
-            ],
-          );
-        },
+          ],
+        ),
       ),
     );
   }
