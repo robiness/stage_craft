@@ -9,16 +9,16 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
 
-  flutter_colorpicker: ^1.0.3
-  spot: ^0.6.0
+  flutter_colorpicker: ^1.1.0
+  spot: ^0.13.0
   universal_io: ^2.2.2
 
 dev_dependencies:
-  lint: ^2.1.2
+  lint: ^2.3.0
   flutter_test:
     sdk: flutter
 
