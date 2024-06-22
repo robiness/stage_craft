@@ -119,17 +119,24 @@ class _StageBuilderState extends State<StageBuilder> {
                         child: GestureDetector(
                           onPanDown: _onPanStart,
                           onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
-                          child: DecoratedBox(
+                          child: ListenableBuilder(
+                            listenable: Listenable.merge(widget.controls),
+                            builder: (context, child) {
+                              return widget.builder(context);
+                            },
+                          ),
+                        ),
+                      ),
+                      StageRect(
+                        rect: rect,
+                        child: GestureDetector(
+                          onPanDown: _onPanStart,
+                          onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
+                          child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.2),
                               ),
-                            ),
-                            child: ListenableBuilder(
-                              listenable: Listenable.merge(widget.controls),
-                              builder: (context, child) {
-                                return widget.builder(context);
-                              },
                             ),
                           ),
                         ),
