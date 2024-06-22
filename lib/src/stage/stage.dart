@@ -85,14 +85,14 @@ class _StageBuilderState extends State<StageBuilder> {
       if (alignment == Alignment.centerRight) {
         _width = _width + dx;
       }
-
+      final sizeControlsArea = style.mouseArea;
       // // Ensure minimum size constraints
-      _width = _width.clamp(0.0, constraints.maxWidth);
-      _height = _height.clamp(0.0, constraints.maxHeight);
+      _width = _width.clamp(sizeControlsArea, constraints.maxWidth - sizeControlsArea);
+      _height = _height.clamp(sizeControlsArea, constraints.maxHeight - sizeControlsArea);
 
       // Ensure top and left are within constraints
-      _left = _left.clamp(0.0, constraints.maxWidth - _width);
-      _top = _top.clamp(0.0, constraints.maxHeight - _height);
+      _left = _left.clamp(sizeControlsArea, constraints.maxWidth - _width - sizeControlsArea);
+      _top = _top.clamp(sizeControlsArea, constraints.maxHeight - _height - sizeControlsArea);
 
       // Update drag start position
       _dragStart = details.globalPosition;
@@ -243,6 +243,7 @@ final style = StageStyle();
 
 class StageStyle {
   final double ballSize = 10.0;
+  final double mouseArea = 20.0;
 }
 
 class StageSettings {

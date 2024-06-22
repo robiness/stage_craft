@@ -18,7 +18,6 @@ class StageConstraintsHandles extends StatefulWidget {
 }
 
 class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
-  final double mouseArea = 20.0;
   final double padding = 4.0;
 
   bool _hovered = false;
@@ -27,7 +26,7 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
   @override
   Widget build(BuildContext context) {
     return StageRect(
-      rect: widget.rect.inflate(style.ballSize + mouseArea + padding),
+      rect: widget.rect.inflate(style.ballSize + style.mouseArea + padding),
       child: MouseRegion(
         hitTestBehavior: HitTestBehavior.translucent,
         onEnter: (event) {
