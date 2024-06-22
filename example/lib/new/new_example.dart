@@ -79,7 +79,6 @@ class _FunkyContainerState extends State<FunkyContainer> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        print('constraints: $constraints');
         return DecoratedBox(
           decoration: BoxDecoration(
             color: widget.color,

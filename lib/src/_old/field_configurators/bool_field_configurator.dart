@@ -36,6 +36,7 @@ class BoolFieldConfigurator extends FieldConfigurator<bool> {
 
 class BoolConfigurationWidget extends ConfigurationWidget<bool?> {
   const BoolConfigurationWidget({
+    super.key,
     required super.value,
     required super.updateValue,
   });

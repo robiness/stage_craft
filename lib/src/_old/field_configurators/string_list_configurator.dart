@@ -58,7 +58,7 @@ class _StringListConfiguratorWidgetState extends State<StringListConfiguratorWid
                   newValue.removeAt(index);
                   widget.configurator.updateValue(newValue);
                 },
-              )
+              ),
             ],
           );
         }),

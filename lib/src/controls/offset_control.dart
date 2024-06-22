@@ -26,7 +26,4 @@ class OffsetControl extends ValueControl<Offset> {
       ],
     );
   }
-
-  @override
-  Listenable? get listenable => Listenable.merge([_controllerX, _controllerY]);
 }

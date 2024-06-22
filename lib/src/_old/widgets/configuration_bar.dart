@@ -56,7 +56,7 @@ class _ConfigurationBarState extends State<ConfigurationBar> {
                   title: 'Stage',
                   configurators: stageConfigurators,
                 ),
-              if (widget.configurationBarFooter != null) widget.configurationBarFooter!
+              if (widget.configurationBarFooter != null) widget.configurationBarFooter!,
             ],
           ),
         ),

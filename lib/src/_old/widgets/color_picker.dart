@@ -27,6 +27,7 @@ class ColorPicker extends StatelessWidget {
   ///
   /// The required [onColorChanged] parameter is a callback that will be called when a new color is selected.
   const ColorPicker({
+    super.key,
     this.colorSamples,
     this.color,
     required this.onColorChanged,
@@ -105,7 +106,7 @@ class ColorPicker extends StatelessWidget {
                               fontSize: 10,
                             ),
                           ),
-                        ]
+                        ],
                       ],
                     ),
                   ),
@@ -113,7 +114,7 @@ class ColorPicker extends StatelessWidget {
               },
             ).toList(),
           ),
-        ]
+        ],
       ],
     );
   }

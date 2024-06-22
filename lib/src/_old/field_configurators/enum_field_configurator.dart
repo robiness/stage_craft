@@ -47,6 +47,7 @@ class EnumFieldConfigurator<T extends Enum> extends FieldConfigurator<T> {
 
 class EnumFieldConfigurationWidget<T extends Enum> extends ConfigurationWidget<T?> {
   const EnumFieldConfigurationWidget({
+    super.key,
     required super.value,
     required super.updateValue,
     required this.enumValues,
