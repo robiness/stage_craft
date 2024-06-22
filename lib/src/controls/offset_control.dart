@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
 class OffsetControl extends ValueControl<Offset> {
-  OffsetControl({required super.initialValue});
+  OffsetControl({required super.initialValue, required super.label});
 
   late final TextEditingController _controllerX = TextEditingController();
   late final TextEditingController _controllerY = TextEditingController();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
 class StringControl extends ValueControl<String> {
-  StringControl({required super.initialValue});
+  StringControl({required super.initialValue, required super.label});
 
   late final TextEditingController _controller = TextEditingController(text: value);
 

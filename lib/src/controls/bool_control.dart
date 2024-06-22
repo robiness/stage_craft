@@ -4,6 +4,7 @@ import 'package:stage_craft/src/controls/control.dart';
 class BoolControl extends ValueControl<bool> {
   BoolControl({
     required super.initialValue,
+    required super.label,
   });
 
   @override
@@ -20,6 +21,7 @@ class BoolControl extends ValueControl<bool> {
 class BoolControlNullable extends ValueControl<bool?> {
   BoolControlNullable({
     required super.initialValue,
+    required super.label,
   });
 
   @override

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 abstract class ValueControl<T> extends ValueNotifier<T> {
   ValueControl({
+    required this.label,
     required T initialValue,
     this.listenable,
   })  : _lastValue = initialValue,
         super(initialValue);
+
+  final String label;
 
   Widget builder(BuildContext context);
 
@@ -24,6 +27,9 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   }
 
   void toggleNull(bool? nullValue) {
+    if (!isNullable) {
+      return;
+    }
     if (nullValue == true) {
       value = null as T;
     } else {

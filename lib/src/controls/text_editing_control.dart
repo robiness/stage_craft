@@ -4,6 +4,7 @@ import 'package:stage_craft/src/controls/control.dart';
 class TextEditingControl extends ValueControl<String> {
   TextEditingControl({
     required super.initialValue,
+    required super.label,
   });
 
   late final TextEditingController controller = TextEditingController(text: value);

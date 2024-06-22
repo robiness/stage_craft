@@ -10,12 +10,15 @@ class MyContainerStage extends StatefulWidget {
 
 class _MyContainerStageState extends State<MyContainerStage> {
   final boolControl = BoolControl(
+    label: 'Color',
     initialValue: false,
   );
   final boolControlNullable = BoolControlNullable(
+    label: 'Color',
     initialValue: null,
   );
   final stringControl = StringControl(
+    label: 'Text',
     initialValue: 'Hello',
   );
 
