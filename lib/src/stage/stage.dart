@@ -167,21 +167,37 @@ class _StageBuilderState extends State<StageBuilder> {
               ),
             ),
             if (widget.controls.isNotEmpty)
-              SizedBox(
-                width: 200,
-                child: ListView(
-                  children: widget.controls.map((e) {
-                    return ListenableBuilder(
-                      listenable: e,
-                      builder: (context, child) {
-                        return e.builder(context);
-                      },
-                    );
-                  }).toList(),
-                ),
+              ControlBar(
+                controls: widget.controls,
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ControlBar extends StatelessWidget {
+  const ControlBar({
+    super.key,
+    required this.controls,
+  });
+
+  final List<ValueControl> controls;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 200,
+      child: ListView(
+        children: controls.map((e) {
+          return ListenableBuilder(
+            listenable: e,
+            builder: (context, child) {
+              return e.builder(context);
+            },
+          );
+        }).toList(),
       ),
     );
   }
