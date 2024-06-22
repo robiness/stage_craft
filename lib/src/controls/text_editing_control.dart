@@ -18,7 +18,4 @@ class TextEditingControl extends ValueControl<String> {
       },
     );
   }
-
-  @override
-  Listenable? get listenable => controller;
 }

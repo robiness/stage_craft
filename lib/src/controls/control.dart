@@ -4,7 +4,6 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   ValueControl({
     required this.label,
     required T initialValue,
-    this.listenable,
   })  : _lastValue = initialValue,
         super(initialValue);
 
@@ -13,8 +12,6 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   Widget builder(BuildContext context);
 
   T _lastValue;
-
-  final Listenable? listenable;
 
   bool get isNullable => null is T;
 

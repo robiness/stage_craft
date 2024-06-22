@@ -26,6 +26,11 @@ class _MyContainerStageState extends State<MyContainerStage> {
     initialValue: Colors.blue,
   );
 
+  final offsetControl = OffsetControl(
+    label: 'Offset',
+    initialValue: Offset.zero,
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -33,16 +38,20 @@ class _MyContainerStageState extends State<MyContainerStage> {
     boolControlNullable.dispose();
     stringControl.dispose();
     colorControl.dispose();
+    offsetControl.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StageBuilder(
-      controls: [boolControl, stringControl, boolControlNullable, colorControl],
+      controls: [offsetControl],
       builder: (context) {
         return FunkyContainer(
           color: colorControl.value,
-          child: Text(stringControl.value),
+          child: Transform.translate(
+            offset: offsetControl.value,
+            child: Text(stringControl.value),
+          ),
         );
       },
     );
