@@ -10,29 +10,38 @@ class MyContainerStage extends StatefulWidget {
 
 class _MyContainerStageState extends State<MyContainerStage> {
   final boolControl = BoolControl(
-    label: 'Color',
+    label: 'bool',
     initialValue: false,
   );
   final boolControlNullable = BoolControlNullable(
-    label: 'Color',
+    label: 'bool Nullable',
     initialValue: null,
   );
   final stringControl = StringControl(
     label: 'Text',
     initialValue: 'Hello',
   );
+  final colorControl = ColorControl(
+    label: 'Color',
+    initialValue: Colors.blue,
+  );
+
+  @override
+  void dispose() {
+    super.dispose();
+    boolControl.dispose();
+    boolControlNullable.dispose();
+    stringControl.dispose();
+    colorControl.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return StageBuilder(
-      controls: [boolControl, stringControl, boolControlNullable],
+      controls: [boolControl, stringControl, boolControlNullable, colorControl],
       builder: (context) {
         return FunkyContainer(
-          color: boolControlNullable.value == null
-              ? null
-              : boolControlNullable.value!
-                  ? Colors.green
-                  : Colors.blue,
+          color: colorControl.value,
           child: Text(stringControl.value),
         );
       },

@@ -198,43 +198,9 @@ class ControlBar extends StatelessWidget {
       width: 200,
       child: ListView(
         children: controls.map((control) {
-          return ControlBarRow(
-            control: control,
-          );
+          return control.builder(context);
         }).toList(),
       ),
-    );
-  }
-}
-
-class ControlBarRow extends StatelessWidget {
-  const ControlBarRow({
-    super.key,
-    required this.control,
-  });
-
-  final ValueControl control;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: control,
-      builder: (context, child) {
-        if (control.isNullable) {
-          return Row(
-            children: [
-              Checkbox(
-                value: control.value == null,
-                onChanged: control.toggleNull,
-              ),
-              Expanded(
-                child: control.builder(context),
-              ),
-            ],
-          );
-        }
-        return control.builder(context);
-      },
     );
   }
 }

@@ -37,3 +37,43 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
     }
   }
 }
+
+class DefaultControlBarRow extends StatelessWidget {
+  const DefaultControlBarRow({
+    super.key,
+    required this.control,
+    required this.child,
+  });
+
+  final ValueControl control;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: control,
+      builder: (context, _) {
+        if (control.isNullable) {
+          return Row(
+            children: [
+              Text(control.label),
+              Checkbox(
+                value: control.value == null,
+                onChanged: control.toggleNull,
+              ),
+              Expanded(
+                child: child,
+              ),
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Text(control.label),
+            Expanded(child: child),
+          ],
+        );
+      },
+    );
+  }
+}

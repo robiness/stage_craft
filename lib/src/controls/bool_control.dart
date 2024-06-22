@@ -9,11 +9,14 @@ class BoolControl extends ValueControl<bool> {
 
   @override
   Widget builder(BuildContext context) {
-    return Checkbox(
-      value: value,
-      onChanged: (newValue) {
-        value = newValue!;
-      },
+    return DefaultControlBarRow(
+      control: this,
+      child: Checkbox(
+        value: value,
+        onChanged: (newValue) {
+          value = newValue!;
+        },
+      ),
     );
   }
 }
@@ -26,11 +29,14 @@ class BoolControlNullable extends ValueControl<bool?> {
 
   @override
   Widget builder(BuildContext context) {
-    return Checkbox(
-      value: value ?? false,
-      onChanged: (newValue) {
-        value = newValue;
-      },
+    return DefaultControlBarRow(
+      control: this,
+      child: Checkbox(
+        value: value ?? false,
+        onChanged: (newValue) {
+          value = newValue ?? false;
+        },
+      ),
     );
   }
 }
