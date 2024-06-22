@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:stage_craft/src/stage/stage.dart';
 
-class ControlBar extends StatelessWidget {
-  const ControlBar({
+class SettingsBar extends StatelessWidget {
+  const SettingsBar({
     super.key,
     required this.settings,
     required this.onSettingsChanged,

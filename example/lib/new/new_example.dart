@@ -14,11 +14,14 @@ class _MyContainerStageState extends State<MyContainerStage> {
     final textConfigurator = StringControl(
       initialValue: 'Hello, World!',
     );
-    return Stage(
-      controls: [textConfigurator],
+    final boolControl = BoolControl(
+      initialValue: false,
+    );
+    return StageBuilder(
+      controls: [textConfigurator, boolControl],
       builder: (context) {
         return FunkyContainer(
-          color: Colors.purpleAccent,
+          color: boolControl.value ? Colors.purpleAccent : Colors.greenAccent,
           child: Text(textConfigurator.value),
         );
       },
@@ -48,14 +51,12 @@ class _FunkyContainerState extends State<FunkyContainer> {
     return LayoutBuilder(
       builder: (context, constraints) {
         print('constraints: $constraints');
-        return Center(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: widget.child,
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: widget.color,
+            borderRadius: BorderRadius.circular(24),
           ),
+          child: widget.child,
         );
       },
     );

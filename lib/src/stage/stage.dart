@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
-import 'package:stage_craft/src/stage/control_bar.dart';
 import 'package:stage_craft/src/stage/measure_grid.dart';
 import 'package:stage_craft/src/stage/ruler.dart';
+import 'package:stage_craft/src/stage/settings_bar.dart';
 import 'package:stage_craft/src/stage/stage_constraints_handles.dart';
 
-class Stage extends StatefulWidget {
-  const Stage({
+class StageBuilder extends StatefulWidget {
+  const StageBuilder({
     super.key,
     required this.builder,
     this.initialWidth = 200,
@@ -20,10 +20,10 @@ class Stage extends StatefulWidget {
   final List<ValueControl> controls;
 
   @override
-  State<Stage> createState() => _StageState();
+  State<StageBuilder> createState() => _StageBuilderState();
 }
 
-class _StageState extends State<Stage> {
+class _StageBuilderState extends State<StageBuilder> {
   late double _width = widget.initialWidth;
   late double _height = widget.initialHeight;
   double _top = 100;
@@ -128,7 +128,7 @@ class _StageState extends State<Stage> {
                             child: ListenableBuilder(
                               listenable: Listenable.merge(widget.controls),
                               builder: (context, child) {
-                                return widget.builder(context);
+                                return Center(child: widget.builder(context));
                               },
                             ),
                           ),
@@ -151,7 +151,7 @@ class _StageState extends State<Stage> {
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: ControlBar(
+                          child: SettingsBar(
                             settings: _settings,
                             onSettingsChanged: (settings) {
                               setState(() {
@@ -171,7 +171,12 @@ class _StageState extends State<Stage> {
                 width: 200,
                 child: ListView(
                   children: widget.controls.map((e) {
-                    return e.builder(context);
+                    return ListenableBuilder(
+                      listenable: e,
+                      builder: (context, child) {
+                        return e.builder(context);
+                      },
+                    );
                   }).toList(),
                 ),
               ),
