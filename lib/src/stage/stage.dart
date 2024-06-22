@@ -128,7 +128,7 @@ class _StageBuilderState extends State<StageBuilder> {
                             child: ListenableBuilder(
                               listenable: Listenable.merge(widget.controls),
                               builder: (context, child) {
-                                return Center(child: widget.builder(context));
+                                return widget.builder(context);
                               },
                             ),
                           ),
@@ -190,15 +190,44 @@ class ControlBar extends StatelessWidget {
     return SizedBox(
       width: 200,
       child: ListView(
-        children: controls.map((e) {
-          return ListenableBuilder(
-            listenable: e,
-            builder: (context, child) {
-              return e.builder(context);
-            },
+        children: controls.map((control) {
+          return ControlBarRow(
+            control: control,
           );
         }).toList(),
       ),
+    );
+  }
+}
+
+class ControlBarRow extends StatelessWidget {
+  const ControlBarRow({
+    super.key,
+    required this.control,
+  });
+
+  final ValueControl control;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: control,
+      builder: (context, child) {
+        if (control.isNullable) {
+          return Row(
+            children: [
+              Checkbox(
+                value: control.value == null,
+                onChanged: control.toggleNull,
+              ),
+              Expanded(
+                child: control.builder(context),
+              ),
+            ],
+          );
+        }
+        return control.builder(context);
+      },
     );
   }
 }

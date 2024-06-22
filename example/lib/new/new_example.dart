@@ -9,20 +9,28 @@ class MyContainerStage extends StatefulWidget {
 }
 
 class _MyContainerStageState extends State<MyContainerStage> {
+  final boolControl = BoolControl(
+    initialValue: false,
+  );
+  final boolControlNullable = BoolControlNullable(
+    initialValue: null,
+  );
+  final stringControl = StringControl(
+    initialValue: 'Hello',
+  );
+
   @override
   Widget build(BuildContext context) {
-    final textConfigurator = StringControl(
-      initialValue: 'Hello, World!',
-    );
-    final boolControl = BoolControl(
-      initialValue: false,
-    );
     return StageBuilder(
-      controls: [textConfigurator, boolControl],
+      controls: [boolControl, stringControl, boolControlNullable],
       builder: (context) {
         return FunkyContainer(
-          color: boolControl.value ? Colors.purpleAccent : Colors.greenAccent,
-          child: Text(textConfigurator.value),
+          color: boolControlNullable.value == null
+              ? null
+              : boolControlNullable.value!
+                  ? Colors.green
+                  : Colors.blue,
+          child: Text(stringControl.value),
         );
       },
     );

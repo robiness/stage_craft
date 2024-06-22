@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
 class BoolControl extends ValueControl<bool> {
-  BoolControl({required super.initialValue});
+  BoolControl({
+    required super.initialValue,
+  });
 
   @override
   Widget builder(BuildContext context) {
@@ -10,6 +12,22 @@ class BoolControl extends ValueControl<bool> {
       value: value,
       onChanged: (newValue) {
         value = newValue!;
+      },
+    );
+  }
+}
+
+class BoolControlNullable extends ValueControl<bool?> {
+  BoolControlNullable({
+    required super.initialValue,
+  });
+
+  @override
+  Widget builder(BuildContext context) {
+    return Checkbox(
+      value: value ?? false,
+      onChanged: (newValue) {
+        value = newValue;
       },
     );
   }
