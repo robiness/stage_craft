@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:spot/spot.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
-import '../controls_test.dart';
+import '../controls_extension.dart';
 
 void main() {
   testWidgets('The controls builder does get built', (WidgetTester tester) async {
