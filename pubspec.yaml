@@ -9,11 +9,10 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
-  collection: ^1.19.0
+  collection: ^1.18.0
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
-
   flutter_colorpicker: ^1.1.0
   spot: ^0.13.0
   universal_io: ^2.2.2

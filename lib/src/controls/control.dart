@@ -23,14 +23,14 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
     }
   }
 
-  void toggleNull(bool? nullValue) {
+  void toggleNull() {
     if (!isNullable) {
       return;
     }
-    if (nullValue == true) {
-      value = null as T;
-    } else {
+    if (value == null) {
       value = _lastValue;
+    } else {
+      value = null as T;
     }
   }
 }
@@ -56,7 +56,7 @@ class DefaultControlBarRow extends StatelessWidget {
               Text(control.label),
               Checkbox(
                 value: control.value == null,
-                onChanged: control.toggleNull,
+                onChanged: (_) => control.toggleNull(),
               ),
               Expanded(
                 child: child,

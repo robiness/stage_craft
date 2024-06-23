@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
 class OffsetControl extends ValueControl<Offset> {
-  OffsetControl({required super.initialValue, required super.label});
+  OffsetControl({
+    required super.initialValue,
+    required super.label,
+  });
 
   late final TextEditingController _controllerX = TextEditingController();
   late final TextEditingController _controllerY = TextEditingController();
@@ -24,6 +27,43 @@ class OffsetControl extends ValueControl<Offset> {
           },
         ),
       ],
+    );
+  }
+}
+
+class OffsetNullableControl extends ValueControl<Offset?> {
+  OffsetNullableControl({
+    required super.initialValue,
+    required super.label,
+  });
+
+  late final TextEditingController _controllerX = TextEditingController();
+  late final TextEditingController _controllerY = TextEditingController();
+
+  @override
+  Widget builder(BuildContext context) {
+    return DefaultControlBarRow(
+      control: this,
+      child: Column(
+        children: [
+          TextField(
+            controller: _controllerX,
+            onChanged: (newString) {
+              final double? dx = double.tryParse(newString);
+              if (dx == null) {
+                value = null;
+              }
+              value = Offset(dx!, value!.dy);
+            },
+          ),
+          TextField(
+            controller: _controllerY,
+            onChanged: (newString) {
+              value = Offset(value!.dx, double.parse(newString));
+            },
+          ),
+        ],
+      ),
     );
   }
 }
