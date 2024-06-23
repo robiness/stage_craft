@@ -45,12 +45,9 @@ void main() {
 
 class TestControl<T> extends ValueControl<T> {
   TestControl({
-    required T initialValue,
-    required String label,
-  }) : super(
-          initialValue: initialValue,
-          label: label,
-        );
+    required super.initialValue,
+    required super.label,
+  });
 
   @override
   Widget builder(BuildContext context) {
