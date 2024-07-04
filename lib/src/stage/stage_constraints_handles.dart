@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:stage_craft/src/stage/stage.dart';
+import 'package:stage_craft/src/stage/stage_style.dart';
 
 class StageConstraintsHandles extends StatefulWidget {
   const StageConstraintsHandles({
@@ -25,8 +26,9 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
 
   @override
   Widget build(BuildContext context) {
+    final style = StageStyle.of(context);
     return StageRect(
-      rect: widget.rect.inflate(style.ballSize + style.mouseArea + padding),
+      rect: widget.rect.inflate(style.ballSize + style.dragPadding + padding),
       child: MouseRegion(
         hitTestBehavior: HitTestBehavior.translucent,
         onEnter: (event) {
@@ -95,6 +97,7 @@ class StageConstraintHandle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = StageStyle.of(context);
     return Align(
       alignment: alignment,
       child: MouseRegion(
@@ -106,8 +109,8 @@ class StageConstraintHandle extends StatelessWidget {
           onPanEnd: onPanEnd,
           onPanUpdate: (details) => onPanUpdate?.call(details, alignment),
           child: Container(
-            width: 10,
-            height: 10,
+            width: style.ballSize,
+            height: style.ballSize,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               border: Border.all(

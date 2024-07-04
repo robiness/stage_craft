@@ -4,6 +4,7 @@ import 'package:stage_craft/src/stage/measure_grid.dart';
 import 'package:stage_craft/src/stage/ruler.dart';
 import 'package:stage_craft/src/stage/settings_bar.dart';
 import 'package:stage_craft/src/stage/stage_constraints_handles.dart';
+import 'package:stage_craft/src/stage/stage_style.dart';
 
 class StageBuilder extends StatefulWidget {
   const StageBuilder({
@@ -22,6 +23,8 @@ class StageBuilder extends StatefulWidget {
 }
 
 class _StageBuilderState extends State<StageBuilder> {
+  final style = StageStyle();
+
   late Rect _rect = Rect.fromLTWH(
     100,
     100,
@@ -84,7 +87,7 @@ class _StageBuilderState extends State<StageBuilder> {
         width = width + dx;
       }
       // The size controls should also be always visible
-      final sizeControlsArea = style.mouseArea;
+      final sizeControlsArea = style.dragPadding;
       // // Ensure minimum size constraints
       width = width.clamp(sizeControlsArea, constraints.maxWidth - sizeControlsArea);
       height = height.clamp(sizeControlsArea, constraints.maxHeight - sizeControlsArea);
@@ -101,69 +104,72 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: _settings.stageColor,
-      child: MeasureGrid(
-        size: 100,
-        showGrid: !_settings.showRuler,
-        child: Row(
-          children: [
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Stack(
-                    children: [
-                      // The widget on stage
-                      StageRect(
-                        rect: _rect,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onPanDown: _onDragStart,
-                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
-                          child: ListenableBuilder(
-                            listenable: Listenable.merge(widget.controls),
-                            builder: (context, child) {
-                              return widget.builder(context);
-                            },
-                          ),
-                        ),
-                      ),
-                      StageBorder(rect: _rect),
-                      if (_settings.showRuler)
-                        Rulers(
+    return InheritedStageStyle(
+      style: style,
+      child: ColoredBox(
+        color: _settings.stageColor,
+        child: MeasureGrid(
+          size: 100,
+          showGrid: !_settings.showRuler,
+          child: Row(
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Stack(
+                      children: [
+                        // The widget on stage
+                        StageRect(
                           rect: _rect,
-                        ),
-                      StageConstraintsHandles(
-                        rect: _rect,
-                        onPanUpdate: (details, alignment) {
-                          _handleDrag(details, constraints, alignment);
-                        },
-                        onPanStart: _onDragStart,
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SettingsBar(
-                            settings: _settings,
-                            onSettingsChanged: (settings) {
-                              setState(() {
-                                _settings = settings;
-                              });
-                            },
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onPanDown: _onDragStart,
+                            onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
+                            child: ListenableBuilder(
+                              listenable: Listenable.merge(widget.controls),
+                              builder: (context, child) {
+                                return widget.builder(context);
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                        StageBorder(rect: _rect),
+                        if (_settings.showRuler)
+                          Rulers(
+                            rect: _rect,
+                          ),
+                        StageConstraintsHandles(
+                          rect: _rect,
+                          onPanUpdate: (details, alignment) {
+                            _handleDrag(details, constraints, alignment);
+                          },
+                          onPanStart: _onDragStart,
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SettingsBar(
+                              settings: _settings,
+                              onSettingsChanged: (settings) {
+                                setState(() {
+                                  _settings = settings;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            if (widget.controls.isNotEmpty)
-              ControlBar(
-                controls: widget.controls,
-              ),
-          ],
+              if (widget.controls.isNotEmpty)
+                ControlBar(
+                  controls: widget.controls,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -216,14 +222,6 @@ class ControlBar extends StatelessWidget {
       ),
     );
   }
-}
-
-final style = StageStyle();
-
-/// Style settings for the stage.
-class StageStyle {
-  final double ballSize = 10.0;
-  final double mouseArea = 20.0;
 }
 
 /// Settings for the stage.
