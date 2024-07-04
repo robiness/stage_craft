@@ -125,22 +125,7 @@ class _StageBuilderState extends State<StageBuilder> {
                           ),
                         ),
                       ),
-                      // The border of the widget on stage
-                      StageRect(
-                        rect: _rect,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onPanDown: _onDragStart,
-                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(0.2),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      StageBorder(rect: _rect),
                       if (_settings.showRuler)
                         Rulers(
                           rect: _rect,
@@ -176,6 +161,32 @@ class _StageBuilderState extends State<StageBuilder> {
                 controls: widget.controls,
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class StageBorder extends StatelessWidget {
+  const StageBorder({
+    super.key,
+    required Rect rect,
+  }) : _rect = rect;
+
+  final Rect _rect;
+
+  @override
+  Widget build(BuildContext context) {
+    return StageRect(
+      rect: _rect,
+      child: IgnorePointer(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.2),
+            ),
+          ),
+          child: const SizedBox.expand(),
         ),
       ),
     );
