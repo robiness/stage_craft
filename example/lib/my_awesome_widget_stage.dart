@@ -54,6 +54,12 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         offsetControl,
         boolControl,
         boolControlNullable,
+        ControlHeader(
+          child: const Text(
+            'Colors',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
         stringControl,
         colorControl,
         textEditingControl,
