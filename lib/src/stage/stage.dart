@@ -30,11 +30,11 @@ class _StageBuilderState extends State<StageBuilder> {
 
   StageSettings _settings = StageSettings();
 
-  void _onPanStart(DragDownDetails details) {
+  void _onDragStart(DragDownDetails details) {
     _dragStart = details.globalPosition;
   }
 
-  void _onPanUpdate(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment) {
+  void _handleDrag(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment) {
     late double width = _rect.width;
     late double height = _rect.height;
     double top = _rect.top;
@@ -115,8 +115,8 @@ class _StageBuilderState extends State<StageBuilder> {
                         rect: _rect,
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
-                          onPanDown: _onPanStart,
-                          onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
+                          onPanDown: _onDragStart,
+                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
                           child: ListenableBuilder(
                             listenable: Listenable.merge(widget.controls),
                             builder: (context, child) {
@@ -130,8 +130,8 @@ class _StageBuilderState extends State<StageBuilder> {
                         rect: _rect,
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
-                          onPanDown: _onPanStart,
-                          onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
+                          onPanDown: _onDragStart,
+                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -148,9 +148,9 @@ class _StageBuilderState extends State<StageBuilder> {
                       StageConstraintsHandles(
                         rect: _rect,
                         onPanUpdate: (details, alignment) {
-                          _onPanUpdate(details, constraints, alignment);
+                          _handleDrag(details, constraints, alignment);
                         },
-                        onPanStart: _onPanStart,
+                        onPanStart: _onDragStart,
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
