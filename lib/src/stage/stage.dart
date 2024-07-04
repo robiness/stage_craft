@@ -9,14 +9,12 @@ class StageBuilder extends StatefulWidget {
   const StageBuilder({
     super.key,
     required this.builder,
-    this.initialWidth = 200,
-    this.initialHeight = 300,
+    this.initialSize = const Size(200, 300),
     this.controls = const [],
   });
 
   final WidgetBuilder builder;
-  final double initialWidth;
-  final double initialHeight;
+  final Size initialSize;
   final List<ValueControl> controls;
 
   @override
@@ -24,7 +22,12 @@ class StageBuilder extends StatefulWidget {
 }
 
 class _StageBuilderState extends State<StageBuilder> {
-  late Rect _rect = Rect.fromLTWH(100, 100, widget.initialWidth, widget.initialHeight);
+  late Rect _rect = Rect.fromLTWH(
+    100,
+    100,
+    widget.initialSize.width,
+    widget.initialSize.height,
+  );
 
   late Offset _dragStart;
 
