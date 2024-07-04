@@ -31,6 +31,10 @@ class MyAwesomeWidget extends StatelessWidget {
               children: [
                 if (label != null) Text(label!),
                 TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter a value',
+                  ),
                   controller: controller,
                 ),
               ],

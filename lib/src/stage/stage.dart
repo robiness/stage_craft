@@ -24,76 +24,73 @@ class StageBuilder extends StatefulWidget {
 }
 
 class _StageBuilderState extends State<StageBuilder> {
-  late double _width = widget.initialWidth;
-  late double _height = widget.initialHeight;
-  double _top = 100;
-  double _left = 100;
+  late Rect _rect = Rect.fromLTWH(100, 100, widget.initialWidth, widget.initialHeight);
 
   late Offset _dragStart;
 
   StageSettings _settings = StageSettings();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void _onPanStart(DragDownDetails details) {
     _dragStart = details.globalPosition;
   }
 
   void _onPanUpdate(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment) {
+    late double width = _rect.width;
+    late double height = _rect.height;
+    double top = _rect.top;
+    double left = _rect.left;
+    final dx = details.globalPosition.dx - _dragStart.dx;
+    final dy = details.globalPosition.dy - _dragStart.dy;
     setState(() {
-      final dx = details.globalPosition.dx - _dragStart.dx;
-      final dy = details.globalPosition.dy - _dragStart.dy;
-
       if (alignment == Alignment.center) {
-        _left = _left + dx;
-        _top = _top + dy;
+        left = left + dx;
+        top = top + dy;
       }
       if (alignment == Alignment.topLeft) {
-        _left = _left + dx;
-        _top = _top + dy;
-        _width = _width - dx;
-        _height = _height - dy;
+        left = left + dx;
+        top = top + dy;
+        width = width - dx;
+        height = height - dy;
       }
       if (alignment == Alignment.topRight) {
-        _top = _top + dy;
-        _width = _width + dx;
-        _height = _height - dy;
+        top = top + dy;
+        width = width + dx;
+        height = height - dy;
       }
       if (alignment == Alignment.bottomLeft) {
-        _left = _left + dx;
-        _width = _width - dx;
-        _height = _height + dy;
+        left = left + dx;
+        width = width - dx;
+        height = height + dy;
       }
       if (alignment == Alignment.bottomRight) {
-        _width = _width + dx;
-        _height = _height + dy;
+        width = width + dx;
+        height = height + dy;
       }
       if (alignment == Alignment.topCenter) {
-        _top = _top + dy;
-        _height = _height - dy;
+        top = top + dy;
+        height = height - dy;
       }
       if (alignment == Alignment.bottomCenter) {
-        _height = _height + dy;
+        height = height + dy;
       }
       if (alignment == Alignment.centerLeft) {
-        _left = _left + dx;
-        _width = _width - dx;
+        left = left + dx;
+        width = width - dx;
       }
       if (alignment == Alignment.centerRight) {
-        _width = _width + dx;
+        width = width + dx;
       }
+      // The size controls should also be always visible
       final sizeControlsArea = style.mouseArea;
       // // Ensure minimum size constraints
-      _width = _width.clamp(sizeControlsArea, constraints.maxWidth - sizeControlsArea);
-      _height = _height.clamp(sizeControlsArea, constraints.maxHeight - sizeControlsArea);
+      width = width.clamp(sizeControlsArea, constraints.maxWidth - sizeControlsArea);
+      height = height.clamp(sizeControlsArea, constraints.maxHeight - sizeControlsArea);
 
       // Ensure top and left are within constraints
-      _left = _left.clamp(sizeControlsArea, constraints.maxWidth - _width - sizeControlsArea);
-      _top = _top.clamp(sizeControlsArea, constraints.maxHeight - _height - sizeControlsArea);
+      left = left.clamp(sizeControlsArea, constraints.maxWidth - width - sizeControlsArea);
+      top = top.clamp(sizeControlsArea, constraints.maxHeight - height - sizeControlsArea);
 
+      _rect = Rect.fromLTWH(left, top, width, height);
       // Update drag start position
       _dragStart = details.globalPosition;
     });
@@ -101,7 +98,6 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final rect = Rect.fromLTWH(_left, _top, _width, _height);
     return ColoredBox(
       color: _settings.stageColor,
       child: MeasureGrid(
@@ -114,9 +110,11 @@ class _StageBuilderState extends State<StageBuilder> {
                 builder: (context, constraints) {
                   return Stack(
                     children: [
+                      // The widget on stage
                       StageRect(
-                        rect: rect,
+                        rect: _rect,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onPanDown: _onPanStart,
                           onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
                           child: ListenableBuilder(
@@ -127,9 +125,11 @@ class _StageBuilderState extends State<StageBuilder> {
                           ),
                         ),
                       ),
+                      // The border of the widget on stage
                       StageRect(
-                        rect: rect,
+                        rect: _rect,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onPanDown: _onPanStart,
                           onPanUpdate: (details) => _onPanUpdate(details, constraints, Alignment.center),
                           child: Container(
@@ -143,12 +143,10 @@ class _StageBuilderState extends State<StageBuilder> {
                       ),
                       if (_settings.showRuler)
                         Rulers(
-                          rect: rect,
-                          height: _height,
-                          width: _width,
+                          rect: _rect,
                         ),
                       StageConstraintsHandles(
-                        rect: rect,
+                        rect: _rect,
                         onPanUpdate: (details, alignment) {
                           _onPanUpdate(details, constraints, alignment);
                         },
@@ -184,6 +182,7 @@ class _StageBuilderState extends State<StageBuilder> {
   }
 }
 
+/// A control bar that displays a list of controls to manipulate the stage.
 class ControlBar extends StatelessWidget {
   const ControlBar({
     super.key,
@@ -207,11 +206,13 @@ class ControlBar extends StatelessWidget {
 
 final style = StageStyle();
 
+/// Style settings for the stage.
 class StageStyle {
   final double ballSize = 10.0;
   final double mouseArea = 20.0;
 }
 
+/// Settings for the stage.
 class StageSettings {
   StageSettings({
     this.showRuler = true,
@@ -232,6 +233,7 @@ class StageSettings {
   }
 }
 
+/// Draws a rectangle the size of the rect on the stage, which is a stack.
 class StageRect extends StatelessWidget {
   const StageRect({
     super.key,

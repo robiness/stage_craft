@@ -5,14 +5,9 @@ class Rulers extends StatelessWidget {
   const Rulers({
     super.key,
     required this.rect,
-    required double height,
-    required double width,
-  })  : _height = height,
-        _width = width;
+  });
 
   final Rect rect;
-  final double _height;
-  final double _width;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +19,7 @@ class Rulers extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Ruler(
               direction: Axis.vertical,
-              length: _height,
+              length: rect.height,
               color: Colors.grey.withOpacity(0.2),
             ),
           ),
@@ -32,7 +27,7 @@ class Rulers extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Ruler(
               direction: Axis.horizontal,
-              length: _width,
+              length: rect.width,
               color: Colors.grey.withOpacity(0.2),
             ),
           ),

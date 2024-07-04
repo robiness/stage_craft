@@ -20,6 +20,7 @@ class SettingsBar extends StatelessWidget {
           color: Colors.grey.withOpacity(0.3),
           width: 2,
         ),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(64),
       ),
       child: Row(
