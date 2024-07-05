@@ -91,10 +91,11 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           label: 'Int',
           initialValue: 0,
         ),
-        IntNullableControl(
+        IntControlNullable(
           label: 'Int Nullable',
           initialValue: null,
         ),
+        colorControl,
         // offsetControl,
         // boolControl,
         // boolControlNullable,
