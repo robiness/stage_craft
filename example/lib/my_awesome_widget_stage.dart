@@ -42,7 +42,13 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     values: MyEnum.values,
   );
 
-  late final GenericControl genericControl = GenericControl<MyEnum>(
+  final nullableEnum = EnumControlNullable<MyEnum>(
+    label: 'NEnum',
+    initialValue: null,
+    values: MyEnum.values,
+  );
+
+  late final GenericControlNullable genericControl = GenericControlNullable<MyEnum>(
     label: 'Generic',
     initialValue: MyEnum.one,
     values: MyEnum.values
@@ -53,6 +59,11 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           ),
         )
         .toList(),
+  );
+
+  final nullableString = StringControlNullable(
+    label: 'Nstring',
+    initialValue: null,
   );
 
   @override
@@ -84,6 +95,9 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         colorControl,
         textEditingControl,
         enumControl,
+        nullableEnum,
+        genericControl,
+        nullableString,
       ],
       builder: (context) {
         return MyAwesomeWidget(

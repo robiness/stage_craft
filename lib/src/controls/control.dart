@@ -22,7 +22,10 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
       super.value = newValue;
     }
     notifyListeners();
+    onChange();
   }
+
+  void onChange() {}
 
   void toggleNull() {
     if (!isNullable) {
@@ -34,6 +37,7 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
       value = null as T;
     }
     notifyListeners();
+    onChange();
   }
 }
 
@@ -56,10 +60,12 @@ class DefaultControlBarRow extends StatelessWidget {
           return Row(
             children: [
               Text(control.label),
+              const SizedBox(width: 8),
               Checkbox(
                 value: control.value == null,
                 onChanged: (_) => control.toggleNull(),
               ),
+              const SizedBox(width: 8),
               Expanded(
                 child: child,
               ),

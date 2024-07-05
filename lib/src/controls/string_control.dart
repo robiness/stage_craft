@@ -8,11 +8,39 @@ class StringControl extends ValueControl<String> {
 
   @override
   Widget builder(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      onChanged: (newString) {
-        value = newString;
-      },
+    return DefaultControlBarRow(
+      control: this,
+      child: TextField(
+        controller: _controller,
+        onChanged: (newString) {
+          value = newString;
+        },
+      ),
+    );
+  }
+}
+
+class StringControlNullable extends ValueControl<String?> {
+  StringControlNullable({required super.initialValue, required super.label});
+
+  late final TextEditingController _controller = TextEditingController(text: value);
+
+  @override
+  void onChange() {
+    super.onChange();
+    _controller.text = value ?? '';
+  }
+
+  @override
+  Widget builder(BuildContext context) {
+    return DefaultControlBarRow(
+      control: this,
+      child: TextField(
+        controller: _controller,
+        onChanged: (newString) {
+          value = newString;
+        },
+      ),
     );
   }
 }
