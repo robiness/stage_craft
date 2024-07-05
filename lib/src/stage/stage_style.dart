@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 /// Style settings for the stage.
 class StageStyle {
@@ -8,9 +8,12 @@ class StageStyle {
   /// The minimum distance between the ball and the edge of the stage.
   final double dragPadding = 20.0;
 
-  static StageStyle of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedStageStyle>()!.style;
-  }
+  final BoxDecoration stageBorderDecoration = BoxDecoration(
+    border: Border.all(
+      strokeAlign: BorderSide.strokeAlignCenter,
+      color: const Color(0xFF989898).withOpacity(1),
+    ),
+  );
 }
 
 // InheritedWiget to access the StageStyle
@@ -22,6 +25,10 @@ class InheritedStageStyle extends InheritedWidget {
     required super.child,
     super.key,
   });
+
+  static StageStyle of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedStageStyle>()!.style;
+  }
 
   @override
   bool updateShouldNotify(InheritedStageStyle oldWidget) {

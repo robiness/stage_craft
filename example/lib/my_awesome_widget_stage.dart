@@ -36,6 +36,25 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: Offset.zero,
   );
 
+  final enumControl = EnumControl<MyEnum>(
+    label: 'Enum',
+    initialValue: MyEnum.one,
+    values: MyEnum.values,
+  );
+
+  late final GenericControl genericControl = GenericControl<MyEnum>(
+    label: 'Generic',
+    initialValue: MyEnum.one,
+    values: MyEnum.values
+        .map(
+          (e) => DropdownMenuItem<MyEnum>(
+            value: e,
+            child: Text(e.name),
+          ),
+        )
+        .toList(),
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -45,6 +64,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     colorControl.dispose();
     offsetControl.dispose();
     textEditingControl.dispose();
+    genericControl.dispose();
   }
 
   @override
@@ -63,6 +83,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         stringControl,
         colorControl,
         textEditingControl,
+        enumControl,
       ],
       builder: (context) {
         return MyAwesomeWidget(
@@ -74,4 +95,10 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
       },
     );
   }
+}
+
+enum MyEnum {
+  one,
+  two,
+  three,
 }

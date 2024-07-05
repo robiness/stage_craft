@@ -190,11 +190,7 @@ class StageBorder extends StatelessWidget {
       rect: _rect,
       child: IgnorePointer(
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey.withOpacity(0.2),
-            ),
-          ),
+          decoration: context.stageStyle.stageBorderDecoration,
           child: const SizedBox.expand(),
         ),
       ),
@@ -203,7 +199,7 @@ class StageBorder extends StatelessWidget {
 }
 
 /// A control bar that displays a list of controls to manipulate the stage.
-class ControlBar extends StatelessWidget {
+class ControlBar extends StatefulWidget {
   const ControlBar({
     super.key,
     required this.controls,
@@ -212,11 +208,36 @@ class ControlBar extends StatelessWidget {
   final List<ValueControl> controls;
 
   @override
+  State<ControlBar> createState() => _ControlBarState();
+}
+
+class _ControlBarState extends State<ControlBar> {
+  @override
+  void initState() {
+    super.initState();
+    for (final control in widget.controls) {
+      control.addListener(_update);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (final control in widget.controls) {
+      control.removeListener(_update);
+    }
+  }
+
+  void _update() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
       child: ListView(
-        children: controls.map((control) {
+        children: widget.controls.map((control) {
           return control.builder(context);
         }).toList(),
       ),
@@ -270,4 +291,8 @@ class StageRect extends StatelessWidget {
       ),
     );
   }
+}
+
+extension StageStyleExtension on BuildContext {
+  StageStyle get stageStyle => InheritedStageStyle.of(this);
 }

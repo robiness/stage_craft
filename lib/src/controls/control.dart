@@ -21,6 +21,7 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
     if (newValue != value) {
       super.value = newValue;
     }
+    notifyListeners();
   }
 
   void toggleNull() {
@@ -32,6 +33,7 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
     } else {
       value = null as T;
     }
+    notifyListeners();
   }
 }
 
