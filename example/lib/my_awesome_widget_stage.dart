@@ -26,10 +26,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     label: 'Text',
     initialValue: 'Hello',
   );
-  final colorControl = ColorControl(
-    label: 'Color',
-    initialValue: Colors.blue,
-  );
 
   final offsetControl = OffsetNullableControl(
     label: 'Offset',
@@ -66,6 +62,15 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: null,
   );
 
+  final colorControl = ColorControl(
+    label: 'Color',
+    initialValue: Colors.blue,
+    colorSamples: [
+      ColorSample(color: Colors.purpleAccent, name: 'Purple'),
+      ColorSample(color: Colors.orange, name: 'Blue'),
+    ],
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -82,22 +87,31 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   Widget build(BuildContext context) {
     return StageBuilder(
       controls: [
-        offsetControl,
-        boolControl,
-        boolControlNullable,
+        IntControl(
+          label: 'Int',
+          initialValue: 0,
+        ),
+        IntNullableControl(
+          label: 'Int Nullable',
+          initialValue: null,
+        ),
+        // offsetControl,
+        // boolControl,
+        // boolControlNullable,
         ControlHeader(
           child: const Text(
             'Colors',
             style: TextStyle(fontSize: 18),
           ),
         ),
-        stringControl,
-        colorControl,
-        textEditingControl,
-        enumControl,
-        nullableEnum,
-        genericControl,
-        nullableString,
+        // stringControl,
+        // colorControl,
+        // textEditingControl,
+        // enumControl,
+        // nullableEnum,
+        // genericControl,
+        // nullableString,
+        // colorControl,
       ],
       builder: (context) {
         return MyAwesomeWidget(
