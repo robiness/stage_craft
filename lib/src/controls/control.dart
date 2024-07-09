@@ -59,7 +59,10 @@ class DefaultControlBarRow extends StatelessWidget {
         if (control.isNullable) {
           return Row(
             children: [
-              Text(control.label),
+              Text(
+                control.label,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               const SizedBox(width: 8),
               Checkbox(
                 value: control.value == null,
@@ -74,7 +77,11 @@ class DefaultControlBarRow extends StatelessWidget {
         }
         return Row(
           children: [
-            Text(control.label),
+            Text(
+              control.label,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(width: 8),
             Expanded(child: child),
           ],
         );

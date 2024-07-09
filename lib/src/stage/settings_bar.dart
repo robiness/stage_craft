@@ -7,10 +7,12 @@ class SettingsBar extends StatelessWidget {
     super.key,
     required this.settings,
     required this.onSettingsChanged,
+    required this.onStyleToggled,
   });
 
   final StageSettings settings;
   final void Function(StageSettings settings) onSettingsChanged;
+  final VoidCallback onStyleToggled;
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +33,20 @@ class SettingsBar extends StatelessWidget {
               Icons.space_bar_sharp,
               color: settings.showRuler ? Colors.blue : Colors.grey,
             ),
-            onPressed: () => onSettingsChanged(
-              settings.copyWith(
-                showRuler: !settings.showRuler,
-              ),
-            ),
+            onPressed: () {
+              onSettingsChanged(
+                settings.copyWith(
+                  showRuler: !settings.showRuler,
+                ),
+              );
+            },
           ),
           IconButton(
             icon: Container(
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: settings.stageColor,
+                color: context.stageStyle.stageColor,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Colors.grey,
@@ -52,22 +56,34 @@ class SettingsBar extends StatelessWidget {
             ),
             onPressed: () {
               showDialog(
-                builder: (context) => AlertDialog(
-                  title: const Text('Pick a color!'),
-                  content: SingleChildScrollView(
-                    child: MaterialPicker(
-                      pickerColor: settings.stageColor,
-                      onColorChanged: (newColor) => onSettingsChanged(
-                        settings.copyWith(
-                          stageColor: newColor,
-                        ),
+                builder: (_) {
+                  return AlertDialog(
+                    title: const Text('Pick a color!'),
+                    content: SingleChildScrollView(
+                      child: MaterialPicker(
+                        pickerColor: context.stageStyle.stageColor,
+                        onColorChanged: (newColor) {
+                          onSettingsChanged(
+                            settings.copyWith(
+                              stageColor: newColor,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
                 context: context,
               );
             },
+          ),
+          // toggle light and dark mode
+          IconButton(
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.light ? Icons.light_mode : Icons.dark_mode,
+              color: Colors.grey,
+            ),
+            onPressed: onStyleToggled,
           ),
         ],
       ),

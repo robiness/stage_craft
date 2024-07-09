@@ -52,6 +52,56 @@ class ColorControl extends ValueControl<Color> {
   }
 }
 
+class ColorControlNullable extends ValueControl<Color?> {
+  ColorControlNullable({
+    required super.label,
+    required super.initialValue,
+    required this.colorSamples,
+  });
+
+  final List<ColorSample> colorSamples;
+
+  @override
+  Widget builder(BuildContext context) {
+    return DefaultControlBarRow(
+      control: this,
+      child: StageCraftColorPicker(
+        initialColor: value,
+        onColorSelected: (color) {
+          value = color;
+        },
+        colorSamples: colorSamples,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              height: 38,
+              width: 38,
+              foregroundDecoration: BoxDecoration(
+                // The actual color drawn over the chessboard pattern
+                color: value,
+              ),
+              // The chessboard pattern
+              child: const CustomPaint(
+                foregroundPainter: ChessBoardPainter(
+                  boxSize: 8,
+                  // The color of the chessboard pattern
+                  color: Colors.grey,
+                ),
+                child: ColoredBox(
+                  // Background of the chessboard pattern
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ChessBoardPainter extends CustomPainter {
   const ChessBoardPainter({
     required this.color,

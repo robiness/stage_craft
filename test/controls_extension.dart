@@ -12,13 +12,23 @@ import 'package:stage_craft/stage_craft.dart';
 extension ControlsExtensions on WidgetTester {
   Future<void> pumpControl<T>(ValueControl<T> control) async {
     await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: StageBuilder(
-            controls: [control],
-            builder: (context) {
-              return control.builder(context);
-            },
+      StageStyle(
+        data: StageStyleData(
+          brightness: Brightness.light,
+          canvasColor: Colors.orange,
+          rulerColor: Colors.green,
+          lineColor: Colors.green,
+          stageColor: Colors.white,
+          primaryColor: Colors.pink,
+        ),
+        child: MaterialApp(
+          home: Scaffold(
+            body: StageBuilder(
+              controls: [control],
+              builder: (context) {
+                return control.builder(context);
+              },
+            ),
           ),
         ),
       ),

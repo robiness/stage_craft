@@ -66,8 +66,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     label: 'Color',
     initialValue: Colors.blue,
     colorSamples: [
-      ColorSample(color: Colors.purpleAccent, name: 'Purple'),
-      ColorSample(color: Colors.orange, name: 'Blue'),
+      const ColorSample(color: Colors.purpleAccent, name: 'Purple'),
+      const ColorSample(color: Colors.orange, name: 'Blue'),
     ],
   );
 
@@ -99,10 +99,10 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         // offsetControl,
         // boolControl,
         // boolControlNullable,
-        ControlHeader(
-          child: const Text(
-            'Colors',
-            style: TextStyle(fontSize: 18),
+        CustomHeader(
+          childBuilder: (context) => Text(
+            'Custom Header',
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
         // stringControl,

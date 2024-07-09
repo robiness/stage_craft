@@ -20,7 +20,7 @@ class Rulers extends StatelessWidget {
             child: Ruler(
               direction: Axis.vertical,
               length: rect.height,
-              color: Colors.grey.withOpacity(0.2),
+              color: context.stageStyle.rulerColor.withOpacity(0.2),
             ),
           ),
           Align(
@@ -28,7 +28,7 @@ class Rulers extends StatelessWidget {
             child: Ruler(
               direction: Axis.horizontal,
               length: rect.width,
-              color: Colors.grey.withOpacity(0.2),
+              color: context.stageStyle.rulerColor.withOpacity(0.2),
             ),
           ),
         ],
@@ -60,7 +60,10 @@ class Ruler extends StatelessWidget {
           _buildEdgeLine(),
           _buildExpandedLine(),
           _buildSpacing(),
-          Text(length.toStringAsFixed(1)),
+          Text(
+            length.toStringAsFixed(1),
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
           _buildSpacing(),
           _buildExpandedLine(),
           _buildEdgeLine(),
@@ -71,7 +74,7 @@ class Ruler extends StatelessWidget {
 
   Widget _buildEdgeLine() {
     return Container(
-      color: Colors.grey,
+      color: color,
       width: direction == Axis.vertical ? 8 : 2,
       height: direction == Axis.vertical ? 2 : 8,
     );

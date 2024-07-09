@@ -12,19 +12,20 @@ class StageBuilder extends StatefulWidget {
     required this.builder,
     this.initialSize = const Size(200, 300),
     this.controls = const [],
+    this.style,
   });
 
   final WidgetBuilder builder;
   final Size initialSize;
   final List<ValueControl> controls;
 
+  final StageStyleData? style;
+
   @override
   State<StageBuilder> createState() => _StageBuilderState();
 }
 
 class _StageBuilderState extends State<StageBuilder> {
-  final style = StageStyle();
-
   late Rect _rect = Rect.fromLTWH(
     100,
     100,
@@ -36,11 +37,19 @@ class _StageBuilderState extends State<StageBuilder> {
 
   StageSettings _settings = StageSettings();
 
+  late ThemeData _theme;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _theme = Theme.of(context);
+  }
+
   void _onDragStart(DragDownDetails details) {
     _dragStart = details.globalPosition;
   }
 
-  void _handleDrag(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment) {
+  void _handleDrag(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment, StageStyleData style) {
     late double width = _rect.width;
     late double height = _rect.height;
     double top = _rect.top;
@@ -104,71 +113,88 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return InheritedStageStyle(
-      style: style,
-      child: ColoredBox(
-        color: _settings.stageColor,
-        child: MeasureGrid(
-          size: 100,
-          showGrid: !_settings.showRuler,
-          child: Row(
-            children: [
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Stack(
-                      children: [
-                        // The widget on stage
-                        StageRect(
-                          rect: _rect,
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onPanDown: _onDragStart,
-                            onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center),
-                            child: ListenableBuilder(
-                              listenable: Listenable.merge(widget.controls),
-                              builder: (context, child) {
-                                return widget.builder(context);
-                              },
-                            ),
-                          ),
-                        ),
-                        StageBorder(rect: _rect),
-                        if (_settings.showRuler)
-                          Rulers(
+    final stageTheme = widget.style ?? StageStyle.maybeOf(context) ?? StageStyleData.fromMaterialTheme(_theme);
+    return Theme(
+      data: _theme,
+      child: StageStyle(
+        data: stageTheme,
+        child: ColoredBox(
+          color: stageTheme.canvasColor,
+          child: MeasureGrid(
+            size: 100,
+            showGrid: !_settings.showRuler,
+            child: Row(
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        children: [
+                          // The widget on stage
+                          StageRect(
                             rect: _rect,
-                          ),
-                        StageConstraintsHandles(
-                          rect: _rect,
-                          onPanUpdate: (details, alignment) {
-                            _handleDrag(details, constraints, alignment);
-                          },
-                          onPanStart: _onDragStart,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: SettingsBar(
-                              settings: _settings,
-                              onSettingsChanged: (settings) {
-                                setState(() {
-                                  _settings = settings;
-                                });
-                              },
+                            child: ColoredBox(
+                              color: stageTheme.stageColor,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onPanDown: _onDragStart,
+                                onPanUpdate: (details) =>
+                                    _handleDrag(details, constraints, Alignment.center, stageTheme),
+                                child: ListenableBuilder(
+                                  listenable: Listenable.merge(widget.controls),
+                                  builder: (context, child) {
+                                    return widget.builder(context);
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                          StageBorder(rect: _rect),
+                          if (_settings.showRuler)
+                            Rulers(
+                              rect: _rect,
+                            ),
+                          StageConstraintsHandles(
+                            rect: _rect,
+                            onPanUpdate: (details, alignment) {
+                              _handleDrag(details, constraints, alignment, stageTheme);
+                            },
+                            onPanStart: _onDragStart,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: SettingsBar(
+                                settings: _settings,
+                                onSettingsChanged: (settings) {
+                                  setState(() {
+                                    _settings = settings;
+                                  });
+                                },
+                                onStyleToggled: () {
+                                  setState(() {
+                                    if (_theme.brightness == Brightness.light) {
+                                      _theme = ThemeData.dark();
+                                    } else {
+                                      _theme = ThemeData.light();
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-              if (widget.controls.isNotEmpty)
-                ControlBar(
-                  controls: widget.controls,
-                ),
-            ],
+                if (widget.controls.isNotEmpty)
+                  ControlBar(
+                    controls: widget.controls,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -249,11 +275,9 @@ class _ControlBarState extends State<ControlBar> {
 class StageSettings {
   StageSettings({
     this.showRuler = true,
-    this.stageColor = Colors.white,
   });
 
   final bool showRuler;
-  final Color stageColor;
 
   StageSettings copyWith({
     bool? showRuler,
@@ -261,7 +285,6 @@ class StageSettings {
   }) {
     return StageSettings(
       showRuler: showRuler ?? this.showRuler,
-      stageColor: stageColor ?? this.stageColor,
     );
   }
 }
@@ -294,5 +317,5 @@ class StageRect extends StatelessWidget {
 }
 
 extension StageStyleExtension on BuildContext {
-  StageStyle get stageStyle => InheritedStageStyle.of(this);
+  StageStyleData get stageStyle => StageStyle.of(this);
 }
