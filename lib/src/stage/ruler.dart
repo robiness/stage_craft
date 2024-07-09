@@ -20,7 +20,7 @@ class Rulers extends StatelessWidget {
             child: Ruler(
               direction: Axis.vertical,
               length: rect.height,
-              color: context.stageStyle.rulerColor.withOpacity(0.2),
+              color: context.stageStyle.onSurface,
             ),
           ),
           Align(
@@ -28,7 +28,7 @@ class Rulers extends StatelessWidget {
             child: Ruler(
               direction: Axis.horizontal,
               length: rect.width,
-              color: context.stageStyle.rulerColor.withOpacity(0.2),
+              color: context.stageStyle.onSurface,
             ),
           ),
         ],

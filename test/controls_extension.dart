@@ -17,8 +17,7 @@ extension ControlsExtensions on WidgetTester {
           brightness: Brightness.light,
           canvasColor: Colors.orange,
           rulerColor: Colors.green,
-          lineColor: Colors.green,
-          stageColor: Colors.white,
+          onSurface: Colors.green,
           primaryColor: Colors.pink,
         ),
         child: MaterialApp(

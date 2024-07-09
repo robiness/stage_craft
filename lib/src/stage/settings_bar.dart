@@ -8,11 +8,13 @@ class SettingsBar extends StatelessWidget {
     required this.settings,
     required this.onSettingsChanged,
     required this.onStyleToggled,
+    required this.onSurfaceColorChanged,
   });
 
   final StageSettings settings;
   final void Function(StageSettings settings) onSettingsChanged;
   final VoidCallback onStyleToggled;
+  final void Function(Color color) onSurfaceColorChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class SettingsBar extends StatelessWidget {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: context.stageStyle.stageColor,
+                color: context.stageStyle.canvasColor,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Colors.grey,
@@ -61,14 +63,8 @@ class SettingsBar extends StatelessWidget {
                     title: const Text('Pick a color!'),
                     content: SingleChildScrollView(
                       child: MaterialPicker(
-                        pickerColor: context.stageStyle.stageColor,
-                        onColorChanged: (newColor) {
-                          onSettingsChanged(
-                            settings.copyWith(
-                              stageColor: newColor,
-                            ),
-                          );
-                        },
+                        pickerColor: context.stageStyle.canvasColor,
+                        onColorChanged: onSurfaceColorChanged,
                       ),
                     ),
                   );

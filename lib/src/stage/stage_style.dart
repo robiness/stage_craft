@@ -8,14 +8,13 @@ class StageStyleData {
     BoxDecoration? stageBorderDecoration,
     required this.primaryColor,
     required this.canvasColor,
-    required this.stageColor,
     required this.rulerColor,
     required this.brightness,
-    required this.lineColor,
+    required this.onSurface,
   }) : stageBorderDecoration = stageBorderDecoration ??
             BoxDecoration(
               border: Border.all(
-                color: lineColor,
+                color: onSurface,
               ),
             );
 
@@ -24,14 +23,13 @@ class StageStyleData {
       brightness: theme.brightness,
       stageBorderDecoration: BoxDecoration(
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.4),
+          color: theme.colorScheme.onSurface.withOpacity(0.4),
         ),
       ),
       canvasColor: theme.colorScheme.surface,
-      stageColor: theme.colorScheme.surface,
       rulerColor: theme.colorScheme.onSurface,
       primaryColor: theme.colorScheme.primary,
-      lineColor: theme.colorScheme.onSurface,
+      onSurface: theme.colorScheme.onSurface.withOpacity(0.2),
     );
   }
 
@@ -53,14 +51,59 @@ class StageStyleData {
   /// The Color of the whole canvas.
   final Color canvasColor;
 
-  /// The Color of the stage.
-  final Color stageColor;
-
   /// The Color of the ruler.
   final Color rulerColor;
 
-  /// The Color of lines, like the stage area border or the ruler lines.
-  final Color lineColor;
+  /// The Color of elements on the surface, like the stage area border or the ruler lines.
+  final Color onSurface;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StageStyleData &&
+          runtimeType == other.runtimeType &&
+          brightness == other.brightness &&
+          primaryColor == other.primaryColor &&
+          ballSize == other.ballSize &&
+          dragPadding == other.dragPadding &&
+          stageBorderDecoration == other.stageBorderDecoration &&
+          canvasColor == other.canvasColor &&
+          rulerColor == other.rulerColor &&
+          onSurface == other.onSurface;
+
+  @override
+  int get hashCode =>
+      brightness.hashCode ^
+      primaryColor.hashCode ^
+      ballSize.hashCode ^
+      dragPadding.hashCode ^
+      stageBorderDecoration.hashCode ^
+      canvasColor.hashCode ^
+      rulerColor.hashCode ^
+      onSurface.hashCode;
+
+  StageStyleData copyWith({
+    Brightness? brightness,
+    Color? primaryColor,
+    double? ballSize,
+    double? dragPadding,
+    BoxDecoration? stageBorderDecoration,
+    Color? canvasColor,
+    Color? stageColor,
+    Color? rulerColor,
+    Color? onSurface,
+  }) {
+    return StageStyleData(
+      brightness: brightness ?? this.brightness,
+      primaryColor: primaryColor ?? this.primaryColor,
+      ballSize: ballSize ?? this.ballSize,
+      dragPadding: dragPadding ?? this.dragPadding,
+      stageBorderDecoration: stageBorderDecoration ?? this.stageBorderDecoration,
+      canvasColor: canvasColor ?? this.canvasColor,
+      rulerColor: rulerColor ?? this.rulerColor,
+      onSurface: onSurface ?? this.onSurface,
+    );
+  }
 }
 
 // InheritedWidget to access the StageStyle

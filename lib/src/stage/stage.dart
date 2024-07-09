@@ -38,11 +38,25 @@ class _StageBuilderState extends State<StageBuilder> {
   StageSettings _settings = StageSettings();
 
   late ThemeData _theme;
+  late StageStyleData _style;
+
+  @override
+  void didUpdateWidget(covariant StageBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.style != oldWidget.style) {
+      _style = widget.style ?? StageStyleData.fromMaterialTheme(_theme);
+    }
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _theme = Theme.of(context);
+    if (widget.style != null) {
+      _style = widget.style!;
+    } else {
+      _style = StageStyleData.fromMaterialTheme(_theme);
+    }
   }
 
   void _onDragStart(DragDownDetails details) {
@@ -113,13 +127,12 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final stageTheme = widget.style ?? StageStyle.maybeOf(context) ?? StageStyleData.fromMaterialTheme(_theme);
     return Theme(
       data: _theme,
       child: StageStyle(
-        data: stageTheme,
+        data: _style,
         child: ColoredBox(
-          color: stageTheme.canvasColor,
+          color: _style.canvasColor,
           child: MeasureGrid(
             size: 100,
             showGrid: !_settings.showRuler,
@@ -133,19 +146,15 @@ class _StageBuilderState extends State<StageBuilder> {
                           // The widget on stage
                           StageRect(
                             rect: _rect,
-                            child: ColoredBox(
-                              color: stageTheme.stageColor,
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onPanDown: _onDragStart,
-                                onPanUpdate: (details) =>
-                                    _handleDrag(details, constraints, Alignment.center, stageTheme),
-                                child: ListenableBuilder(
-                                  listenable: Listenable.merge(widget.controls),
-                                  builder: (context, child) {
-                                    return widget.builder(context);
-                                  },
-                                ),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onPanDown: _onDragStart,
+                              onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, _style),
+                              child: ListenableBuilder(
+                                listenable: Listenable.merge(widget.controls),
+                                builder: (context, child) {
+                                  return widget.builder(context);
+                                },
                               ),
                             ),
                           ),
@@ -157,7 +166,7 @@ class _StageBuilderState extends State<StageBuilder> {
                           StageConstraintsHandles(
                             rect: _rect,
                             onPanUpdate: (details, alignment) {
-                              _handleDrag(details, constraints, alignment, stageTheme);
+                              _handleDrag(details, constraints, alignment, _style);
                             },
                             onPanStart: _onDragStart,
                           ),
@@ -172,6 +181,11 @@ class _StageBuilderState extends State<StageBuilder> {
                                     _settings = settings;
                                   });
                                 },
+                                onSurfaceColorChanged: (color) {
+                                  setState(() {
+                                    _style = _style.copyWith(canvasColor: color);
+                                  });
+                                },
                                 onStyleToggled: () {
                                   setState(() {
                                     if (_theme.brightness == Brightness.light) {
@@ -179,6 +193,7 @@ class _StageBuilderState extends State<StageBuilder> {
                                     } else {
                                       _theme = ThemeData.light();
                                     }
+                                    _style = StageStyleData.fromMaterialTheme(_theme);
                                   });
                                 },
                               ),
