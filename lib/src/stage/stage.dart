@@ -10,13 +10,11 @@ class StageBuilder extends StatefulWidget {
   const StageBuilder({
     super.key,
     required this.builder,
-    this.initialSize = const Size(200, 300),
     this.controls = const [],
     this.style,
   });
 
   final WidgetBuilder builder;
-  final Size initialSize;
   final List<ValueControl> controls;
 
   final StageStyleData? style;
@@ -26,12 +24,7 @@ class StageBuilder extends StatefulWidget {
 }
 
 class _StageBuilderState extends State<StageBuilder> {
-  late Rect _rect = Rect.fromLTWH(
-    100,
-    100,
-    widget.initialSize.width,
-    widget.initialSize.height,
-  );
+  Rect? _rect;
 
   late Offset _dragStart;
 
@@ -40,12 +33,17 @@ class _StageBuilderState extends State<StageBuilder> {
   late ThemeData _theme;
   late StageStyleData _style;
 
+  late BoxConstraints canvasConstraints;
+
+  final _childKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
     if (widget.style != null) {
       _style = widget.style!;
     }
+    _sizeAndCenterStage();
   }
 
   @override
@@ -74,15 +72,31 @@ class _StageBuilderState extends State<StageBuilder> {
     }
   }
 
+  void _sizeAndCenterStage() {
+    // Get the size of the child and center it on the canvas
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final renderBox = _childKey.currentContext!.findRenderObject()! as RenderBox;
+      final size = renderBox.size;
+      final clampedWidth = size.width.clamp(0.0, canvasConstraints.maxWidth - 150);
+      final clampedHeight = size.height.clamp(0.0, canvasConstraints.maxHeight - 140);
+      final clampedSize = Size(clampedWidth, clampedHeight);
+      final positionX = (canvasConstraints.maxWidth - clampedSize.width) / 2;
+      final positionY = (canvasConstraints.maxHeight - clampedSize.height) / 2;
+      setState(() {
+        _rect = Rect.fromLTWH(positionX, positionY - 50, clampedSize.width, clampedSize.height);
+      });
+    });
+  }
+
   void _onDragStart(DragDownDetails details) {
     _dragStart = details.globalPosition;
   }
 
   void _handleDrag(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment, StageStyleData style) {
-    late double width = _rect.width;
-    late double height = _rect.height;
-    double top = _rect.top;
-    double left = _rect.left;
+    late double width = _rect!.width;
+    late double height = _rect!.height;
+    double top = _rect!.top;
+    double left = _rect!.left;
     final dx = details.globalPosition.dx - _dragStart.dx;
     final dy = details.globalPosition.dy - _dragStart.dy;
     setState(() {
@@ -156,11 +170,22 @@ class _StageBuilderState extends State<StageBuilder> {
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
+                      canvasConstraints = constraints;
+                      if (_rect == null) {
+                        return Offstage(
+                          child: Center(
+                            child: KeyedSubtree(
+                              key: _childKey,
+                              child: widget.builder(context),
+                            ),
+                          ),
+                        );
+                      }
                       return Stack(
                         children: [
                           // The widget on stage
                           StageRect(
-                            rect: _rect,
+                            rect: _rect!,
                             child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onPanDown: _onDragStart,
@@ -173,13 +198,13 @@ class _StageBuilderState extends State<StageBuilder> {
                               ),
                             ),
                           ),
-                          StageBorder(rect: _rect),
+                          StageBorder(rect: _rect!),
                           if (_settings.showRuler)
                             Rulers(
-                              rect: _rect,
+                              rect: _rect!,
                             ),
                           StageConstraintsHandles(
-                            rect: _rect,
+                            rect: _rect!,
                             onPanUpdate: (details, alignment) {
                               _handleDrag(details, constraints, alignment, _style);
                             },

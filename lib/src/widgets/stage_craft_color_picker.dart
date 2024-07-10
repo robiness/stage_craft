@@ -1,6 +1,5 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:stage_craft/stage_craft.dart';
 
 /// A color picking interface that provides an enhanced color selection experience
 /// using the FlexColorPicker library and integration with StageCraft widgets.
@@ -79,8 +78,7 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
   @override
   void didUpdateWidget(StageCraftColorPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.colorSamples != widget.colorSamples ||
-        oldWidget.initialColor != widget.initialColor) {
+    if (oldWidget.colorSamples != widget.colorSamples || oldWidget.initialColor != widget.initialColor) {
       _initializeColorPicker();
     }
   }
@@ -93,8 +91,7 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
 
     if (widget.colorSamples?.isNotEmpty == true) {
       for (final sample in widget.colorSamples!) {
-        _colorSwatches[ColorTools.createPrimarySwatch(sample.color)] =
-            sample.name ?? '';
+        _colorSwatches[ColorTools.createPrimarySwatch(sample.color)] = sample.name ?? '';
       }
     }
   }

@@ -18,24 +18,29 @@ class MyAwesomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Transform.translate(
-        offset: offset,
-        child: Column(
-          children: [
-            if (label != null) Text(label!),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter a value',
+    // return OutlinedButton(onPressed: () {}, child: Text('jojojjojo'));
+    return SizedBox(
+      height: 100,
+      width: 200,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Transform.translate(
+          offset: offset,
+          child: Column(
+            children: [
+              if (label != null) Text(label!),
+              TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter a value',
+                ),
+                controller: controller,
               ),
-              controller: controller,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
