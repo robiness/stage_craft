@@ -8,7 +8,6 @@ class StageStyleData {
     BoxDecoration? stageBorderDecoration,
     required this.primaryColor,
     required this.canvasColor,
-    required this.rulerColor,
     required this.brightness,
     required this.onSurface,
   }) : stageBorderDecoration = stageBorderDecoration ??
@@ -29,7 +28,6 @@ class StageStyleData {
         ),
       ),
       canvasColor: theme.colorScheme.surface,
-      rulerColor: theme.colorScheme.onSurface,
       primaryColor: theme.colorScheme.primary,
       onSurface: theme.colorScheme.onSurface.withOpacity(0.2),
     );
@@ -53,9 +51,6 @@ class StageStyleData {
   /// The Color of the whole canvas.
   final Color canvasColor;
 
-  /// The Color of the ruler.
-  final Color rulerColor;
-
   /// The Color of elements on the surface, like the stage area border or the ruler lines.
   final Color onSurface;
 
@@ -70,7 +65,6 @@ class StageStyleData {
           dragPadding == other.dragPadding &&
           stageBorderDecoration == other.stageBorderDecoration &&
           canvasColor == other.canvasColor &&
-          rulerColor == other.rulerColor &&
           onSurface == other.onSurface;
 
   @override
@@ -81,7 +75,6 @@ class StageStyleData {
       dragPadding.hashCode ^
       stageBorderDecoration.hashCode ^
       canvasColor.hashCode ^
-      rulerColor.hashCode ^
       onSurface.hashCode;
 
   StageStyleData copyWith({
@@ -92,7 +85,6 @@ class StageStyleData {
     BoxDecoration? stageBorderDecoration,
     Color? canvasColor,
     Color? stageColor,
-    Color? rulerColor,
     Color? onSurface,
   }) {
     return StageStyleData(
@@ -102,7 +94,6 @@ class StageStyleData {
       dragPadding: dragPadding ?? this.dragPadding,
       stageBorderDecoration: stageBorderDecoration ?? this.stageBorderDecoration,
       canvasColor: canvasColor ?? this.canvasColor,
-      rulerColor: rulerColor ?? this.rulerColor,
       onSurface: onSurface ?? this.onSurface,
     );
   }

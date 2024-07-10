@@ -62,7 +62,6 @@ void main() {
 
 StageStyleData testStyle = StageStyleData(
   brightness: Brightness.dark,
-  rulerColor: Colors.red,
   canvasColor: Colors.blue,
   primaryColor: Colors.purple,
   onSurface: Colors.orange,

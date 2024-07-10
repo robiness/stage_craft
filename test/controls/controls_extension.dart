@@ -16,7 +16,6 @@ extension ControlsExtensions on WidgetTester {
         data: StageStyleData(
           brightness: Brightness.light,
           canvasColor: Colors.orange,
-          rulerColor: Colors.green,
           onSurface: Colors.green,
           primaryColor: Colors.pink,
         ),
