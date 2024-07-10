@@ -276,6 +276,21 @@ class _StageBuilderState extends State<StageBuilder> {
                               ),
                             ),
                           ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: ListenableBuilder(
+                                listenable: _transformationController,
+                                builder: (context, child) {
+                                  return Text(
+                                    '${currentScale.toStringAsFixed(2)}x',
+                                    style: Theme.of(context).textTheme.labelSmall,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     },
