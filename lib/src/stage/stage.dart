@@ -37,6 +37,10 @@ class _StageBuilderState extends State<StageBuilder> {
 
   final _childKey = GlobalKey();
 
+  final _transformationController = TransformationController();
+
+  double get currentScale => _transformationController.value.getMaxScaleOnAxis();
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +48,9 @@ class _StageBuilderState extends State<StageBuilder> {
       _style = widget.style!;
     }
     _sizeAndCenterStage();
+    _transformationController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -163,7 +170,7 @@ class _StageBuilderState extends State<StageBuilder> {
         child: ColoredBox(
           color: _style.canvasColor,
           child: MeasureGrid(
-            size: 100,
+            size: 100 * currentScale,
             showGrid: !_settings.showRuler,
             child: Row(
               children: [
@@ -183,48 +190,59 @@ class _StageBuilderState extends State<StageBuilder> {
                       }
                       return Stack(
                         children: [
-                          // The widget on stage
-                          StageRect(
-                            rect: _rect!,
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onPanDown: _onDragStart,
-                              onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, _style),
-                              child: ListenableBuilder(
-                                listenable: Listenable.merge(widget.controls),
-                                builder: (context, child) {
-                                  return widget.builder(context);
-                                },
-                              ),
+                          InteractiveViewer(
+                            transformationController: _transformationController,
+                            minScale: 0.1,
+                            maxScale: 10,
+                            child: Stack(
+                              children: [
+                                // The widget on stage
+                                StageRect(
+                                  rect: _rect!,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onPanDown: _onDragStart,
+                                    onPanUpdate: (details) =>
+                                        _handleDrag(details, constraints, Alignment.center, _style),
+                                    child: ListenableBuilder(
+                                      listenable: Listenable.merge(widget.controls),
+                                      builder: (context, child) {
+                                        return widget.builder(context);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                // The border of the stage
+                                StageRect(
+                                  rect: _rect!,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onPanDown: _onDragStart,
+                                    onPanUpdate: (details) =>
+                                        _handleDrag(details, constraints, Alignment.center, _style),
+                                    child: IgnorePointer(
+                                      child: _settings.showRuler
+                                          ? DecoratedBox(
+                                              decoration: context.stageStyle.stageBorderDecoration,
+                                              child: const SizedBox.expand(),
+                                            )
+                                          : const SizedBox.expand(),
+                                    ),
+                                  ),
+                                ),
+                                if (_settings.showRuler)
+                                  Rulers(
+                                    rect: _rect!,
+                                  ),
+                                StageConstraintsHandles(
+                                  rect: _rect!,
+                                  onPanUpdate: (details, alignment) {
+                                    _handleDrag(details, constraints, alignment, _style);
+                                  },
+                                  onPanStart: _onDragStart,
+                                ),
+                              ],
                             ),
-                          ),
-                          // The border of the stage
-                          StageRect(
-                            rect: _rect!,
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onPanDown: _onDragStart,
-                              onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, _style),
-                              child: IgnorePointer(
-                                child: _settings.showRuler
-                                    ? DecoratedBox(
-                                        decoration: context.stageStyle.stageBorderDecoration,
-                                        child: const SizedBox.expand(),
-                                      )
-                                    : const SizedBox.expand(),
-                              ),
-                            ),
-                          ),
-                          if (_settings.showRuler)
-                            Rulers(
-                              rect: _rect!,
-                            ),
-                          StageConstraintsHandles(
-                            rect: _rect!,
-                            onPanUpdate: (details, alignment) {
-                              _handleDrag(details, constraints, alignment, _style);
-                            },
-                            onPanStart: _onDragStart,
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,
