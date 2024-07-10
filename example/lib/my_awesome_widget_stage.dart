@@ -93,6 +93,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         widthControl,
         heightControl,
         colorControl,
+        stringControl,
         // offsetControl,
         // boolControl,
         // boolControlNullable,

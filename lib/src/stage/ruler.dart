@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/stage/stage.dart';
 
@@ -51,24 +53,33 @@ class Ruler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final text = Text(
+      length.toStringAsFixed(1),
+      style: Theme.of(context).textTheme.labelMedium,
+    );
     return SizedBox(
-      width: direction == Axis.horizontal ? length : 80,
-      height: direction == Axis.vertical ? length : 80,
-      child: Flex(
-        direction: direction,
-        children: [
-          _buildEdgeLine(),
-          _buildExpandedLine(),
-          _buildSpacing(),
-          Text(
-            length.toStringAsFixed(1),
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
-          _buildSpacing(),
-          _buildExpandedLine(),
-          _buildEdgeLine(),
-        ],
-      ),
+      width: direction == Axis.horizontal ? max(40, length) : 80,
+      height: direction == Axis.vertical ? max(40, length) : 80,
+      child: length < 50
+          ? Flex(
+              direction: direction,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                text,
+              ],
+            )
+          : Flex(
+              direction: direction,
+              children: [
+                _buildEdgeLine(),
+                _buildExpandedLine(),
+                _buildSpacing(),
+                text,
+                _buildSpacing(),
+                _buildExpandedLine(),
+                _buildEdgeLine(),
+              ],
+            ),
     );
   }
 
