@@ -48,6 +48,9 @@ class _StageBuilderState extends State<StageBuilder> {
       _style = widget.style!;
     }
     _sizeAndCenterStage();
+    _transformationController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -201,12 +204,7 @@ class _StageBuilderState extends State<StageBuilder> {
                                     onPanDown: _onDragStart,
                                     onPanUpdate: (details) =>
                                         _handleDrag(details, constraints, Alignment.center, _style),
-                                    child: ListenableBuilder(
-                                      listenable: Listenable.merge(widget.controls),
-                                      builder: (context, child) {
-                                        return widget.builder(context);
-                                      },
-                                    ),
+                                    child: widget.builder(context),
                                   ),
                                 ),
                                 // The border of the stage
@@ -280,14 +278,9 @@ class _StageBuilderState extends State<StageBuilder> {
                             alignment: Alignment.bottomRight,
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: ListenableBuilder(
-                                listenable: _transformationController,
-                                builder: (context, child) {
-                                  return Text(
-                                    '${currentScale.toStringAsFixed(2)}x',
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                  );
-                                },
+                              child: Text(
+                                '${currentScale.toStringAsFixed(2)}x',
+                                style: Theme.of(context).textTheme.labelSmall,
                               ),
                             ),
                           ),
