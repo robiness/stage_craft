@@ -198,7 +198,23 @@ class _StageBuilderState extends State<StageBuilder> {
                               ),
                             ),
                           ),
-                          StageBorder(rect: _rect!),
+                          // The border of the stage
+                          StageRect(
+                            rect: _rect!,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onPanDown: _onDragStart,
+                              onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, _style),
+                              child: IgnorePointer(
+                                child: _settings.showRuler
+                                    ? DecoratedBox(
+                                        decoration: context.stageStyle.stageBorderDecoration,
+                                        child: const SizedBox.expand(),
+                                      )
+                                    : const SizedBox.expand(),
+                              ),
+                            ),
+                          ),
                           if (_settings.showRuler)
                             Rulers(
                               rect: _rect!,

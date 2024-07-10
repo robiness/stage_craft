@@ -29,6 +29,12 @@ class MyAwesomeWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 4,
+              offset: Offset(2, 2),
+            ),
+          ],
         ),
         child: Transform.translate(
           offset: offset,
