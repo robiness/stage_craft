@@ -48,9 +48,6 @@ class _StageBuilderState extends State<StageBuilder> {
       _style = widget.style!;
     }
     _sizeAndCenterStage();
-    _transformationController.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
