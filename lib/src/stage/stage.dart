@@ -12,12 +12,16 @@ class StageBuilder extends StatefulWidget {
     required this.builder,
     this.controls = const [],
     this.style,
+    this.forceSize = true,
   });
 
   final WidgetBuilder builder;
   final List<ValueControl> controls;
 
   final StageStyleData? style;
+
+  /// If true, the size of the stage will be forced to the size of the child.
+  final bool forceSize;
 
   @override
   State<StageBuilder> createState() => _StageBuilderState();
@@ -28,7 +32,7 @@ class _StageBuilderState extends State<StageBuilder> {
 
   late Offset _dragStart;
 
-  StageSettings _settings = StageSettings();
+  late StageSettings _settings = StageSettings(forceSize: widget.forceSize);
 
   late ThemeData _theme;
   late StageStyleData _style;
@@ -59,6 +63,9 @@ class _StageBuilderState extends State<StageBuilder> {
     // The parameter style always takes precedence
     if (widget.style != oldWidget.style) {
       _style = widget.style ?? StageStyleData.fromMaterialTheme(_theme);
+    }
+    if (widget.forceSize != oldWidget.forceSize) {
+      _settings = _settings.copyWith(forceSize: widget.forceSize);
     }
   }
 
@@ -204,7 +211,11 @@ class _StageBuilderState extends State<StageBuilder> {
                                     onPanDown: _onDragStart,
                                     onPanUpdate: (details) =>
                                         _handleDrag(details, constraints, Alignment.center, _style),
-                                    child: widget.builder(context),
+                                    child: SizedBox(
+                                      height: _settings.forceSize ? _rect!.height : null,
+                                      width: _settings.forceSize ? _rect!.width : null,
+                                      child: widget.builder(context),
+                                    ),
                                   ),
                                 ),
                                 // The border of the stage
@@ -375,16 +386,20 @@ class _ControlBarState extends State<ControlBar> {
 class StageSettings {
   StageSettings({
     this.showRuler = true,
+    this.forceSize = true,
   });
 
   final bool showRuler;
+  final bool forceSize;
 
   StageSettings copyWith({
     bool? showRuler,
     Color? stageColor,
+    bool? forceSize,
   }) {
     return StageSettings(
       showRuler: showRuler ?? this.showRuler,
+      forceSize: forceSize ?? this.forceSize,
     );
   }
 }

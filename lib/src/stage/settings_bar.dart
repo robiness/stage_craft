@@ -81,6 +81,16 @@ class SettingsBar extends StatelessWidget {
             ),
             onPressed: onStyleToggled,
           ),
+          IconButton(
+            icon: Icon(Icons.aspect_ratio, color: settings.forceSize ? Colors.blue : Colors.grey),
+            onPressed: () {
+              onSettingsChanged(
+                settings.copyWith(
+                  forceSize: !settings.forceSize,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
