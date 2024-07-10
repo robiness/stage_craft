@@ -24,6 +24,7 @@ class StageStyleData {
       stageBorderDecoration: BoxDecoration(
         border: Border.all(
           color: theme.colorScheme.onSurface.withOpacity(0.4),
+          strokeAlign: BorderSide.strokeAlignOutside,
         ),
       ),
       canvasColor: theme.colorScheme.surface,

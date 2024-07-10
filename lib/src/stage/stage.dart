@@ -240,18 +240,13 @@ class _StageBuilderState extends State<StageBuilder> {
                                   Rulers(
                                     rect: _rect!,
                                   ),
-                                ListenableBuilder(
-                                  listenable: _transformationController,
-                                  builder: (context, child) {
-                                    return StageConstraintsHandles(
-                                      rect: _rect!,
-                                      onPanUpdate: (details, alignment) {
-                                        _handleDrag(details, constraints, alignment, _style);
-                                      },
-                                      currentScale: currentScale,
-                                      onPanStart: _onDragStart,
-                                    );
+                                StageConstraintsHandles(
+                                  rect: _rect!,
+                                  onPanUpdate: (details, alignment) {
+                                    _handleDrag(details, constraints, alignment, _style);
                                   },
+                                  currentScale: currentScale,
+                                  onPanStart: _onDragStart,
                                 ),
                               ],
                             ),
