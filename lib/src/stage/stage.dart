@@ -101,8 +101,8 @@ class _StageBuilderState extends State<StageBuilder> {
     late double height = _rect!.height;
     double top = _rect!.top;
     double left = _rect!.left;
-    final dx = details.globalPosition.dx - _dragStart.dx;
-    final dy = details.globalPosition.dy - _dragStart.dy;
+    final dx = (details.globalPosition.dx - _dragStart.dx) * (1 / currentScale);
+    final dy = (details.globalPosition.dy - _dragStart.dy) * (1 / currentScale);
     setState(() {
       if (alignment == Alignment.center) {
         left = left + dx;
@@ -231,12 +231,18 @@ class _StageBuilderState extends State<StageBuilder> {
                                   Rulers(
                                     rect: _rect!,
                                   ),
-                                StageConstraintsHandles(
-                                  rect: _rect!,
-                                  onPanUpdate: (details, alignment) {
-                                    _handleDrag(details, constraints, alignment, _style);
+                                ListenableBuilder(
+                                  listenable: _transformationController,
+                                  builder: (context, child) {
+                                    return StageConstraintsHandles(
+                                      rect: _rect!,
+                                      onPanUpdate: (details, alignment) {
+                                        _handleDrag(details, constraints, alignment, _style);
+                                      },
+                                      currentScale: currentScale,
+                                      onPanStart: _onDragStart,
+                                    );
                                   },
-                                  onPanStart: _onDragStart,
                                 ),
                               ],
                             ),

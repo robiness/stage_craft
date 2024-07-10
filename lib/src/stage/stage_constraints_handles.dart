@@ -7,11 +7,13 @@ class StageConstraintsHandles extends StatefulWidget {
     required this.rect,
     required this.onPanUpdate,
     required this.onPanStart,
+    required this.currentScale,
   });
 
   final Rect rect;
   final void Function(DragUpdateDetails, Alignment alignment) onPanUpdate;
   final void Function(DragDownDetails details) onPanStart;
+  final double currentScale;
 
   @override
   State<StageConstraintsHandles> createState() => _StageConstraintsHandlesState();
@@ -26,7 +28,11 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
   @override
   Widget build(BuildContext context) {
     return StageRect(
-      rect: widget.rect.inflate(context.stageStyle.ballSize + context.stageStyle.dragPadding + padding),
+      rect: widget.rect.inflate(
+        context.stageStyle.ballSize * (1 / widget.currentScale) +
+            context.stageStyle.dragPadding * (1 / widget.currentScale) +
+            padding,
+      ),
       child: MouseRegion(
         hitTestBehavior: HitTestBehavior.translucent,
         onEnter: (event) {
@@ -42,7 +48,7 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
         child: !_hovered && !_dragged
             ? null
             : Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.0 * (1 / widget.currentScale)),
                 child: Stack(
                   children: [
                     Alignment.topLeft,
@@ -56,6 +62,7 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
                   ].map(
                     (alignment) {
                       return StageConstraintHandle(
+                        currentScale: widget.currentScale,
                         alignment: alignment,
                         onPanStart: (details) {
                           setState(() {
@@ -83,6 +90,7 @@ class StageConstraintHandle extends StatelessWidget {
   const StageConstraintHandle({
     super.key,
     required this.alignment,
+    required this.currentScale,
     this.onPanStart,
     this.onPanUpdate,
     this.onPanEnd,
@@ -92,6 +100,7 @@ class StageConstraintHandle extends StatelessWidget {
   final void Function(DragDownDetails)? onPanStart;
   final void Function(DragUpdateDetails, Alignment alignment)? onPanUpdate;
   final void Function(DragEndDetails)? onPanEnd;
+  final double currentScale;
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +115,13 @@ class StageConstraintHandle extends StatelessWidget {
           onPanEnd: onPanEnd,
           onPanUpdate: (details) => onPanUpdate?.call(details, alignment),
           child: Container(
-            width: context.stageStyle.ballSize,
-            height: context.stageStyle.ballSize,
+            width: context.stageStyle.ballSize * (1 / currentScale),
+            height: context.stageStyle.ballSize * (1 / currentScale),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(4 * (1 / currentScale)),
               border: Border.all(
                 color: const Color(0xFF949393),
-                width: 2,
+                width: 2 * (1 / currentScale),
               ),
             ),
           ),
