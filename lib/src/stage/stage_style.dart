@@ -15,6 +15,7 @@ class StageStyleData {
             BoxDecoration(
               border: Border.all(
                 color: onSurface,
+                strokeAlign: BorderSide.strokeAlignOutside,
               ),
             );
 
