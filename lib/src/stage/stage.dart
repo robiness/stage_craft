@@ -41,8 +41,17 @@ class _StageBuilderState extends State<StageBuilder> {
   late StageStyleData _style;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.style != null) {
+      _style = widget.style!;
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant StageBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // The parameter style always takes precedence
     if (widget.style != oldWidget.style) {
       _style = widget.style ?? StageStyleData.fromMaterialTheme(_theme);
     }
@@ -51,11 +60,17 @@ class _StageBuilderState extends State<StageBuilder> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // If no style is provided, we first check if there is one in the context
     _theme = Theme.of(context);
-    if (widget.style != null) {
-      _style = widget.style!;
-    } else {
-      _style = StageStyleData.fromMaterialTheme(_theme);
+    if (widget.style == null) {
+      final styleFromContext = StageStyle.maybeOf(context);
+      if (styleFromContext != null) {
+        _style = styleFromContext;
+      }
+      // If there is no style passed via parameter or context we default to a predefine style based on the MaterialThemes brightness.
+      else {
+        _style = StageStyleData.fromMaterialTheme(_theme);
+      }
     }
   }
 
