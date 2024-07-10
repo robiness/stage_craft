@@ -155,8 +155,8 @@ class _StageBuilderState extends State<StageBuilder> {
       // The size controls should also be always visible
       final sizeControlsArea = style.dragPadding;
       // // Ensure minimum size constraints
-      width = width.clamp(sizeControlsArea, constraints.maxWidth - sizeControlsArea);
-      height = height.clamp(sizeControlsArea, constraints.maxHeight - sizeControlsArea);
+      width = width.clamp(0, constraints.maxWidth - sizeControlsArea);
+      height = height.clamp(0, constraints.maxHeight - sizeControlsArea);
 
       // Ensure top and left are within constraints
       left = left.clamp(sizeControlsArea, constraints.maxWidth - width - sizeControlsArea);
