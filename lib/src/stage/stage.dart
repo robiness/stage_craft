@@ -229,7 +229,13 @@ class _StageBuilderState extends State<StageBuilder> {
                                     child: IgnorePointer(
                                       child: _settings.showRuler
                                           ? DecoratedBox(
-                                              decoration: context.stageStyle.stageBorderDecoration,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: _theme.colorScheme.onSurface.withOpacity(0.4),
+                                                  strokeAlign: BorderSide.strokeAlignOutside,
+                                                  width: 1 * (1 / currentScale),
+                                                ),
+                                              ),
                                               child: const SizedBox.expand(),
                                             )
                                           : const SizedBox.expand(),
@@ -302,28 +308,6 @@ class _StageBuilderState extends State<StageBuilder> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class StageBorder extends StatelessWidget {
-  const StageBorder({
-    super.key,
-    required Rect rect,
-  }) : _rect = rect;
-
-  final Rect _rect;
-
-  @override
-  Widget build(BuildContext context) {
-    return StageRect(
-      rect: _rect,
-      child: IgnorePointer(
-        child: DecoratedBox(
-          decoration: context.stageStyle.stageBorderDecoration,
-          child: const SizedBox.expand(),
         ),
       ),
     );

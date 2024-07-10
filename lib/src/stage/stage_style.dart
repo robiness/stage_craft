@@ -5,28 +5,15 @@ class StageStyleData {
   StageStyleData({
     this.ballSize = 10,
     this.dragPadding = 20,
-    BoxDecoration? stageBorderDecoration,
     required this.primaryColor,
     required this.canvasColor,
     required this.brightness,
     required this.onSurface,
-  }) : stageBorderDecoration = stageBorderDecoration ??
-            BoxDecoration(
-              border: Border.all(
-                color: onSurface,
-                strokeAlign: BorderSide.strokeAlignOutside,
-              ),
-            );
+  });
 
   factory StageStyleData.fromMaterialTheme(ThemeData theme) {
     return StageStyleData(
       brightness: theme.brightness,
-      stageBorderDecoration: BoxDecoration(
-        border: Border.all(
-          color: theme.colorScheme.onSurface.withOpacity(0.4),
-          strokeAlign: BorderSide.strokeAlignOutside,
-        ),
-      ),
       canvasColor: theme.colorScheme.surface,
       primaryColor: theme.colorScheme.primary,
       onSurface: theme.colorScheme.onSurface.withOpacity(0.2),
@@ -45,9 +32,6 @@ class StageStyleData {
   /// The minimum distance between the ball and the edge of the stage.
   final double dragPadding;
 
-  /// The decoration of the stage border.
-  final BoxDecoration stageBorderDecoration;
-
   /// The Color of the whole canvas.
   final Color canvasColor;
 
@@ -63,7 +47,6 @@ class StageStyleData {
           primaryColor == other.primaryColor &&
           ballSize == other.ballSize &&
           dragPadding == other.dragPadding &&
-          stageBorderDecoration == other.stageBorderDecoration &&
           canvasColor == other.canvasColor &&
           onSurface == other.onSurface;
 
@@ -73,7 +56,6 @@ class StageStyleData {
       primaryColor.hashCode ^
       ballSize.hashCode ^
       dragPadding.hashCode ^
-      stageBorderDecoration.hashCode ^
       canvasColor.hashCode ^
       onSurface.hashCode;
 
@@ -92,7 +74,6 @@ class StageStyleData {
       primaryColor: primaryColor ?? this.primaryColor,
       ballSize: ballSize ?? this.ballSize,
       dragPadding: dragPadding ?? this.dragPadding,
-      stageBorderDecoration: stageBorderDecoration ?? this.stageBorderDecoration,
       canvasColor: canvasColor ?? this.canvasColor,
       onSurface: onSurface ?? this.onSurface,
     );
