@@ -7,7 +7,7 @@ class IntControl extends ValueControl<int> {
     required super.initialValue,
   });
 
-  final controller = TextEditingController();
+  late final controller = TextEditingController(text: value.toString());
 
   @override
   Widget builder(BuildContext context) {

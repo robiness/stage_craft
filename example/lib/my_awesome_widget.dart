@@ -8,6 +8,8 @@ class MyAwesomeWidget extends StatelessWidget {
     this.controller,
     required this.offset,
     this.borderRadius,
+    this.width,
+    this.height,
   });
 
   final String? label;
@@ -15,10 +17,14 @@ class MyAwesomeWidget extends StatelessWidget {
   final TextEditingController? controller;
   final Offset offset;
   final double? borderRadius;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      width: width,
+      height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: color,

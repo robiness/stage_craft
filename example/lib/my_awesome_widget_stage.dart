@@ -62,6 +62,9 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: null,
   );
 
+  final widthControl = DoubleControl(label: 'width', initialValue: 100);
+  final heightControl = DoubleControl(label: 'height', initialValue: 100);
+
   final colorControl = ColorControl(
     label: 'Color',
     initialValue: Colors.blue,
@@ -87,18 +90,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   Widget build(BuildContext context) {
     return StageBuilder(
       controls: [
-        IntControl(
-          label: 'Int',
-          initialValue: 0,
-        ),
-        IntControlNullable(
-          label: 'nullint',
-          initialValue: null,
-        ),
-        StringControlNullable(
-          label: 'nullstring',
-          initialValue: null,
-        ),
+        widthControl,
+        heightControl,
         colorControl,
         // offsetControl,
         // boolControl,
@@ -124,6 +117,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           color: colorControl.value,
           controller: textEditingControl.controller,
           offset: offsetControl.value ?? Offset.zero,
+          width: widthControl.value,
+          height: heightControl.value,
         );
       },
     );
