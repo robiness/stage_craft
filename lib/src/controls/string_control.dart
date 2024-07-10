@@ -26,12 +26,6 @@ class StringControlNullable extends ValueControl<String?> {
   late final TextEditingController _controller = TextEditingController(text: value);
 
   @override
-  void onChange() {
-    super.onChange();
-    _controller.text = value ?? '';
-  }
-
-  @override
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,

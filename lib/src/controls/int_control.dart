@@ -29,14 +29,14 @@ class IntControlNullable extends ValueControl<int?> {
     required super.initialValue,
   });
 
-  final controller = TextEditingController();
+  late final _controller = TextEditingController(text: value?.toString() ?? '');
 
   @override
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
       child: TextField(
-        controller: controller,
+        controller: _controller,
         onChanged: (String value) {
           this.value = int.tryParse(value);
         },

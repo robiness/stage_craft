@@ -29,7 +29,7 @@ class DoubleControlNullable extends ValueControl<double?> {
     required super.initialValue,
   });
 
-  final controller = TextEditingController();
+  late final controller = TextEditingController(text: value?.toString() ?? '');
 
   @override
   Widget builder(BuildContext context) {

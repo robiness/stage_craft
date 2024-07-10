@@ -18,10 +18,7 @@ class MyAwesomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return OutlinedButton(onPressed: () {}, child: Text('jojojjojo'));
     return SizedBox(
-      height: 100,
-      width: 200,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: color,

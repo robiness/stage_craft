@@ -37,8 +37,8 @@ class OffsetNullableControl extends ValueControl<Offset?> {
     required super.label,
   });
 
-  late final TextEditingController _controllerX = TextEditingController();
-  late final TextEditingController _controllerY = TextEditingController();
+  late final TextEditingController _controllerX = TextEditingController(text: value?.dx.toString() ?? '');
+  late final TextEditingController _controllerY = TextEditingController(text: value?.dy.toString() ?? '');
 
   @override
   Widget builder(BuildContext context) {
