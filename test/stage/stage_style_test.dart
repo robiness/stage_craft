@@ -16,7 +16,9 @@ void main() {
     StageStyleData? style;
     await tester.pumpWidgetOnStage(
       widget: TestWidget(
-        builtWithStyle: (s) => style = s,
+        didChangeDependencies: (context) {
+          style = StageStyle.of(context);
+        },
       ),
       brightness: Brightness.dark,
     );
@@ -27,7 +29,9 @@ void main() {
     StageStyleData? style;
     await tester.pumpWidgetOnStage(
       widget: TestWidget(
-        builtWithStyle: (s) => style = s,
+        didChangeDependencies: (context) {
+          style = StageStyle.of(context);
+        },
       ),
       brightness: Brightness.light,
     );
@@ -38,7 +42,9 @@ void main() {
     StageStyleData? style;
     await tester.pumpWidgetOnStage(
       widget: TestWidget(
-        builtWithStyle: (s) => style = s,
+        didChangeDependencies: (context) {
+          style = StageStyle.of(context);
+        },
       ),
       inheritedStyle: testStyle,
       brightness: Brightness.dark,
@@ -50,7 +56,9 @@ void main() {
     StageStyleData? style;
     await tester.pumpWidgetOnStage(
       widget: TestWidget(
-        builtWithStyle: (s) => style = s,
+        didChangeDependencies: (context) {
+          style = StageStyle.of(context);
+        },
       ),
       parameterStyle: testStyle,
       brightness: Brightness.dark,
@@ -67,25 +75,3 @@ StageStyleData testStyle = StageStyleData(
   onSurface: Colors.orange,
   ballSize: 100,
 );
-
-class TestWidget extends StatefulWidget {
-  const TestWidget({super.key, required this.builtWithStyle});
-
-  final void Function(StageStyleData style) builtWithStyle;
-
-  @override
-  State<TestWidget> createState() => _TestWidgetState();
-}
-
-class _TestWidgetState extends State<TestWidget> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    widget.builtWithStyle(StageStyle.of(context));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}

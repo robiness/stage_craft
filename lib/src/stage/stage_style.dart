@@ -82,7 +82,7 @@ class StageStyleData {
 
 // InheritedWidget to access the StageStyle
 class StageStyle extends InheritedWidget {
-  final StageStyleData data;
+  final StageStyleData? data;
 
   const StageStyle({
     required this.data,

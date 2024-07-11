@@ -10,10 +10,10 @@ class StageBuilder extends StatefulWidget {
   const StageBuilder({
     super.key,
     required this.builder,
-    this.controls = const [],
+    List<ValueControl>? controls,
     this.style,
     this.forceSize = true,
-  });
+  }) : controls = controls ?? const [];
 
   final WidgetBuilder builder;
   final List<ValueControl> controls;
@@ -214,7 +214,12 @@ class _StageBuilderState extends State<StageBuilder> {
                                     child: SizedBox(
                                       height: _settings.forceSize ? _rect!.height : null,
                                       width: _settings.forceSize ? _rect!.width : null,
-                                      child: widget.builder(context),
+                                      child: ListenableBuilder(
+                                        listenable: Listenable.merge(widget.controls),
+                                        builder: (context, _) {
+                                          return widget.builder(context);
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
