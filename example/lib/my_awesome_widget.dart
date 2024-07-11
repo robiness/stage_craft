@@ -28,7 +28,7 @@ class MyAwesomeWidget extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(8),
           boxShadow: const [
             BoxShadow(
               blurRadius: 4,
@@ -40,13 +40,20 @@ class MyAwesomeWidget extends StatelessWidget {
           offset: offset,
           child: Column(
             children: [
-              if (label != null) Text(label!),
-              TextField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter a value',
+              if (label != null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(label!),
                 ),
-                controller: controller,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter a value',
+                  ),
+                  controller: controller,
+                ),
               ),
               // Text(label ?? 'No label'),
             ],

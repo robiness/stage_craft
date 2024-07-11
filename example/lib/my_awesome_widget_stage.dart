@@ -62,7 +62,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: null,
   );
 
-  final widthControl = DoubleControl(label: 'width', initialValue: 200);
+  final widthControl = DoubleControl(label: 'width', initialValue: 400);
   final heightControl = DoubleControl(label: 'height', initialValue: 100);
 
   final colorControl = ColorControl(

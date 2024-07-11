@@ -208,7 +208,7 @@ class _StageBuilderState extends State<StageBuilder> {
                           InteractiveViewer(
                             transformationController: _transformationController,
                             minScale: 0.1,
-                            maxScale: 10,
+                            maxScale: 256,
                             child: Stack(
                               children: [
                                 // The widget on stage
