@@ -45,6 +45,14 @@ class _StageBuilderState extends State<StageBuilder> {
 
   double get currentScale => _transformationController.value.getMaxScaleOnAxis();
 
+  final hotReloadListener = ValueNotifier<Key>(UniqueKey());
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    hotReloadListener.value = UniqueKey();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -215,7 +223,7 @@ class _StageBuilderState extends State<StageBuilder> {
                                       height: _settings.forceSize ? _rect!.height : null,
                                       width: _settings.forceSize ? _rect!.width : null,
                                       child: ListenableBuilder(
-                                        listenable: Listenable.merge(widget.controls),
+                                        listenable: Listenable.merge([...widget.controls, hotReloadListener]),
                                         builder: (context, _) {
                                           return widget.builder(context);
                                         },
