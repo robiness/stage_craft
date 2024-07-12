@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 
+/// A abstract representation of a value to control the widget on stage.
+/// The task is to provide a way for the user to change the value to then be used by the widget on stage.
+///
+/// Concrete implementations are for example [IntControl], [DoubleControl], [StringControl], [BoolControl].
+/// You can always create your own implementation by extending this class and use it on the stage.
 abstract class ValueControl<T> extends ValueNotifier<T> {
+  /// Creates a new [ValueControl] with the given initial value.
   ValueControl({
     required this.label,
     required T initialValue,
   })  : _previousValue = initialValue,
         super(initialValue);
 
+  /// The label to display in the control bar.
   final String label;
 
+  /// The widget to display in the control bar to modify the value.
   Widget builder(BuildContext context);
 
   T _previousValue;
 
+  /// Whether the value can be set to `null`.
   bool get isNullable => null is T;
 
   @override
@@ -24,6 +33,7 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
     notifyListeners();
   }
 
+  /// Toggles the value between `null` and the previous value.
   void toggleNull() {
     if (!isNullable) {
       return;
@@ -37,14 +47,20 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   }
 }
 
+/// A default implementation of a control bar row.
+/// It displays the label, a `null` button if the value is nullable and the child widget to modify the value.
 class DefaultControlBarRow extends StatelessWidget {
+  /// Creates a new [DefaultControlBarRow] with the given control and child.
   const DefaultControlBarRow({
     super.key,
     required this.control,
     required this.child,
   });
 
+  /// The control to display in the control bar.
   final ValueControl control;
+
+  /// The widget to display in the control bar to modify the value.
   final Widget child;
 
   @override
@@ -83,12 +99,15 @@ class DefaultControlBarRow extends StatelessWidget {
   }
 }
 
+/// A button to toggle the value between `null` and the previous value.
 class NullButton extends StatelessWidget {
+  /// Creates a new [NullButton] with the given control.
   const NullButton({
     super.key,
     required this.control,
   });
 
+  /// The control to toggle the value.
   final ValueControl control;
 
   @override

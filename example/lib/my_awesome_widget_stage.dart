@@ -43,7 +43,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   late final GenericControlNullable genericControl = GenericControlNullable<MyEnum>(
     label: 'Generic',
     initialValue: MyEnum.one,
-    values: MyEnum.values
+    options: MyEnum.values
         .map(
           (e) => DropdownMenuItem<MyEnum>(
             value: e,

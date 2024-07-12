@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
+/// A control to modify an offset parameter of the widget on stage.
 class OffsetControl extends ValueControl<Offset> {
+  /// Creates an offset control.
   OffsetControl({
     required super.initialValue,
     required super.label,
@@ -31,7 +33,9 @@ class OffsetControl extends ValueControl<Offset> {
   }
 }
 
+/// A control to modify a nullable offset parameter of the widget on stage.
 class OffsetControlNullable extends ValueControl<Offset?> {
+  /// Creates an offset control.
   OffsetControlNullable({
     required super.initialValue,
     required super.label,

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
+/// A control to modify a double parameter of the widget on stage.
 class DoubleControl extends ValueControl<double> {
+  /// Creates a double control.
   DoubleControl({
     required super.label,
     required super.initialValue,
   });
 
+  /// The controller for the text field.
   late final controller = TextEditingController(text: value.toString());
 
   @override
@@ -23,12 +26,15 @@ class DoubleControl extends ValueControl<double> {
   }
 }
 
+/// A control to modify a nullable double parameter of the widget on stage.
 class DoubleControlNullable extends ValueControl<double?> {
+  /// Creates a nullable double control.
   DoubleControlNullable({
     required super.label,
     required super.initialValue,
   });
 
+  /// The controller for the text field.
   late final controller = TextEditingController(text: value?.toString() ?? '');
 
   @override

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
+/// A control to modify a boolean parameter of the widget on stage.
 class BoolControl extends ValueControl<bool> {
+  /// Creates a new boolean control.
   BoolControl({
     required super.initialValue,
     required super.label,
@@ -21,7 +23,9 @@ class BoolControl extends ValueControl<bool> {
   }
 }
 
+/// A control to modify a nullable boolean parameter of the widget on stage.
 class BoolControlNullable extends ValueControl<bool?> {
+  /// Creates a new nullable boolean control.
   BoolControlNullable({
     required super.initialValue,
     required super.label,

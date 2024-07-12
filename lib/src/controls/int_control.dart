@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 
+/// A control to modify a int parameter of the widget on stage.
 class IntControl extends ValueControl<int> {
+  /// Creates a new int control.
   IntControl({
     required super.label,
     required super.initialValue,
   });
 
+  /// The controller for the text field.
   late final controller = TextEditingController(text: value.toString());
 
   @override
@@ -23,20 +26,23 @@ class IntControl extends ValueControl<int> {
   }
 }
 
+/// A control to modify a nullable int parameter of the widget on stage.
 class IntControlNullable extends ValueControl<int?> {
+  /// Creates a new nullable int control.
   IntControlNullable({
     required super.label,
     required super.initialValue,
   });
 
-  late final _controller = TextEditingController(text: value?.toString() ?? '');
+  /// The controller for the text field.
+  late final controller = TextEditingController(text: value?.toString() ?? '');
 
   @override
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
       child: TextField(
-        controller: _controller,
+        controller: controller,
         onChanged: (String value) {
           this.value = int.tryParse(value);
         },

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 
+/// A control to modify a color parameter of the widget on stage.
 class ColorControl extends ValueControl<Color> {
+  /// Creates a color control.
   ColorControl({
     required super.label,
     required super.initialValue,
@@ -34,7 +36,7 @@ class ColorControl extends ValueControl<Color> {
               ),
               // The chessboard pattern
               child: const CustomPaint(
-                foregroundPainter: ChessBoardPainter(
+                foregroundPainter: _ChessBoardPainter(
                   boxSize: 8,
                   // The color of the chessboard pattern
                   color: Colors.grey,
@@ -52,7 +54,9 @@ class ColorControl extends ValueControl<Color> {
   }
 }
 
+/// A control to modify a nullable color parameter of the widget on stage.
 class ColorControlNullable extends ValueControl<Color?> {
+  /// Creates a nullable color control.
   ColorControlNullable({
     required super.label,
     required super.initialValue,
@@ -84,7 +88,7 @@ class ColorControlNullable extends ValueControl<Color?> {
               ),
               // The chessboard pattern
               child: const CustomPaint(
-                foregroundPainter: ChessBoardPainter(
+                foregroundPainter: _ChessBoardPainter(
                   boxSize: 8,
                   // The color of the chessboard pattern
                   color: Colors.grey,
@@ -102,8 +106,8 @@ class ColorControlNullable extends ValueControl<Color?> {
   }
 }
 
-class ChessBoardPainter extends CustomPainter {
-  const ChessBoardPainter({
+class _ChessBoardPainter extends CustomPainter {
+  const _ChessBoardPainter({
     required this.color,
     this.boxSize = 20,
   });
