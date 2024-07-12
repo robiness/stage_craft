@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:stage_craft/src/stage/stage.dart';
 
+/// A widget that displays the constraints handles for a [StageRect].
+/// Used to modify the stages size and position.
 class StageConstraintsHandles extends StatefulWidget {
+  /// Creates a new [StageConstraintsHandles] widget.
   const StageConstraintsHandles({
     super.key,
     required this.rect,

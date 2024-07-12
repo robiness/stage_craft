@@ -447,7 +447,7 @@ class StageSettings {
   StageSettings({
     this.showRuler = true,
     this.forceSize = true,
-    this.showCrossHair = true,
+    this.showCrossHair = false,
   });
 
   final bool showRuler;

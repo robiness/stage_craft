@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Draws a grid on top of the child widget.
 class MeasureGrid extends StatelessWidget {
+  /// Creates a new [MeasureGrid].
   const MeasureGrid({
     super.key,
     required this.size,
@@ -8,8 +10,13 @@ class MeasureGrid extends StatelessWidget {
     this.showGrid,
   });
 
+  /// The size of the grid.
   final double size;
+
+  /// Whether to show the grid or not.
   final bool? showGrid;
+
+  /// The child widget.
   final Widget child;
 
   @override

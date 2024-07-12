@@ -11,6 +11,7 @@ class ColorControl extends ValueControl<Color> {
     required this.colorSamples,
   });
 
+  /// The color samples to be displayed in the color picker.
   final List<ColorSample> colorSamples;
 
   @override
@@ -63,6 +64,7 @@ class ColorControlNullable extends ValueControl<Color?> {
     required this.colorSamples,
   });
 
+  /// The color samples to be displayed in the color picker.
   final List<ColorSample> colorSamples;
 
   @override
