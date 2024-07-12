@@ -105,7 +105,7 @@ class _StageBuilderState extends State<StageBuilder> {
       final positionX = (canvasConstraints.maxWidth - clampedSize.width) / 2;
       final positionY = (canvasConstraints.maxHeight - clampedSize.height) / 2;
       setState(() {
-        _rect = Rect.fromLTWH(positionX, positionY - 50, clampedSize.width, clampedSize.height);
+        _rect = Rect.fromLTWH(positionX, positionY - 50, clampedSize.width, clampedSize.height).toRounded();
       });
     });
   }
@@ -170,7 +170,8 @@ class _StageBuilderState extends State<StageBuilder> {
       left = left.clamp(sizeControlsArea, constraints.maxWidth - width - sizeControlsArea);
       top = top.clamp(sizeControlsArea, constraints.maxHeight - height - sizeControlsArea);
 
-      _rect = Rect.fromLTWH(left, top, width, height);
+      // We want to set the stage to full pixels so that we can measure it accurately
+      _rect = Rect.fromLTWH(left, top, width, height).toRounded();
       // Update drag start position
       _dragStart = details.globalPosition;
     });
@@ -178,6 +179,7 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    print(_rect);
     return Theme(
       data: _theme,
       child: StageStyle(
@@ -375,13 +377,13 @@ class CrossHairPainter extends CustomPainter {
         ..color = Colors.black.withOpacity(1)
         ..strokeWidth = 1;
       canvas.drawLine(
-        Offset(mousePosition!.dx, 0).toRounded(),
-        Offset(mousePosition!.dx, size.height).toRounded(),
+        Offset(mousePosition!.dx, 0).toRounded() + const Offset(0.5, 0.5),
+        Offset(mousePosition!.dx, size.height).toRounded() + const Offset(0.5, 0.5),
         paint,
       );
       canvas.drawLine(
-        Offset(0, mousePosition!.dy).toRounded(),
-        Offset(size.width, mousePosition!.dy).toRounded(),
+        Offset(0, mousePosition!.dy).toRounded() + const Offset(0.5, 0.5),
+        Offset(size.width, mousePosition!.dy).toRounded() + const Offset(0.5, 0.5),
         paint,
       );
     }
@@ -496,8 +498,19 @@ extension StageStyleExtension on BuildContext {
   StageStyleData get stageStyle => StageStyle.of(this);
 }
 
-extension PixelExtension on Offset {
+extension OffsetPixelExtension on Offset {
   Offset toRounded() {
     return Offset(dx.roundToDouble(), dy.roundToDouble());
+  }
+}
+
+extension RectPixelExtension on Rect {
+  Rect toRounded() {
+    return Rect.fromLTWH(
+      left.roundToDouble(),
+      top.roundToDouble(),
+      width.roundToDouble(),
+      height.roundToDouble(),
+    );
   }
 }
