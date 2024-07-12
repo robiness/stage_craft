@@ -91,6 +91,19 @@ class SettingsBar extends StatelessWidget {
               );
             },
           ),
+          IconButton(
+            onPressed: () {
+              onSettingsChanged(
+                settings.copyWith(
+                  showCrossHair: !settings.showCrossHair,
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.center_focus_strong_outlined,
+              color: settings.showCrossHair ? Colors.blue : Colors.grey,
+            ),
+          ),
         ],
       ),
     );

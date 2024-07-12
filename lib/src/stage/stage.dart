@@ -267,6 +267,10 @@ class _StageBuilderState extends State<StageBuilder> {
                                   currentScale: currentScale,
                                   onPanStart: _onDragStart,
                                 ),
+                                if (_settings.showCrossHair)
+                                  const Positioned.fill(
+                                    child: CrossHair(),
+                                  ),
                               ],
                             ),
                           ),
@@ -327,6 +331,68 @@ class _StageBuilderState extends State<StageBuilder> {
   }
 }
 
+class CrossHair extends StatefulWidget {
+  const CrossHair({
+    super.key,
+  });
+
+  @override
+  State<CrossHair> createState() => _CrossHairState();
+}
+
+class _CrossHairState extends State<CrossHair> {
+  Offset? mousePosition;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onHover: (event) {
+        setState(() {
+          mousePosition = event.localPosition;
+        });
+      },
+      child: IgnorePointer(
+        child: CustomPaint(
+          painter: CrossHairPainter(
+            mousePosition: mousePosition,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A Painter which draws a crosshair at the mouse position.
+class CrossHairPainter extends CustomPainter {
+  CrossHairPainter({super.repaint, required this.mousePosition});
+
+  final Offset? mousePosition;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (mousePosition != null) {
+      final paint = Paint()
+        ..color = Colors.black.withOpacity(1)
+        ..strokeWidth = 1;
+      canvas.drawLine(
+        Offset(mousePosition!.dx, 0).toRounded(),
+        Offset(mousePosition!.dx, size.height).toRounded(),
+        paint,
+      );
+      canvas.drawLine(
+        Offset(0, mousePosition!.dy).toRounded(),
+        Offset(size.width, mousePosition!.dy).toRounded(),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
 /// A control bar that displays a list of controls to manipulate the stage.
 class ControlBar extends StatefulWidget {
   const ControlBar({
@@ -379,19 +445,22 @@ class StageSettings {
   StageSettings({
     this.showRuler = true,
     this.forceSize = true,
+    this.showCrossHair = true,
   });
 
   final bool showRuler;
   final bool forceSize;
+  final bool showCrossHair;
 
   StageSettings copyWith({
     bool? showRuler,
-    Color? stageColor,
     bool? forceSize,
+    bool? showCrossHair,
   }) {
     return StageSettings(
       showRuler: showRuler ?? this.showRuler,
       forceSize: forceSize ?? this.forceSize,
+      showCrossHair: showCrossHair ?? this.showCrossHair,
     );
   }
 }
@@ -425,4 +494,10 @@ class StageRect extends StatelessWidget {
 
 extension StageStyleExtension on BuildContext {
   StageStyleData get stageStyle => StageStyle.of(this);
+}
+
+extension PixelExtension on Offset {
+  Offset toRounded() {
+    return Offset(dx.roundToDouble(), dy.roundToDouble());
+  }
 }
