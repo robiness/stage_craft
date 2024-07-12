@@ -31,8 +31,8 @@ class OffsetControl extends ValueControl<Offset> {
   }
 }
 
-class OffsetNullableControl extends ValueControl<Offset?> {
-  OffsetNullableControl({
+class OffsetControlNullable extends ValueControl<Offset?> {
+  OffsetControlNullable({
     required super.initialValue,
     required super.label,
   });

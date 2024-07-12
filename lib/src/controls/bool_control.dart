@@ -21,8 +21,8 @@ class BoolControl extends ValueControl<bool> {
   }
 }
 
-class BoolNullableControl extends ValueControl<bool?> {
-  BoolNullableControl({
+class BoolControlNullable extends ValueControl<bool?> {
+  BoolControlNullable({
     required super.initialValue,
     required super.label,
   });

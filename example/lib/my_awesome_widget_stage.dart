@@ -14,11 +14,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     label: 'bool',
     initialValue: false,
   );
-  final textEditingControl = TextEditingControl(
-    label: 'Awesome',
-    initialValue: 'Test',
-  );
-  final boolControlNullable = BoolNullableControl(
+  final boolControlNullable = BoolControlNullable(
     label: 'bool Nullable',
     initialValue: null,
   );
@@ -27,7 +23,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: 'Hello',
   );
 
-  final offsetControl = OffsetNullableControl(
+  final offsetControl = OffsetControlNullable(
     label: 'Offset',
     initialValue: Offset.zero,
   );
@@ -82,7 +78,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     stringControl.dispose();
     colorControl.dispose();
     offsetControl.dispose();
-    textEditingControl.dispose();
     genericControl.dispose();
   }
 
@@ -116,7 +111,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         return MyAwesomeWidget(
           label: stringControl.value,
           color: colorControl.value,
-          controller: textEditingControl.controller,
           offset: offsetControl.value ?? Offset.zero,
           width: widthControl.value,
           height: heightControl.value,
