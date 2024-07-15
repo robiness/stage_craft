@@ -486,6 +486,8 @@ class ControlBar extends StatefulWidget {
 }
 
 class _ControlBarState extends State<ControlBar> {
+  bool _expanded = true;
+
   @override
   void initState() {
     super.initState();
@@ -508,17 +510,44 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      reverseDuration: const Duration(milliseconds: 400),
+      alignment: Alignment.centerLeft,
       child: SizedBox(
-        width: 200,
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: ListView(
-            children: widget.controls.map((control) {
-              return control.builder(context);
-            }).toList(),
-          ),
+        width: _expanded ? 250 : 48,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(
+                  _expanded ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _expanded = !_expanded;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: ColoredBox(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ListView(
+                    children: widget.controls.map((control) {
+                      return control.builder(context);
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
