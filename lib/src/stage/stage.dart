@@ -181,12 +181,12 @@ class _StageCanvasState extends State<StageCanvas> {
 
   double get currentScale => _transformationController.value.getMaxScaleOnAxis();
 
-  final hotReloadListener = ValueNotifier<Key>(UniqueKey());
+  final _hotReloadListener = ValueNotifier<Key>(UniqueKey());
 
   @override
   void reassemble() {
     super.reassemble();
-    hotReloadListener.value = UniqueKey();
+    _hotReloadListener.value = UniqueKey();
   }
 
   @override
@@ -218,7 +218,12 @@ class _StageCanvasState extends State<StageCanvas> {
     _dragStart = details.globalPosition;
   }
 
-  void _handleDrag(DragUpdateDetails details, BoxConstraints constraints, Alignment alignment, StageStyleData style) {
+  void _handleDrag(
+    DragUpdateDetails details,
+    BoxConstraints constraints,
+    Alignment alignment,
+    StageStyleData style,
+  ) {
     late double width = _rect!.width;
     late double height = _rect!.height;
     double top = _rect!.top;
@@ -274,8 +279,7 @@ class _StageCanvasState extends State<StageCanvas> {
       left = left.clamp(sizeControlsArea, constraints.maxWidth - width - sizeControlsArea);
       top = top.clamp(sizeControlsArea, constraints.maxHeight - height - sizeControlsArea);
 
-      // We want to set the stage to full pixels so that we can measure it accurately
-      _rect = Rect.fromLTWH(left, top, width, height).toRounded();
+      _rect = Rect.fromLTWH(left, top, width, height);
       // Update drag start position
       _dragStart = details.globalPosition;
     });
@@ -321,7 +325,7 @@ class _StageCanvasState extends State<StageCanvas> {
                         height: widget.settings.forceSize ? _rect!.height : null,
                         width: widget.settings.forceSize ? _rect!.width : null,
                         child: ListenableBuilder(
-                          listenable: Listenable.merge([...widget.controls, hotReloadListener]),
+                          listenable: Listenable.merge([...widget.controls, _hotReloadListener]),
                           builder: (context, _) {
                             return widget.widgetBuilder(context);
                           },
