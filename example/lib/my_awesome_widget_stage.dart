@@ -61,9 +61,12 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     super.dispose();
   }
 
+  late final style = StageStyleData.fromMaterialTheme(Theme.of(context)).copyWith(canvasColor: Colors.white60);
+
   @override
   Widget build(BuildContext context) {
     return StageBuilder(
+      style: style,
       controls: [
         width,
         height,

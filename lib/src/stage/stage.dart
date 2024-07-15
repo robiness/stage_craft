@@ -114,10 +114,19 @@ class _StageBuilderState extends State<StageBuilder> {
                           },
                           onStyleToggled: () {
                             setState(() {
+                              final overriddenStyle = widget.style ?? StageStyle.maybeOf(context);
                               if (_theme.brightness == Brightness.light) {
                                 _theme = ThemeData.dark();
+                                if (overriddenStyle?.brightness == Brightness.dark) {
+                                  _style = overriddenStyle!;
+                                  return;
+                                }
                               } else {
                                 _theme = ThemeData.light();
+                                if (overriddenStyle?.brightness == Brightness.light) {
+                                  _style = overriddenStyle!;
+                                  return;
+                                }
                               }
                               _style = StageStyleData.fromMaterialTheme(_theme);
                             });
