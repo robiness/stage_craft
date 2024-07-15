@@ -6,7 +6,11 @@ import 'package:stage_craft/src/stage/settings_bar.dart';
 import 'package:stage_craft/src/stage/stage_constraints_handles.dart';
 import 'package:stage_craft/src/stage/stage_style.dart';
 
+/// The heart of StageCraft.
+/// Puts it's builder on a stage where it can be manipulated.
+/// It contains of a Canvas where the Stage is located and a ControlBar where the controls are located to manipulate the stage.
 class StageBuilder extends StatefulWidget {
+  /// Creates a [StageBuilder].
   const StageBuilder({
     super.key,
     required this.builder,
@@ -15,9 +19,13 @@ class StageBuilder extends StatefulWidget {
     this.forceSize = true,
   }) : controls = controls ?? const [];
 
+  /// The builder for the widget on stage.
   final WidgetBuilder builder;
+
+  /// The controls to manipulate the widget on stage.
   final List<ValueControl> controls;
 
+  /// The style of the stage.
   final StageStyleData? style;
 
   /// If true, the size of the stage will be forced to the size of the child.
@@ -28,30 +36,9 @@ class StageBuilder extends StatefulWidget {
 }
 
 class _StageBuilderState extends State<StageBuilder> {
-  Rect? _rect;
-
-  late Offset _dragStart;
-
-  late StageSettings _settings = StageSettings(forceSize: widget.forceSize);
-
   late ThemeData _theme;
   late StageStyleData _style;
-
-  late BoxConstraints canvasConstraints;
-
-  final _childKey = GlobalKey();
-
-  final _transformationController = TransformationController();
-
-  double get currentScale => _transformationController.value.getMaxScaleOnAxis();
-
-  final hotReloadListener = ValueNotifier<Key>(UniqueKey());
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    hotReloadListener.value = UniqueKey();
-  }
+  late StageSettings _settings = StageSettings(forceSize: widget.forceSize);
 
   @override
   void initState() {
@@ -59,10 +46,6 @@ class _StageBuilderState extends State<StageBuilder> {
     if (widget.style != null) {
       _style = widget.style!;
     }
-    _sizeAndCenterStage();
-    _transformationController.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -92,6 +75,127 @@ class _StageBuilderState extends State<StageBuilder> {
         _style = StageStyleData.fromMaterialTheme(_theme);
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: _theme,
+      child: StageStyle(
+        data: _style,
+        child: ColoredBox(
+          color: _style.canvasColor,
+          child: Row(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    StageCanvas(
+                      settings: _settings,
+                      controls: widget.controls,
+                      widgetBuilder: widget.builder,
+                      style: _style,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SettingsBar(
+                          settings: _settings,
+                          onSettingsChanged: (settings) {
+                            setState(() {
+                              _settings = settings;
+                            });
+                          },
+                          onSurfaceColorChanged: (color) {
+                            setState(() {
+                              _style = _style.copyWith(canvasColor: color);
+                            });
+                          },
+                          onStyleToggled: () {
+                            setState(() {
+                              if (_theme.brightness == Brightness.light) {
+                                _theme = ThemeData.dark();
+                              } else {
+                                _theme = ThemeData.light();
+                              }
+                              _style = StageStyleData.fromMaterialTheme(_theme);
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (widget.controls.isNotEmpty)
+                ControlBar(
+                  controls: widget.controls,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The canvas where the stage is placed on.
+/// It handles the position and the size of the stage.
+class StageCanvas extends StatefulWidget {
+  /// Creates a [StageCanvas].
+  const StageCanvas({
+    super.key,
+    required this.settings,
+    required this.widgetBuilder,
+    required this.controls,
+    required this.style,
+  });
+
+  /// The settings for the stage which can be manipulated by the user.
+  final StageSettings settings;
+
+  /// The builder for the widget on stage.
+  final WidgetBuilder widgetBuilder;
+
+  /// The controls to manipulate the widget on stage.
+  final List<ValueControl> controls;
+
+  /// The style of the stage.
+  final StageStyleData style;
+
+  @override
+  State<StageCanvas> createState() => _StageCanvasState();
+}
+
+class _StageCanvasState extends State<StageCanvas> {
+  Rect? _rect;
+
+  late Offset _dragStart;
+
+  late BoxConstraints canvasConstraints;
+
+  final _childKey = GlobalKey();
+
+  final _transformationController = TransformationController();
+
+  double get currentScale => _transformationController.value.getMaxScaleOnAxis();
+
+  final hotReloadListener = ValueNotifier<Key>(UniqueKey());
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    hotReloadListener.value = UniqueKey();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _sizeAndCenterStage();
+    _transformationController.addListener(() {
+      setState(() {});
+    });
   }
 
   void _sizeAndCenterStage() {
@@ -179,161 +283,109 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    print(_rect);
-    return Theme(
-      data: _theme,
-      child: StageStyle(
-        data: _style,
-        child: ColoredBox(
-          color: _style.canvasColor,
-          child: MeasureGrid(
-            size: 100 * currentScale,
-            showGrid: !_settings.showRuler,
-            child: Row(
-              children: [
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      canvasConstraints = constraints;
-                      if (_rect == null) {
-                        return Offstage(
-                          child: Center(
-                            child: KeyedSubtree(
-                              key: _childKey,
-                              child: widget.builder(context),
-                            ),
-                          ),
-                        );
-                      }
-                      return Stack(
-                        children: [
-                          InteractiveViewer(
-                            transformationController: _transformationController,
-                            minScale: 0.1,
-                            maxScale: 256,
-                            child: Stack(
-                              children: [
-                                // The widget on stage
-                                StageRect(
-                                  rect: _rect!,
-                                  child: GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onPanDown: _onDragStart,
-                                    onPanUpdate: (details) =>
-                                        _handleDrag(details, constraints, Alignment.center, _style),
-                                    child: SizedBox(
-                                      height: _settings.forceSize ? _rect!.height : null,
-                                      width: _settings.forceSize ? _rect!.width : null,
-                                      child: ListenableBuilder(
-                                        listenable: Listenable.merge([...widget.controls, hotReloadListener]),
-                                        builder: (context, _) {
-                                          return widget.builder(context);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // The border of the stage
-                                StageRect(
-                                  rect: _rect!,
-                                  child: GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onPanDown: _onDragStart,
-                                    onPanUpdate: (details) =>
-                                        _handleDrag(details, constraints, Alignment.center, _style),
-                                    child: IgnorePointer(
-                                      child: _settings.showRuler
-                                          ? DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: _theme.colorScheme.onSurface.withOpacity(0.4),
-                                                  strokeAlign: BorderSide.strokeAlignOutside,
-                                                  width: 1 * (1 / currentScale),
-                                                ),
-                                              ),
-                                              child: const SizedBox.expand(),
-                                            )
-                                          : const SizedBox.expand(),
-                                    ),
-                                  ),
-                                ),
-                                if (_settings.showRuler)
-                                  Rulers(
-                                    rect: _rect!,
-                                  ),
-                                StageConstraintsHandles(
-                                  rect: _rect!,
-                                  onPanUpdate: (details, alignment) {
-                                    _handleDrag(details, constraints, alignment, _style);
-                                  },
-                                  currentScale: currentScale,
-                                  onPanStart: _onDragStart,
-                                ),
-                                if (_settings.showCrossHair)
-                                  const Positioned.fill(
-                                    child: CrossHair(),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SettingsBar(
-                                settings: _settings,
-                                onSettingsChanged: (settings) {
-                                  setState(() {
-                                    _settings = settings;
-                                  });
-                                },
-                                onSurfaceColorChanged: (color) {
-                                  setState(() {
-                                    _style = _style.copyWith(canvasColor: color);
-                                  });
-                                },
-                                onStyleToggled: () {
-                                  setState(() {
-                                    if (_theme.brightness == Brightness.light) {
-                                      _theme = ThemeData.dark();
-                                    } else {
-                                      _theme = ThemeData.light();
-                                    }
-                                    _style = StageStyleData.fromMaterialTheme(_theme);
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                '${currentScale.toStringAsFixed(2)}x',
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-                if (widget.controls.isNotEmpty)
-                  ControlBar(
-                    controls: widget.controls,
-                  ),
-              ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        canvasConstraints = constraints;
+        if (_rect == null) {
+          return Offstage(
+            child: Center(
+              child: KeyedSubtree(
+                key: _childKey,
+                child: widget.widgetBuilder(context),
+              ),
             ),
-          ),
-        ),
-      ),
+          );
+        }
+        return Stack(
+          children: [
+            InteractiveViewer(
+              transformationController: _transformationController,
+              minScale: 0.1,
+              maxScale: 256,
+              child: Stack(
+                children: [
+                  // The widget on stage
+                  StageRect(
+                    rect: _rect!,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onPanDown: _onDragStart,
+                      onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
+                      child: SizedBox(
+                        height: widget.settings.forceSize ? _rect!.height : null,
+                        width: widget.settings.forceSize ? _rect!.width : null,
+                        child: ListenableBuilder(
+                          listenable: Listenable.merge([...widget.controls, hotReloadListener]),
+                          builder: (context, _) {
+                            return widget.widgetBuilder(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  // The border of the stage
+                  StageRect(
+                    rect: _rect!,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onPanDown: _onDragStart,
+                      onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
+                      child: IgnorePointer(
+                        child: widget.settings.showRuler
+                            ? DecoratedBox(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: widget.style.borderColor,
+                                    strokeAlign: BorderSide.strokeAlignOutside,
+                                    width: 1 * (1 / currentScale),
+                                  ),
+                                ),
+                                child: const SizedBox.expand(),
+                              )
+                            : const SizedBox.expand(),
+                      ),
+                    ),
+                  ),
+                  if (widget.settings.showRuler)
+                    Rulers(
+                      rect: _rect!,
+                    ),
+                  StageConstraintsHandles(
+                    rect: _rect!,
+                    onPanUpdate: (details, alignment) {
+                      _handleDrag(details, constraints, alignment, widget.style);
+                    },
+                    currentScale: currentScale,
+                    onPanStart: _onDragStart,
+                  ),
+                  if (widget.settings.showCrossHair)
+                    const Positioned.fill(
+                      child: CrossHair(),
+                    ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  '${currentScale.toStringAsFixed(2)}x',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ),
+            ),
+            if (!widget.settings.showRuler) MeasureGrid(size: 100 * currentScale),
+          ],
+        );
+      },
     );
   }
 }
 
+/// A crosshair that follows the mouse position.
 class CrossHair extends StatefulWidget {
+  /// Creates a [CrossHair].
   const CrossHair({
     super.key,
   });
@@ -366,8 +418,13 @@ class _CrossHairState extends State<CrossHair> {
 
 /// A Painter which draws a crosshair at the mouse position.
 class CrossHairPainter extends CustomPainter {
-  CrossHairPainter({super.repaint, required this.mousePosition});
+  /// Creates a [CrossHairPainter].
+  CrossHairPainter({
+    super.repaint,
+    required this.mousePosition,
+  });
 
+  /// The position of the mouse.
   final Offset? mousePosition;
 
   @override
@@ -397,11 +454,13 @@ class CrossHairPainter extends CustomPainter {
 
 /// A control bar that displays a list of controls to manipulate the stage.
 class ControlBar extends StatefulWidget {
+  /// Creates a [ControlBar].
   const ControlBar({
     super.key,
     required this.controls,
   });
 
+  /// The controls to manipulate the widget on stage.
   final List<ValueControl> controls;
 
   @override
@@ -444,16 +503,23 @@ class _ControlBarState extends State<ControlBar> {
 
 /// Settings for the stage.
 class StageSettings {
+  /// Creates a [StageSettings].
   StageSettings({
     this.showRuler = true,
     this.forceSize = true,
     this.showCrossHair = false,
   });
 
+  /// Whether the rulers should be shown.
   final bool showRuler;
+
+  /// Whether the size of the stage should be forced to the size of the child.
   final bool forceSize;
+
+  /// Whether the crosshair should be shown.
   final bool showCrossHair;
 
+  /// Creates a copy of this [StageSettings] but with the given fields replaced with the new values.
   StageSettings copyWith({
     bool? showRuler,
     bool? forceSize,
@@ -469,13 +535,17 @@ class StageSettings {
 
 /// Draws a rectangle the size of the rect on the stage, which is a stack.
 class StageRect extends StatelessWidget {
+  /// Creates a [StageRect].
   const StageRect({
     super.key,
     required this.rect,
     required this.child,
   });
 
+  /// The size and position of the rectangle.
   final Rect rect;
+
+  /// The child of the rectangle.
   final Widget child;
 
   @override
@@ -494,17 +564,23 @@ class StageRect extends StatelessWidget {
   }
 }
 
+/// A ruler that shows the position of the mouse.
 extension StageStyleExtension on BuildContext {
+  /// The style of the stage.
   StageStyleData get stageStyle => StageStyle.of(this);
 }
 
+/// A ruler that shows the position of the mouse.
 extension OffsetPixelExtension on Offset {
+  /// Rounds the offset to a whole number.
   Offset toRounded() {
     return Offset(dx.roundToDouble(), dy.roundToDouble());
   }
 }
 
+/// A ruler that shows the position of the mouse.
 extension RectPixelExtension on Rect {
+  /// Rounds the rect to a whole number.
   Rect toRounded() {
     return Rect.fromLTWH(
       left.roundToDouble(),

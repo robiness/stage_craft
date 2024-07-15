@@ -3,12 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/stage/stage.dart';
 
+/// A widget that displays rulers around the stage as indicators of the size of the stage.
 class Rulers extends StatelessWidget {
+  /// Creates a widget that displays rulers around the stage as indicators of the size of the stage.
   const Rulers({
     super.key,
     required this.rect,
   });
 
+  /// The rect of the stage.
   final Rect rect;
 
   @override
@@ -39,7 +42,9 @@ class Rulers extends StatelessWidget {
   }
 }
 
+/// A widget that displays a ruler as an indicator of the size of the stage.
 class Ruler extends StatelessWidget {
+  /// Creates a widget that displays a ruler as an indicator of the size of the stage.
   const Ruler({
     super.key,
     required this.length,
@@ -47,8 +52,13 @@ class Ruler extends StatelessWidget {
     required this.direction,
   });
 
+  /// The length of the ruler.
   final double length;
+
+  /// The color of the ruler.
   final Color color;
+
+  /// The direction of the ruler.
   final Axis direction;
 
   @override

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:stage_craft/src/stage/stage.dart';
 
+/// A settings bar that allows the user to toggle and adjust various stage settings.
 class SettingsBar extends StatelessWidget {
+  /// Creates a new settings bar.
   const SettingsBar({
     super.key,
     required this.settings,
@@ -11,9 +13,16 @@ class SettingsBar extends StatelessWidget {
     required this.onSurfaceColorChanged,
   });
 
+  /// The current settings.
   final StageSettings settings;
+
+  /// Called when the settings are changed.
   final void Function(StageSettings settings) onSettingsChanged;
+
+  /// Called when the style is toggled.
   final VoidCallback onStyleToggled;
+
+  /// Called when the surface color is changed.
   final void Function(Color color) onSurfaceColorChanged;
 
   @override

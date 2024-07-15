@@ -13,9 +13,16 @@ class StageConstraintsHandles extends StatefulWidget {
     required this.currentScale,
   });
 
+  /// The rect of the stage to be manipulated.
   final Rect rect;
+
+  /// The callback that is called when the stage is being dragged.
   final void Function(DragUpdateDetails, Alignment alignment) onPanUpdate;
+
+  /// The callback that is called when the stage is being dragged.
   final void Function(DragDownDetails details) onPanStart;
+
+  /// The current scale of the stage.
   final double currentScale;
 
   @override
@@ -89,7 +96,9 @@ class _StageConstraintsHandlesState extends State<StageConstraintsHandles> {
   }
 }
 
+/// A widget that displays a single constraint handle for a [StageRect].
 class StageConstraintHandle extends StatelessWidget {
+  /// Creates a new [StageConstraintHandle] widget.
   const StageConstraintHandle({
     super.key,
     required this.alignment,
@@ -99,10 +108,19 @@ class StageConstraintHandle extends StatelessWidget {
     this.onPanEnd,
   });
 
+  /// The alignment of the handle.
   final Alignment alignment;
+
+  /// The callback that is called when the handle is being dragged.
   final void Function(DragDownDetails)? onPanStart;
+
+  /// The callback that is called when the handle is being dragged.
   final void Function(DragUpdateDetails, Alignment alignment)? onPanUpdate;
+
+  /// The callback that is called when the handle is being dragged.
   final void Function(DragEndDetails)? onPanEnd;
+
+  /// The current scale of the stage.
   final double currentScale;
 
   @override

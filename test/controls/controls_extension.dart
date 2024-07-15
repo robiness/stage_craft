@@ -18,6 +18,7 @@ extension ControlsExtensions on WidgetTester {
           canvasColor: Colors.orange,
           onSurface: Colors.green,
           primaryColor: Colors.pink,
+          borderColor: Colors.red,
         ),
         child: MaterialApp(
           home: Scaffold(

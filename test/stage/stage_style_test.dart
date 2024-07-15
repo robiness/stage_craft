@@ -73,5 +73,6 @@ StageStyleData testStyle = StageStyleData(
   canvasColor: Colors.blue,
   primaryColor: Colors.purple,
   onSurface: Colors.orange,
+  borderColor: Colors.red,
   ballSize: 100,
 );

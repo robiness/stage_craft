@@ -6,29 +6,17 @@ class MeasureGrid extends StatelessWidget {
   const MeasureGrid({
     super.key,
     required this.size,
-    required this.child,
-    this.showGrid,
   });
 
   /// The size of the grid.
   final double size;
 
-  /// Whether to show the grid or not.
-  final bool? showGrid;
-
-  /// The child widget.
-  final Widget child;
-
   @override
   Widget build(BuildContext context) {
-    if (showGrid == false) {
-      return child;
-    }
     return CustomPaint(
       painter: _MeasureGridPainter(
         size: size,
       ),
-      child: child,
     );
   }
 }

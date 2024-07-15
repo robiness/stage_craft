@@ -43,7 +43,10 @@ class MyAwesomeWidget extends StatelessWidget {
               if (label != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(label!),
+                  child: Text(
+                    label!,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
