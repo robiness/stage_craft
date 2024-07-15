@@ -427,6 +427,7 @@ class _CrossHairState extends State<CrossHair> {
         child: CustomPaint(
           painter: CrossHairPainter(
             mousePosition: mousePosition,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
       ),
@@ -440,16 +441,20 @@ class CrossHairPainter extends CustomPainter {
   CrossHairPainter({
     super.repaint,
     required this.mousePosition,
+    required this.color,
   });
 
   /// The position of the mouse.
   final Offset? mousePosition;
 
+  /// The color of the crosshair.
+  final Color color;
+
   @override
   void paint(Canvas canvas, Size size) {
     if (mousePosition != null) {
       final paint = Paint()
-        ..color = Colors.black.withOpacity(1)
+        ..color = color
         ..strokeWidth = 1;
       canvas.drawLine(
         Offset(mousePosition!.dx, 0).toRounded() + const Offset(0.5, 0.5),
