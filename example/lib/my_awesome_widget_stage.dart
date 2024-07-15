@@ -74,16 +74,15 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         backgroundColor,
         options,
         alignment,
-        CustomHeader(
-          childBuilder: (context) => Text(
-            'Chip ',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+        ControlGroup(
+          label: 'Chip',
+          controls: [
+            chipBorderRadius,
+            chipColor,
+            chipWidth,
+            chipShadowBlur,
+          ],
         ),
-        chipBorderRadius,
-        chipColor,
-        chipWidth,
-        chipShadowBlur,
       ],
       builder: (context) {
         return MyAwesomeWidget(

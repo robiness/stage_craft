@@ -508,12 +508,18 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      child: ListView(
-        children: widget.controls.map((control) {
-          return control.builder(context);
-        }).toList(),
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+      child: SizedBox(
+        width: 200,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ListView(
+            children: widget.controls.map((control) {
+              return control.builder(context);
+            }).toList(),
+          ),
+        ),
       ),
     );
   }

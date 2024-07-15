@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
+import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 
 /// A control to modify a int parameter of the widget on stage.
 class IntControl extends ValueControl<int> {
@@ -16,7 +17,7 @@ class IntControl extends ValueControl<int> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: TextField(
+      child: StageCraftTextField(
         controller: controller,
         onChanged: (String value) {
           this.value = int.tryParse(value) ?? 0;
@@ -41,7 +42,7 @@ class IntControlNullable extends ValueControl<int?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: TextField(
+      child: StageCraftTextField(
         controller: controller,
         onChanged: (String value) {
           this.value = int.tryParse(value);

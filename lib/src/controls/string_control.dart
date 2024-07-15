@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
+import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 
 /// A control to modify a string parameter of the widget on stage.
 class StringControl extends ValueControl<String> {
@@ -12,7 +13,7 @@ class StringControl extends ValueControl<String> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: TextField(
+      child: StageCraftTextField(
         controller: _controller,
         onChanged: (newString) {
           value = newString;
@@ -33,7 +34,7 @@ class StringControlNullable extends ValueControl<String?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: TextField(
+      child: StageCraftTextField(
         controller: _controller,
         onChanged: (newString) {
           value = newString;

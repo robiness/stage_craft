@@ -69,29 +69,39 @@ class DefaultControlBarRow extends StatelessWidget {
       listenable: control,
       builder: (context, _) {
         if (control.isNullable) {
-          return Row(
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 4),
               Text(
                 control.label,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(width: 8),
-              NullButton(control: control),
-              const SizedBox(width: 8),
-              Expanded(
-                child: child,
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  NullButton(control: control),
+                  const SizedBox(width: 8),
+                  child,
+                ],
               ),
             ],
           );
         }
-        return Row(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              control.label,
-              style: Theme.of(context).textTheme.bodyMedium,
+            const SizedBox(height: 8),
+            Flexible(
+              child: Text(
+                control.label,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
             const SizedBox(width: 8),
-            Expanded(child: child),
+            child,
           ],
         );
       },
