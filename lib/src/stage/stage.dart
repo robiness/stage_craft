@@ -298,6 +298,12 @@ class _StageCanvasState extends State<StageCanvas> {
         }
         return Stack(
           children: [
+            if (!widget.settings.showRuler)
+              Positioned.fill(
+                child: MeasureGrid(
+                  size: 100 * currentScale,
+                ),
+              ),
             InteractiveViewer(
               transformationController: _transformationController,
               minScale: 0.1,
@@ -375,7 +381,6 @@ class _StageCanvasState extends State<StageCanvas> {
                 ),
               ),
             ),
-            if (!widget.settings.showRuler) MeasureGrid(size: 100 * currentScale),
           ],
         );
       },
