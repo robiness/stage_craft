@@ -540,9 +540,14 @@ class _ControlBarState extends State<ControlBar> {
               ),
             ),
             Container(
-              width: 0.5,
+              width: 2,
               height: double.infinity,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(1),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            ),
+            Container(
+              width: 1,
+              height: double.infinity,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
             ),
             Expanded(
               child: ColoredBox(
