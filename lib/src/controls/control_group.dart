@@ -21,16 +21,24 @@ class ControlGroup implements ValueControl {
       padding: const EdgeInsets.only(top: 16.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(4),
           color: Theme.of(context).canvasColor.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+            width: 2,
+          ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: Theme.of(context).textTheme.titleLarge),
+            Center(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
             ...controls.map((control) {
               return control.builder(context);
             }),

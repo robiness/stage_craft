@@ -6,6 +6,7 @@ class StageStyleData {
   StageStyleData({
     this.ballSize = 10,
     this.dragPadding = 20,
+    this.controlPanelWidth = 300,
     required this.primaryColor,
     required this.canvasColor,
     required this.brightness,
@@ -33,6 +34,9 @@ class StageStyleData {
   /// The size of the ball.
   final double ballSize;
 
+  /// The width of the control panel.
+  final double controlPanelWidth;
+
   /// The minimum distance between the ball and the edge of the stage.
   final double dragPadding;
 
@@ -56,7 +60,8 @@ class StageStyleData {
           dragPadding == other.dragPadding &&
           canvasColor == other.canvasColor &&
           onSurface == other.onSurface &&
-          borderColor == other.borderColor;
+          borderColor == other.borderColor &&
+          controlPanelWidth == other.controlPanelWidth;
 
   @override
   int get hashCode =>
@@ -66,7 +71,8 @@ class StageStyleData {
       dragPadding.hashCode ^
       canvasColor.hashCode ^
       onSurface.hashCode ^
-      borderColor.hashCode;
+      borderColor.hashCode ^
+      controlPanelWidth.hashCode;
 
   /// Creates a copy of this [StageStyleData] but with the given fields replaced with the new values.
   StageStyleData copyWith({
@@ -79,6 +85,7 @@ class StageStyleData {
     Color? stageColor,
     Color? onSurface,
     Color? borderColor,
+    double? controlPanelWidth,
   }) {
     return StageStyleData(
       brightness: brightness ?? this.brightness,
@@ -88,6 +95,7 @@ class StageStyleData {
       canvasColor: canvasColor ?? this.canvasColor,
       onSurface: onSurface ?? this.onSurface,
       borderColor: borderColor ?? this.borderColor,
+      controlPanelWidth: controlPanelWidth ?? this.controlPanelWidth,
     );
   }
 }

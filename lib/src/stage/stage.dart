@@ -516,7 +516,7 @@ class _ControlBarState extends State<ControlBar> {
       reverseDuration: const Duration(milliseconds: 400),
       alignment: Alignment.centerLeft,
       child: SizedBox(
-        width: _expanded ? 250 : 48,
+        width: _expanded ? context.stageStyle.controlPanelWidth : 48,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -533,6 +533,11 @@ class _ControlBarState extends State<ControlBar> {
                   });
                 },
               ),
+            ),
+            Container(
+              width: 0.5,
+              height: double.infinity,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(1),
             ),
             Expanded(
               child: ColoredBox(

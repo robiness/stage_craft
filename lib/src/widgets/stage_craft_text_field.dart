@@ -26,6 +26,7 @@ class StageCraftTextField extends StatelessWidget {
         ),
       ),
       child: TextField(
+        style: Theme.of(context).textTheme.labelLarge,
         controller: controller,
         onChanged: onChanged,
         decoration: const InputDecoration(

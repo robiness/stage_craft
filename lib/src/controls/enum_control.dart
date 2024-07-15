@@ -17,9 +17,16 @@ class EnumControl<T extends Enum> extends ValueControl<T> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+          ),
+        ),
         child: DropdownButton<T>(
+          style: Theme.of(context).textTheme.labelLarge,
           value: value,
           isDense: true,
           onChanged: (T? newValue) {
@@ -31,7 +38,7 @@ class EnumControl<T extends Enum> extends ValueControl<T> {
           items: values.map((value) {
             return DropdownMenuItem<T>(
               value: value,
-              child: Text(value.name),
+              child: Text(value.toString()),
             );
           }).toList(),
         ),
