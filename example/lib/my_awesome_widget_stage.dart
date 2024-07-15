@@ -69,8 +69,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         height,
         label,
         backgroundColor,
-        options,
         alignment,
+        options,
         ControlGroup(
           label: 'Chip',
           controls: [

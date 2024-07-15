@@ -21,12 +21,15 @@ class StageCraftTextField extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+        ),
       ),
       child: TextField(
         controller: controller,
         onChanged: onChanged,
         decoration: const InputDecoration(
-          border: OutlineInputBorder(),
+          border: InputBorder.none,
           contentPadding: EdgeInsets.all(4),
           isCollapsed: true,
         ),

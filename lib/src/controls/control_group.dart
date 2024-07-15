@@ -25,7 +25,7 @@ class ControlGroup implements ValueControl {
           borderRadius: BorderRadius.circular(4),
           color: Theme.of(context).canvasColor.withOpacity(0.4),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

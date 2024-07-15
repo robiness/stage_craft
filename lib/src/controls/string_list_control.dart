@@ -21,7 +21,9 @@ class StringListControl extends ValueControl<List<String>> {
       control: this,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).dividerColor),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+          ),
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.all(4),
