@@ -8,11 +8,11 @@ class ColorControl extends ValueControl<Color> {
   ColorControl({
     required super.label,
     required super.initialValue,
-    required this.colorSamples,
+    this.colorSamples,
   });
 
   /// The color samples to be displayed in the color picker.
-  final List<ColorSample> colorSamples;
+  final List<ColorSample>? colorSamples;
 
   @override
   Widget builder(BuildContext context) {

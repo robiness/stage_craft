@@ -4,21 +4,33 @@ class MyAwesomeWidget extends StatelessWidget {
   const MyAwesomeWidget({
     super.key,
     this.label,
-    this.color,
-    this.controller,
-    required this.offset,
-    this.borderRadius,
+    this.backgroundColor,
     this.width,
     this.height,
-  });
+    List<String>? options,
+    this.chipShadowOffset,
+    this.chipBorderRadius,
+    double? chipWidth,
+    Color? chipColor,
+    required this.alignment,
+    required this.chipShadowBlur,
+  })  : options = options ?? const [],
+        chipWidth = chipWidth ?? 100,
+        chipColor = chipColor ?? Colors.blue;
 
-  final String? label;
-  final Color? color;
-  final TextEditingController? controller;
-  final Offset offset;
-  final double? borderRadius;
   final double? width;
   final double? height;
+  final String? label;
+  final Color? backgroundColor;
+
+  final List<String> options;
+
+  final double? chipBorderRadius;
+  final Offset? chipShadowOffset;
+  final double chipWidth;
+  final Color chipColor;
+  final CrossAxisAlignment alignment;
+  final double chipShadowBlur;
 
   @override
   Widget build(BuildContext context) {
@@ -27,41 +39,79 @@ class MyAwesomeWidget extends StatelessWidget {
       height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: color,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 4,
-              offset: Offset(2, 2),
+        ),
+        child: Column(
+          crossAxisAlignment: alignment,
+          children: [
+            if (label != null)
+              Text(
+                label!,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            Wrap(
+              children: options.map(
+                (option) {
+                  return Chip(
+                    width: chipWidth,
+                    color: chipColor,
+                    borderRadius: chipBorderRadius,
+                    shadowOffset: chipShadowOffset,
+                    blur: chipShadowBlur,
+                    child: Center(
+                      child: Text(
+                        option,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  );
+                },
+              ).toList(),
             ),
           ],
         ),
-        child: Transform.translate(
-          offset: offset,
-          child: Column(
-            children: [
-              if (label != null)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    label!,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter a value',
-                  ),
-                  controller: controller,
-                ),
+      ),
+    );
+  }
+}
+
+class Chip extends StatelessWidget {
+  const Chip({
+    super.key,
+    required this.width,
+    required this.color,
+    required this.borderRadius,
+    required this.shadowOffset,
+    required this.child,
+    required this.blur,
+  });
+
+  final double width;
+  final Color color;
+  final double? borderRadius;
+  final Offset? shadowOffset;
+  final Widget child;
+  final double blur;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: 50,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
+          boxShadow: [
+            if (shadowOffset != null)
+              BoxShadow(
+                blurRadius: blur,
+                offset: shadowOffset!,
               ),
-              // Text(label ?? 'No label'),
-            ],
-          ),
+          ],
         ),
+        child: child,
       ),
     );
   }

@@ -496,7 +496,7 @@ class _ControlBarState extends State<ControlBar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      width: 300,
       child: ListView(
         children: widget.controls.map((control) {
           return control.builder(context);

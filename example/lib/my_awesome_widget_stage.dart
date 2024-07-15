@@ -10,110 +10,91 @@ class MyAwesomeWidgetStage extends StatefulWidget {
 }
 
 class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
-  final boolControl = BoolControl(
-    label: 'bool',
-    initialValue: false,
-  );
-  final boolControlNullable = BoolControlNullable(
-    label: 'bool Nullable',
-    initialValue: null,
-  );
-  final stringControl = StringControl(
-    label: 'Text',
-    initialValue: 'Hello',
+  final width = DoubleControl(label: 'width', initialValue: 400);
+  final height = DoubleControl(label: 'height', initialValue: 200);
+
+  final label = StringControl(
+    label: 'label',
+    initialValue: 'Tag Selection',
   );
 
-  final offsetControl = OffsetControlNullable(
-    label: 'Offset',
+  final backgroundColor = ColorControl(
+    label: 'background',
+    initialValue: Colors.white.withOpacity(0.5),
+  );
+
+  final tagShadow = OffsetControlNullable(
+    label: 'shadow',
     initialValue: Offset.zero,
   );
 
-  final enumControl = EnumControl<MyEnum>(
-    label: 'Enum',
-    initialValue: MyEnum.one,
-    values: MyEnum.values,
+  final options = StringListControl(
+    label: 'options',
+    initialValue: ['one', 'two', 'three'],
+    defaultValue: 'option',
   );
 
-  final nullableEnum = EnumControlNullable<MyEnum>(
-    label: 'NEnum',
-    initialValue: null,
-    values: MyEnum.values,
+  final chipBorderRadius = DoubleControl(
+    label: 'border radius',
+    initialValue: 10,
   );
-
-  late final GenericControlNullable genericControl = GenericControlNullable<MyEnum>(
-    label: 'Generic',
-    initialValue: MyEnum.one,
-    options: MyEnum.values
-        .map(
-          (e) => DropdownMenuItem<MyEnum>(
-            value: e,
-            child: Text(e.name),
-          ),
-        )
-        .toList(),
-  );
-
-  final nullableString = StringControlNullable(
-    label: 'Nstring',
-    initialValue: null,
-  );
-
-  final widthControl = DoubleControl(label: 'width', initialValue: 400);
-  final heightControl = DoubleControl(label: 'height', initialValue: 200);
-
-  final colorControl = ColorControl(
-    label: 'Color',
+  final chipColor = ColorControl(
+    label: 'color',
     initialValue: Colors.blue,
-    colorSamples: [
-      const ColorSample(color: Colors.purpleAccent, name: 'Purple'),
-      const ColorSample(color: Colors.orange, name: 'Blue'),
-    ],
+  );
+  final chipWidth = DoubleControl(
+    label: 'width',
+    initialValue: 100,
+  );
+  final alignment = EnumControl<CrossAxisAlignment>(
+    label: 'alignment',
+    initialValue: CrossAxisAlignment.start,
+    values: CrossAxisAlignment.values,
+  );
+  final chipShadowBlur = DoubleControl(
+    label: 'shadow blur',
+    initialValue: 2,
   );
 
   @override
   void dispose() {
     super.dispose();
-    boolControl.dispose();
-    boolControlNullable.dispose();
-    stringControl.dispose();
-    colorControl.dispose();
-    offsetControl.dispose();
-    genericControl.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StageBuilder(
       controls: [
-        widthControl,
-        heightControl,
-        colorControl,
-        stringControl,
-        // offsetControl,
-        // boolControl,
-        // boolControlNullable,
+        width,
+        height,
+        label,
+        backgroundColor,
+        options,
+        alignment,
         CustomHeader(
           childBuilder: (context) => Text(
-            'Custom Header',
+            'Chip ',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
-        // stringControl,
-        // colorControl,
-        // textEditingControl,
-        // enumControl,
-        // nullableEnum,
-        // genericControl,
-        // nullableString,
-        // colorControl,
+        chipBorderRadius,
+        chipColor,
+        chipWidth,
+        chipShadowBlur,
       ],
       builder: (context) {
         return MyAwesomeWidget(
-          label: stringControl.value,
-          color: colorControl.value,
-          offset: offsetControl.value ?? Offset.zero,
-          width: widthControl.value,
-          height: heightControl.value,
+          width: width.value,
+          height: height.value,
+          label: label.value,
+          backgroundColor: backgroundColor.value,
+          chipShadowOffset: tagShadow.value,
+          options: options.value,
+          chipBorderRadius: chipBorderRadius.value,
+          chipColor: chipColor.value,
+          chipWidth: chipWidth.value,
+          alignment: alignment.value,
+          chipShadowBlur: chipShadowBlur.value,
         );
       },
     );
