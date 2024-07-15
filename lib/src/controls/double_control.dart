@@ -42,7 +42,7 @@ class DoubleControlNullable extends ValueControl<double?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: TextField(
+      child: StageCraftTextField(
         controller: controller,
         onChanged: (String value) {
           this.value = double.tryParse(value);

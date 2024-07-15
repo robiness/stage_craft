@@ -27,6 +27,7 @@ class ControlGroup implements ValueControl {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(label, style: Theme.of(context).textTheme.titleLarge),

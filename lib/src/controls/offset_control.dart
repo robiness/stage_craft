@@ -16,14 +16,15 @@ class OffsetControl extends ValueControl<Offset> {
   @override
   Widget builder(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        TextField(
+        StageCraftTextField(
           controller: _controllerX,
           onChanged: (newString) {
             value = Offset(double.parse(newString), value.dy);
           },
         ),
-        TextField(
+        StageCraftTextField(
           controller: _controllerY,
           onChanged: (newString) {
             value = Offset(value.dx, double.parse(newString));
@@ -50,22 +51,29 @@ class OffsetControlNullable extends ValueControl<Offset?> {
     return DefaultControlBarRow(
       control: this,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          StageCraftTextField(
-            controller: _controllerX,
-            onChanged: (newString) {
-              final double? dx = double.tryParse(newString);
-              if (dx == null) {
-                value = null;
-              }
-              value = Offset(dx!, value!.dy);
-            },
+          Flexible(
+            child: StageCraftTextField(
+              controller: _controllerX,
+              onChanged: (newString) {
+                final double? dx = double.tryParse(newString);
+                if (dx == null) {
+                  value = null;
+                }
+                if (value != null) {
+                  value = Offset(dx!, value!.dy);
+                }
+              },
+            ),
           ),
-          StageCraftTextField(
-            controller: _controllerY,
-            onChanged: (newString) {
-              value = Offset(value!.dx, double.parse(newString));
-            },
+          Flexible(
+            child: StageCraftTextField(
+              controller: _controllerY,
+              onChanged: (newString) {
+                value = Offset(value!.dx, double.parse(newString));
+              },
+            ),
           ),
         ],
       ),
