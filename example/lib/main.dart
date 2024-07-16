@@ -21,14 +21,9 @@ Future<void> main() async {
   });
   runApp(
     const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: ColoredBox(
-          color: Colors.grey,
-          child: Padding(
-            padding: EdgeInsets.all(84.0),
-            child: MyAwesomeWidgetStage(),
-          ),
-        ),
+        body: MyAwesomeWidgetStage(),
       ),
     ),
   );
