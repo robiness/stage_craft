@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
+Future<void> main() async {
+  runApp(const MinimalExample());
+}
+
+/// Your App or ui playground project
 class MinimalExample extends StatelessWidget {
   const MinimalExample({super.key});
 
@@ -14,6 +19,7 @@ class MinimalExample extends StatelessWidget {
   }
 }
 
+/// The Stage for your widget
 class MinimalExampleStage extends StatelessWidget {
   MinimalExampleStage({super.key});
 
@@ -35,6 +41,7 @@ class MinimalExampleStage extends StatelessWidget {
   }
 }
 
+/// Your actual widget
 class MyWidget extends StatelessWidget {
   const MyWidget({
     super.key,

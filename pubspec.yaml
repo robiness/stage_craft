@@ -1,9 +1,9 @@
 name: stage_craft
-description: Put your widgets on a stage.
+description: Develop and live test your UI widgets on a stage.
 
 publish_to: 'none'
 
-version: 0.3.0+2
+version: 1.0.0+2
 
 environment:
   sdk: '>=2.18.0 <3.0.0'
