@@ -10,12 +10,12 @@ class MyAwesomeWidget extends StatelessWidget {
     List<String>? options,
     this.chipShadowOffset,
     this.chipBorderRadius,
-    double? chipWidth,
+    this.chipWidth,
     Color? chipColor,
     required this.alignment,
     required this.chipShadowBlur,
+    required this.chipIntrinsicWidth,
   })  : options = options ?? const [],
-        chipWidth = chipWidth ?? 100,
         chipColor = chipColor ?? Colors.blue;
 
   final double? width;
@@ -27,10 +27,11 @@ class MyAwesomeWidget extends StatelessWidget {
 
   final double? chipBorderRadius;
   final Offset? chipShadowOffset;
-  final double chipWidth;
+  final double? chipWidth;
   final Color chipColor;
   final CrossAxisAlignment alignment;
   final double chipShadowBlur;
+  final bool chipIntrinsicWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,8 @@ class MyAwesomeWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
             Wrap(
+              runSpacing: 8,
+              spacing: 8,
               children: options.map(
                 (option) {
                   return Chip(
@@ -59,6 +62,7 @@ class MyAwesomeWidget extends StatelessWidget {
                     borderRadius: chipBorderRadius,
                     shadowOffset: chipShadowOffset,
                     blur: chipShadowBlur,
+                    intrinsicWidth: chipIntrinsicWidth,
                     child: Center(
                       child: Text(
                         option,
@@ -85,20 +89,22 @@ class Chip extends StatelessWidget {
     required this.shadowOffset,
     required this.child,
     required this.blur,
+    required this.intrinsicWidth,
   });
 
-  final double width;
+  final double? width;
   final Color color;
   final double? borderRadius;
   final Offset? shadowOffset;
   final Widget child;
   final double blur;
+  final bool intrinsicWidth;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
+    final tag = SizedBox(
       height: 50,
+      width: width,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: color,
@@ -114,5 +120,11 @@ class Chip extends StatelessWidget {
         child: child,
       ),
     );
+    if (intrinsicWidth) {
+      return IntrinsicWidth(
+        child: tag,
+      );
+    }
+    return tag;
   }
 }

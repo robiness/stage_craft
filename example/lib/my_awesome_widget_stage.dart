@@ -10,8 +10,8 @@ class MyAwesomeWidgetStage extends StatefulWidget {
 }
 
 class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
-  final width = DoubleControl(label: 'width', initialValue: 400);
-  final height = DoubleControl(label: 'height', initialValue: 200);
+  final width = DoubleControlNullable(label: 'width', initialValue: 400);
+  final height = DoubleControl(label: 'height', initialValue: 250);
 
   final label = StringControl(
     label: 'label',
@@ -20,7 +20,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
 
   final backgroundColor = ColorControl(
     label: 'background',
-    initialValue: Colors.white.withOpacity(0.5),
+    initialValue: Colors.orange,
   );
 
   final tagShadow = OffsetControlNullable(
@@ -42,9 +42,9 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     label: 'color',
     initialValue: Colors.blue,
   );
-  final chipWidth = DoubleControl(
+  final chipWidth = DoubleControlNullable(
     label: 'width',
-    initialValue: 100,
+    initialValue: null,
   );
   final alignment = EnumControl<CrossAxisAlignment>(
     label: 'alignment',
@@ -54,6 +54,10 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   final chipShadowBlur = DoubleControl(
     label: 'shadow blur',
     initialValue: 2,
+  );
+  final chipIntrinsicWidth = BoolControl(
+    label: 'intrinsic width',
+    initialValue: true,
   );
 
   @override
@@ -74,6 +78,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         ControlGroup(
           label: 'Chip',
           controls: [
+            chipIntrinsicWidth,
             chipBorderRadius,
             chipColor,
             chipWidth,
@@ -94,6 +99,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           chipWidth: chipWidth.value,
           alignment: alignment.value,
           chipShadowBlur: chipShadowBlur.value,
+          chipIntrinsicWidth: chipIntrinsicWidth.value,
         );
       },
     );

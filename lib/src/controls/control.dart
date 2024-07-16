@@ -83,7 +83,7 @@ class DefaultControlBarRow extends StatelessWidget {
                 children: [
                   NullButton(control: control),
                   const SizedBox(width: 8),
-                  child,
+                  Expanded(child: child),
                 ],
               ),
             ],
