@@ -14,8 +14,6 @@ dependencies:
 
   stage_craft:
     path: ../
-  window_manager: ^0.3.8
-
 
 dev_dependencies:
   flutter_test:
