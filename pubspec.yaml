@@ -10,13 +10,11 @@ environment:
 
 dependencies:
   collection: ^1.18.0
-  cupertino_icons: ^1.0.8
   flex_color_picker: ^3.4.1
   flutter:
     sdk: flutter
   flutter_colorpicker: ^1.1.0
   spot: ^0.13.0
-  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_test:
