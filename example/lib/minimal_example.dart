@@ -1,34 +1,3 @@
-# stage_craft
-
-Develop and live test your UI widgets on a stage.
-
-StageCraft helps you developing and testing your widgets in a controlled environment. <br>
-It provides a stage where you can change the properties and constraints of your widget and see the changes in real time.
-
-## Benefits
-- **Instant Feedback**: See changes to your widgets immediately without navigating through your app.
-- **Separation of Concerns**: Naturally separates your UI widgets from your app's state.
-- **Efficient Development**: No need to rebuild the app to see changes.
-
-## Installation
-Add StageCraft to your project:
-```yaml
-dependencies:
-  stage_craft: ^1.0.0
-```
-
-or simply run:
-```shell
-flutter pub add stage_craft
-```
-
-## Try it out
-To test just copy the code below, paste it in a new dart file and run it.
-
-<details>
-<summary>Click to expand the example code</summary>
-
-````dart
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
 
@@ -94,5 +63,3 @@ class MyWidget extends StatelessWidget {
     );
   }
 }
-````
-</details>

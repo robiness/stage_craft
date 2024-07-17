@@ -6,21 +6,20 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=2.19.2 <4.0.0'
 
 dependencies:
-  widget_stage:
-    path: ../
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  stage_craft:
+    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  lint: ^2.3.0
 
-  flutter_lints: ^2.0.0
 
 flutter:
 
