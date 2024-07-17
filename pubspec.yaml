@@ -1,10 +1,14 @@
 name: stage_craft
 description: Develop and live test your UI widgets on a stage.
+repository: https://github.com/robiness/stage_craft
+issue_tracker: https://github.com/robiness/stage_craft/issues
+
 
 version: 1.0.0+2
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0 <4.0.0'
 
 dependencies:
   collection: ^1.18.0
