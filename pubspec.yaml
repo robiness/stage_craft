@@ -1,5 +1,7 @@
 name: stage_craft
-description: Develop and live test your UI widgets on a stage.
+description: >
+  Develop and live test your UI widgets on a stage.
+  Manipulate parameters, constraints or BuildContext.
 repository: https://github.com/robiness/stage_craft
 issue_tracker: https://github.com/robiness/stage_craft/issues
 
