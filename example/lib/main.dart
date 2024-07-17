@@ -116,12 +116,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   }
 }
 
-enum MyEnum {
-  one,
-  two,
-  three,
-}
-
 class MyAwesomeWidget extends StatelessWidget {
   const MyAwesomeWidget({
     super.key,
