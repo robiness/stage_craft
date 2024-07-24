@@ -76,7 +76,7 @@ class DefaultControlBarRow extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 control.label,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Row(
@@ -97,7 +97,7 @@ class DefaultControlBarRow extends StatelessWidget {
             Flexible(
               child: Text(
                 control.label,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(width: 8),

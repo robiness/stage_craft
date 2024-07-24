@@ -24,36 +24,43 @@ class StringListControl extends ValueControl<List<String>> {
           border: Border.all(
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
           ),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(6),
         ),
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Column(
           children: [
             ...value.mapIndexed((index, e) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: StageCraftTextField(
-                      controller: TextEditingController(text: e)..selection = TextSelection.collapsed(offset: e.length),
-                      onChanged: (value) {
-                        final newList = this.value;
-                        newList[index] = value;
-                        this.value = newList;
-                      },
+              return Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: StageCraftTextField(
+                        controller: TextEditingController(text: e)
+                          ..selection = TextSelection.collapsed(offset: e.length),
+                        onChanged: (value) {
+                          final newList = this.value;
+                          newList[index] = value;
+                          this.value = newList;
+                        },
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () {
-                      value = value..removeAt(index);
-                    },
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        value = value..removeAt(index);
+                      },
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints.tightFor(width: 32),
+                    ),
+                  ],
+                ),
               );
             }),
+            const SizedBox(height: 2),
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
@@ -61,7 +68,9 @@ class StringListControl extends ValueControl<List<String>> {
               },
               visualDensity: VisualDensity.compact,
               padding: EdgeInsets.zero,
+              constraints: const BoxConstraints.tightFor(width: 32),
             ),
+            const SizedBox(height: 2),
           ],
         ),
       ),

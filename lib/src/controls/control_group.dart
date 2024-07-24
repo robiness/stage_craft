@@ -22,10 +22,9 @@ class ControlGroup implements ValueControl {
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor.withOpacity(0.4),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-            width: 2,
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),

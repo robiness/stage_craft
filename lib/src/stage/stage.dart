@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
+import 'package:stage_craft/src/stage/control_bar.dart';
 import 'package:stage_craft/src/stage/measure_grid.dart';
 import 'package:stage_craft/src/stage/ruler.dart';
 import 'package:stage_craft/src/stage/settings_bar.dart';
@@ -472,95 +473,6 @@ class CrossHairPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
-  }
-}
-
-/// A control bar that displays a list of controls to manipulate the stage.
-class ControlBar extends StatefulWidget {
-  /// Creates a [ControlBar].
-  const ControlBar({
-    super.key,
-    required this.controls,
-  });
-
-  /// The controls to manipulate the widget on stage.
-  final List<ValueControl> controls;
-
-  @override
-  State<ControlBar> createState() => _ControlBarState();
-}
-
-class _ControlBarState extends State<ControlBar> {
-  bool _expanded = true;
-
-  @override
-  void initState() {
-    super.initState();
-    for (final control in widget.controls) {
-      control.addListener(_update);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    for (final control in widget.controls) {
-      control.removeListener(_update);
-    }
-  }
-
-  void _update() {
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      reverseDuration: const Duration(milliseconds: 400),
-      alignment: Alignment.centerLeft,
-      child: SizedBox(
-        width: _expanded ? context.stageStyle.controlPanelWidth : 48,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: Icon(
-                  _expanded ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                ),
-                onPressed: () {
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
-                },
-              ),
-            ),
-            Container(
-              width: 4,
-              height: double.infinity,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
-            ),
-            Expanded(
-              child: ColoredBox(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ListView(
-                    children: widget.controls.map((control) {
-                      return control.builder(context);
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
