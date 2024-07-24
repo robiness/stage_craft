@@ -66,6 +66,8 @@ class _StageBuilderState extends State<StageBuilder> {
     super.didChangeDependencies();
     // If no style is provided, we first check if there is one in the context
     _theme = Theme.of(context);
+    _adjustTheme();
+
     if (widget.style == null) {
       final styleFromContext = StageStyle.maybeOf(context);
       if (styleFromContext != null) {
@@ -120,15 +122,18 @@ class _StageBuilderState extends State<StageBuilder> {
                                 _theme = ThemeData.dark();
                                 if (overriddenStyle?.brightness == Brightness.dark) {
                                   _style = overriddenStyle!;
+                                  _adjustTheme();
                                   return;
                                 }
                               } else {
                                 _theme = ThemeData.light();
                                 if (overriddenStyle?.brightness == Brightness.light) {
                                   _style = overriddenStyle!;
+                                  _adjustTheme();
                                   return;
                                 }
                               }
+                              _adjustTheme();
                               _style = StageStyleData.fromMaterialTheme(_theme);
                             });
                           },
@@ -145,6 +150,26 @@ class _StageBuilderState extends State<StageBuilder> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _adjustTheme() {
+    _theme = _theme.copyWith(
+      checkboxTheme: CheckboxThemeData(
+        checkColor: WidgetStateProperty.all(_theme.colorScheme.onSurface),
+        fillColor: WidgetStateProperty.all(Colors.transparent),
+        side: BorderSide(color: _theme.colorScheme.onSurface),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(2),
+          side: BorderSide(color: _theme.colorScheme.onSurface),
+        ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: _theme.colorScheme.onSurface,
+        selectionColor: _theme.colorScheme.onSurface.withOpacity(0.1),
+        selectionHandleColor: _theme.colorScheme.onSurface.withOpacity(0.1),
       ),
     );
   }

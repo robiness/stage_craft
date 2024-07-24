@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
+import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
 import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 
 /// A control for a list of strings.

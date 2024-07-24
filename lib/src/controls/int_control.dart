@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
+import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
 import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 
 /// A control to modify a int parameter of the widget on stage.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/controls.dart';
+import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
 import 'package:stage_craft/src/widgets/stage_craft_hover_control.dart';
 
 /// A control to modify a enum parameter of the widget on stage.

@@ -38,7 +38,7 @@ class _StageCraftHoverControlState extends State<StageCraftHoverControl> with Ti
           color: Theme.of(context).colorScheme.onSurface.withOpacity(_hovered ? 0.05 : 0),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(_hovered ? 0.4 : 0.2),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(_hovered ? 0.1 : 0),
           ),
         ),
         child: Center(child: widget.child),

@@ -18,7 +18,7 @@ class ControlGroup implements ValueControl {
   @override
   Widget builder(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.only(top: 8.0),
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor.withOpacity(0.4),
