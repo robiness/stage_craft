@@ -70,6 +70,11 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: true,
   );
 
+  final duration = DurationControlNullable(
+    label: 'duration',
+    initialValue: const Duration(seconds: 3),
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -85,6 +90,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         backgroundColor,
         alignment,
         options,
+        duration,
         ControlGroup(
           label: 'Chip',
           controls: [
@@ -110,6 +116,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           alignment: alignment.value,
           chipShadowBlur: chipShadowBlur.value,
           chipIntrinsicWidth: chipIntrinsicWidth.value,
+          duration: duration.value,
         );
       },
     );
@@ -131,6 +138,7 @@ class MyAwesomeWidget extends StatelessWidget {
     required this.alignment,
     required this.chipShadowBlur,
     required this.chipIntrinsicWidth,
+    required this.duration,
   })  : options = options ?? const [],
         chipColor = chipColor ?? Colors.blue;
 
@@ -148,6 +156,7 @@ class MyAwesomeWidget extends StatelessWidget {
   final CrossAxisAlignment alignment;
   final double chipShadowBlur;
   final bool chipIntrinsicWidth;
+  final Duration? duration;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +176,7 @@ class MyAwesomeWidget extends StatelessWidget {
                 label!,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
+            Text('Duration: $duration'),
             Wrap(
               runSpacing: 8,
               spacing: 8,

@@ -30,7 +30,7 @@ class ColorControl extends ValueControl<Color> {
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(4),
               child: Container(
                 height: 24,
                 width: 48,

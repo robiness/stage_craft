@@ -83,7 +83,7 @@ class _ControlBarState extends State<ControlBar> {
             child: ColoredBox(
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
               child: Padding(
-                padding: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.only(left: 2, top: 4, right: 2),
                 child: ListView(
                   children: widget.controls.map((control) {
                     return control.builder(context);

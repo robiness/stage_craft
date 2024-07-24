@@ -24,14 +24,14 @@ class EnumControl<T extends Enum> extends ValueControl<T> {
           style: Theme.of(context).textTheme.labelLarge,
           borderRadius: BorderRadius.circular(4),
           value: value,
-          isDense: true,
           onChanged: (T? newValue) {
             if (newValue != null) {
               value = newValue;
             }
           },
+          isDense: true,
           itemHeight: null,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           underline: const SizedBox(),
           isExpanded: true,
           items: values.map((value) {
@@ -64,10 +64,16 @@ class EnumControlNullable<T extends Enum> extends ValueControl<T?> {
       control: this,
       child: StageCraftHoverControl(
         child: DropdownButton<T>(
+          style: Theme.of(context).textTheme.labelLarge,
+          borderRadius: BorderRadius.circular(4),
           value: value,
           onChanged: (T? newValue) {
             value = newValue;
           },
+          isDense: true,
+          itemHeight: null,
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          underline: const SizedBox(),
           isExpanded: true,
           items: values.map((value) {
             return DropdownMenuItem<T>(

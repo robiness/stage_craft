@@ -6,7 +6,7 @@ class StageStyleData {
   StageStyleData({
     this.ballSize = 10,
     this.dragPadding = 20,
-    this.controlPanelWidth = 300,
+    this.controlPanelWidth = 250,
     required this.primaryColor,
     required this.canvasColor,
     required this.brightness,
