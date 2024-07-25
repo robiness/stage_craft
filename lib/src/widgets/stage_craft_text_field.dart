@@ -25,7 +25,6 @@ class StageCraftTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return StageCraftHoverControl(
       child: TextField(
-        textAlign: TextAlign.end,
         style: Theme.of(context).textTheme.labelLarge,
         controller: controller,
         onChanged: onChanged,
