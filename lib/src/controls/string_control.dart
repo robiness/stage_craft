@@ -6,7 +6,10 @@ import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 /// A control to modify a string parameter of the widget on stage.
 class StringControl extends ValueControl<String> {
   /// Creates a new string control.
-  StringControl({required super.initialValue, required super.label});
+  StringControl({
+    required super.initialValue,
+    required super.label,
+  });
 
   late final TextEditingController _controller = TextEditingController(text: value);
 

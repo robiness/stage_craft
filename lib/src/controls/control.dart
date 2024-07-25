@@ -10,7 +10,19 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   ValueControl({
     required this.label,
     required T initialValue,
+    T? min,
+    T? max,
   })  : _previousValue = initialValue,
+        _minValue = min,
+        _maxValue = max,
+        assert(
+          min == null || (initialValue as Comparable).compareTo(min) >= 0,
+          'Initial value of $label is $initialValue but must be greater than or equal to min of $min.',
+        ),
+        assert(
+          max == null || (initialValue as Comparable).compareTo(max) <= 0,
+          'Initial value of $label is $initialValue but must be less than or equal to max of $max.',
+        ),
         super(initialValue);
 
   /// The label to display in the control bar.
@@ -21,11 +33,30 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
 
   T _previousValue;
 
+  final T? _minValue;
+
+  /// The minimum value that the control can be set to.
+  T? get minValue => _minValue;
+  final T? _maxValue;
+
+  /// The maximum value that the control can be set to.
+  T? get maxValue => _maxValue;
+
   /// Whether the value can be set to `null`.
   bool get isNullable => null is T;
 
   @override
   set value(T newValue) {
+    try {
+      if (_minValue != null && (newValue as Comparable).compareTo(_minValue) < 0) {
+        return;
+      }
+      if (_maxValue != null && (newValue as Comparable).compareTo(_maxValue) > 0) {
+        return;
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
     _previousValue = value;
     if (newValue != value) {
       super.value = newValue;

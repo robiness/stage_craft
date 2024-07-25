@@ -20,7 +20,12 @@ class MyAwesomeWidgetStage extends StatefulWidget {
 }
 
 class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
-  final width = DoubleControlNullable(label: 'width', initialValue: 400);
+  final width = DoubleControlNullable(
+    label: 'width',
+    initialValue: 300,
+    min: 100,
+    max: 400,
+  );
   final height = DoubleControl(label: 'height', initialValue: 250);
 
   final label = StringControl(

@@ -34,6 +34,8 @@ class DoubleControlNullable extends ValueControl<double?> {
   DoubleControlNullable({
     required super.label,
     required super.initialValue,
+    super.max,
+    super.min,
   });
 
   /// The controller for the text field.

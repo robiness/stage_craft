@@ -28,9 +28,20 @@ class DefaultControlBarRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 4),
-              Text(
-                control.label,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    control.label,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 4),
+                  if (control.minValue != null)
+                    Text(
+                      _minMaxLabel(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                ],
               ),
               Row(
                 children: [
@@ -58,6 +69,13 @@ class DefaultControlBarRow extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _minMaxLabel() {
+    final minLabel = control.minValue != null ? 'min: ${control.minValue}' : '';
+    final maxLabel = control.maxValue != null ? 'max: ${control.maxValue}' : '';
+    final separator = minLabel.isNotEmpty && maxLabel.isNotEmpty ? ', ' : '';
+    return '$minLabel$separator$maxLabel';
   }
 }
 

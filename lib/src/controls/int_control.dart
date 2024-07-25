@@ -9,6 +9,8 @@ class IntControl extends ValueControl<int> {
   IntControl({
     required super.label,
     required super.initialValue,
+    super.max,
+    super.min,
   });
 
   /// The controller for the text field.

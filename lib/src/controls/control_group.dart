@@ -86,4 +86,10 @@ class ControlGroup implements ValueControl {
 
   @override
   Object? value;
+
+  @override
+  Null get maxValue => null;
+
+  @override
+  Null get minValue => null;
 }
