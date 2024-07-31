@@ -39,7 +39,11 @@ class StageBuilder extends StatefulWidget {
 class _StageBuilderState extends State<StageBuilder> {
   late ThemeData _theme;
   late StageStyleData _style;
-  late StageSettings _settings = StageSettings(forceSize: widget.forceSize);
+  final _canvasController = StageCanvasController();
+
+  bool _expanded = true;
+
+  final LayerLink _sidebarLink = LayerLink();
 
   @override
   void initState() {
@@ -47,6 +51,7 @@ class _StageBuilderState extends State<StageBuilder> {
     if (widget.style != null) {
       _style = widget.style!;
     }
+    _canvasController.forceSize = widget.forceSize;
   }
 
   @override
@@ -56,9 +61,7 @@ class _StageBuilderState extends State<StageBuilder> {
     if (widget.style != oldWidget.style) {
       _style = widget.style ?? StageStyleData.fromMaterialTheme(_theme);
     }
-    if (widget.forceSize != oldWidget.forceSize) {
-      _settings = _settings.copyWith(forceSize: widget.forceSize);
-    }
+    _canvasController.forceSize = widget.forceSize;
   }
 
   @override
@@ -88,65 +91,109 @@ class _StageBuilderState extends State<StageBuilder> {
         data: _style,
         child: ColoredBox(
           color: _style.canvasColor,
-          child: Row(
+          child: Stack(
             children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    StageCanvas(
-                      settings: _settings,
-                      controls: widget.controls,
-                      widgetBuilder: widget.builder,
-                      style: _style,
+              Row(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        StageCanvas(
+                          controller: _canvasController,
+                          controls: widget.controls,
+                          widgetBuilder: widget.builder,
+                          style: _style,
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SettingsBarCenter(
+                              canvasController: _canvasController,
+                              onSurfaceColorChanged: (color) {
+                                setState(() {
+                                  _style = _style.copyWith(canvasColor: color);
+                                });
+                              },
+                              onStyleToggled: () {
+                                setState(() {
+                                  final overriddenStyle = widget.style ?? StageStyle.maybeOf(context);
+                                  if (_theme.brightness == Brightness.light) {
+                                    _theme = ThemeData.dark();
+                                    if (overriddenStyle?.brightness == Brightness.dark) {
+                                      _style = overriddenStyle!;
+                                      _adjustTheme();
+                                      return;
+                                    }
+                                  } else {
+                                    _theme = ThemeData.light();
+                                    if (overriddenStyle?.brightness == Brightness.light) {
+                                      _style = overriddenStyle!;
+                                      _adjustTheme();
+                                      return;
+                                    }
+                                  }
+                                  _adjustTheme();
+                                  _style = StageStyleData.fromMaterialTheme(_theme);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SettingsBarRight(
+                              canvasController: _canvasController,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SettingsBar(
-                          settings: _settings,
-                          onSettingsChanged: (settings) {
-                            setState(() {
-                              _settings = settings;
-                            });
-                          },
-                          onSurfaceColorChanged: (color) {
-                            setState(() {
-                              _style = _style.copyWith(canvasColor: color);
-                            });
-                          },
-                          onStyleToggled: () {
-                            setState(() {
-                              final overriddenStyle = widget.style ?? StageStyle.maybeOf(context);
-                              if (_theme.brightness == Brightness.light) {
-                                _theme = ThemeData.dark();
-                                if (overriddenStyle?.brightness == Brightness.dark) {
-                                  _style = overriddenStyle!;
-                                  _adjustTheme();
-                                  return;
-                                }
-                              } else {
-                                _theme = ThemeData.light();
-                                if (overriddenStyle?.brightness == Brightness.light) {
-                                  _style = overriddenStyle!;
-                                  _adjustTheme();
-                                  return;
-                                }
-                              }
-                              _adjustTheme();
-                              _style = StageStyleData.fromMaterialTheme(_theme);
-                            });
-                          },
+                  ),
+                  if (widget.controls.isNotEmpty)
+                    CompositedTransformTarget(
+                      link: _sidebarLink,
+                      child: AnimatedContainer(
+                        width: _expanded ? 320 : 0,
+                        alignment: Alignment.centerLeft,
+                        curve: Curves.easeOutQuart,
+                        duration: const Duration(milliseconds: 600),
+                        child: SizedBox(
+                          child: OverflowBox(
+                            alignment: Alignment.centerLeft,
+                            minWidth: 320,
+                            maxWidth: 320,
+                            child: ControlBar(
+                              controls: widget.controls,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ],
+                ],
+              ),
+              CompositedTransformFollower(
+                link: _sidebarLink,
+                offset: const Offset(-44, 0),
+                child: IconButton(
+                  icon: _expanded
+                      ? Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        )
+                      : Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                  onPressed: () {
+                    setState(() {
+                      _expanded = !_expanded;
+                    });
+                  },
                 ),
               ),
-              if (widget.controls.isNotEmpty)
-                ControlBar(
-                  controls: widget.controls,
-                ),
             ],
           ),
         ),
@@ -181,14 +228,14 @@ class StageCanvas extends StatefulWidget {
   /// Creates a [StageCanvas].
   const StageCanvas({
     super.key,
-    required this.settings,
+    required this.controller,
     required this.widgetBuilder,
     required this.controls,
     required this.style,
   });
 
-  /// The settings for the stage which can be manipulated by the user.
-  final StageSettings settings;
+  /// The controller allows to manipulate the canvas by the user.
+  final StageCanvasController controller;
 
   /// The builder for the widget on stage.
   final WidgetBuilder widgetBuilder;
@@ -229,6 +276,7 @@ class _StageCanvasState extends State<StageCanvas> {
     super.initState();
     _sizeAndCenterStage();
     _transformationController.addListener(() {
+      widget.controller.zoomFactor = currentScale;
       setState(() {});
     });
   }
@@ -335,95 +383,164 @@ class _StageCanvasState extends State<StageCanvas> {
             ),
           );
         }
-        return Stack(
-          children: [
-            if (!widget.settings.showRuler)
-              Positioned.fill(
-                child: MeasureGrid(
-                  size: 100 * currentScale,
-                ),
-              ),
-            InteractiveViewer(
-              transformationController: _transformationController,
-              minScale: 0.1,
-              maxScale: 256,
-              child: Stack(
-                children: [
-                  // The widget on stage
-                  StageRect(
-                    rect: _rect!,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanDown: _onDragStart,
-                      onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
-                      child: SizedBox(
-                        height: widget.settings.forceSize ? _rect!.height : null,
-                        width: widget.settings.forceSize ? _rect!.width : null,
-                        child: ListenableBuilder(
-                          listenable: Listenable.merge([...widget.controls, _hotReloadListener]),
-                          builder: (context, _) {
-                            return widget.widgetBuilder(context);
-                          },
+        return ListenableBuilder(
+          listenable: widget.controller,
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              children: [
+                if (!widget.controller.showRuler)
+                  Positioned.fill(
+                    child: MeasureGrid(
+                      size: 100 * currentScale,
+                    ),
+                  ),
+                InteractiveViewer(
+                  transformationController: _transformationController,
+                  minScale: 0.1,
+                  maxScale: 256,
+                  child: Stack(
+                    children: [
+                      // The widget on stage
+                      MediaQuery(
+                        data: MediaQueryData(
+                          textScaler: TextScaler.linear(widget.controller.textScale),
+                          // TODO put brightness into widget.settings?
+                          platformBrightness: widget.style.brightness,
+                        ),
+                        child: StageRect(
+                          rect: _rect!,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onPanDown: _onDragStart,
+                            onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
+                            child: SizedBox(
+                              height: widget.controller.forceSize ? _rect!.height : null,
+                              width: widget.controller.forceSize ? _rect!.width : null,
+                              child: ListenableBuilder(
+                                listenable: Listenable.merge([...widget.controls, _hotReloadListener]),
+                                builder: (context, _) {
+                                  return widget.widgetBuilder(context);
+                                },
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  // The border of the stage
-                  StageRect(
-                    rect: _rect!,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanDown: _onDragStart,
-                      onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
-                      child: IgnorePointer(
-                        child: widget.settings.showRuler
-                            ? DecoratedBox(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: widget.style.borderColor,
-                                    strokeAlign: BorderSide.strokeAlignOutside,
-                                    width: 1 * (1 / currentScale),
-                                  ),
-                                ),
-                                child: const SizedBox.expand(),
-                              )
-                            : const SizedBox.expand(),
+                      // The border of the stage
+                      StageRect(
+                        rect: _rect!,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onPanDown: _onDragStart,
+                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
+                          child: IgnorePointer(
+                            child: widget.controller.showRuler
+                                ? DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: widget.style.borderColor,
+                                        strokeAlign: BorderSide.strokeAlignOutside,
+                                        width: 1 * (1 / currentScale),
+                                      ),
+                                    ),
+                                    child: const SizedBox.expand(),
+                                  )
+                                : const SizedBox.expand(),
+                          ),
+                        ),
                       ),
-                    ),
+                      if (widget.controller.showRuler)
+                        Rulers(
+                          rect: _rect!,
+                        ),
+                      StageConstraintsHandles(
+                        rect: _rect!,
+                        onPanUpdate: (details, alignment) {
+                          _handleDrag(details, constraints, alignment, widget.style);
+                        },
+                        currentScale: currentScale,
+                        onPanStart: _onDragStart,
+                      ),
+                      if (widget.controller.showCrossHair)
+                        const Positioned.fill(
+                          child: CrossHair(),
+                        ),
+                    ],
                   ),
-                  if (widget.settings.showRuler)
-                    Rulers(
-                      rect: _rect!,
-                    ),
-                  StageConstraintsHandles(
-                    rect: _rect!,
-                    onPanUpdate: (details, alignment) {
-                      _handleDrag(details, constraints, alignment, widget.style);
-                    },
-                    currentScale: currentScale,
-                    onPanStart: _onDragStart,
-                  ),
-                  if (widget.settings.showCrossHair)
-                    const Positioned.fill(
-                      child: CrossHair(),
-                    ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  '${currentScale.toStringAsFixed(2)}x',
-                  style: Theme.of(context).textTheme.labelSmall,
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         );
       },
     );
+  }
+}
+
+/// The controller to manipulate the stage.
+class StageCanvasController extends ChangeNotifier {
+  /// The zoom factor of the stage.
+  double _zoomFactor = 1.0;
+
+  /// The zoom factor of the stage.
+  double get zoomFactor => _zoomFactor;
+
+  /// The zoom factor of the stage.
+  set zoomFactor(double value) {
+    if (_zoomFactor == value) return;
+    _zoomFactor = value;
+    notifyListeners();
+  }
+
+  /// Whether the rulers should be shown.
+  bool _showRuler = false;
+
+  /// Whether the rulers should be shown.
+  bool get showRuler => _showRuler;
+
+  /// Whether the rulers should be shown.
+  set showRuler(bool value) {
+    _showRuler = value;
+    notifyListeners();
+  }
+
+  /// Whether the size of the stage should be forced to the size of the child.
+  bool _forceSize = true;
+
+  /// Whether the size of the stage should be forced to the size of the child.
+  bool get forceSize => _forceSize;
+
+  /// Whether the size of the stage should be forced to the size of the child.
+  set forceSize(bool value) {
+    if (_forceSize == value) return;
+    _forceSize = value;
+    notifyListeners();
+  }
+
+  /// Whether the crosshair should be shown.
+  bool _showCrossHair = false;
+
+  /// Whether the crosshair should be shown.
+  bool get showCrossHair => _showCrossHair;
+
+  /// Whether the crosshair should be shown.
+  set showCrossHair(bool value) {
+    if (_showCrossHair == value) return;
+    _showCrossHair = value;
+    notifyListeners();
+  }
+
+  /// The text scale factor for the stage.
+  double _textScale = 1.0;
+
+  /// The text scale factor for the stage.
+  double get textScale => _textScale;
+
+  /// The text scale factor for the stage.
+  set textScale(double value) {
+    if (_textScale == value) return;
+    _textScale = value;
+    notifyListeners();
   }
 }
 
@@ -498,38 +615,6 @@ class CrossHairPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
-  }
-}
-
-/// Settings for the stage.
-class StageSettings {
-  /// Creates a [StageSettings].
-  StageSettings({
-    this.showRuler = true,
-    this.forceSize = true,
-    this.showCrossHair = false,
-  });
-
-  /// Whether the rulers should be shown.
-  final bool showRuler;
-
-  /// Whether the size of the stage should be forced to the size of the child.
-  final bool forceSize;
-
-  /// Whether the crosshair should be shown.
-  final bool showCrossHair;
-
-  /// Creates a copy of this [StageSettings] but with the given fields replaced with the new values.
-  StageSettings copyWith({
-    bool? showRuler,
-    bool? forceSize,
-    bool? showCrossHair,
-  }) {
-    return StageSettings(
-      showRuler: showRuler ?? this.showRuler,
-      forceSize: forceSize ?? this.forceSize,
-      showCrossHair: showCrossHair ?? this.showCrossHair,
-    );
   }
 }
 

@@ -17,8 +17,6 @@ class ControlBar extends StatefulWidget {
 }
 
 class _ControlBarState extends State<ControlBar> {
-  bool _expanded = true;
-
   @override
   void initState() {
     super.initState();
@@ -41,59 +39,25 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
-          alignment: Alignment.centerLeft,
-          width: _expanded ? context.stageStyle.controlPanelWidth + 44 : 48,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: Icon(
-                    _expanded ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _expanded = !_expanded;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                width: _expanded ? 4 : 8,
-                height: double.infinity,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
-              ),
-            ],
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 4,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
           ),
-        ),
-        AnimatedPositioned(
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
-          right: _expanded ? 0 : -context.stageStyle.controlPanelWidth,
-          child: SizedBox(
-            width: context.stageStyle.controlPanelWidth,
-            height: MediaQuery.of(context).size.height,
-            child: ColoredBox(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2, top: 4, right: 2),
-                child: ListView(
-                  children: widget.controls.map((control) {
-                    return control.builder(context);
-                  }).toList(),
-                ),
-              ),
+          Flexible(
+            child: ListView(
+              padding: const EdgeInsets.only(left: 4, top: 4, right: 4),
+              children: widget.controls.map((control) {
+                return control.builder(context);
+              }).toList(),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
