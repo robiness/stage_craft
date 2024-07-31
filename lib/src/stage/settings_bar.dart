@@ -147,7 +147,7 @@ class SettingsBarRight extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.text_fields,
-                            color: canvasController.textScale == 1.5 ? Colors.blue : Colors.grey,
+                            color: canvasController.textScale != 1.0 ? Colors.blue : Colors.grey,
                             size: 16,
                           ),
                           const SizedBox(width: 4),
@@ -155,7 +155,7 @@ class SettingsBarRight extends StatelessWidget {
                             '${canvasController.textScale.toStringWithOptionalDecimal(2)}x',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: canvasController.textScale == 1.5 ? Colors.blue : Colors.grey,
+                              color: canvasController.textScale != 1.0 ? Colors.blue : Colors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
                             ),
@@ -230,28 +230,46 @@ class SettingsBarRight extends StatelessWidget {
                 },
               ),
               const HorizontalDivider(),
-              Container(
-                height: 24,
-                padding: const EdgeInsets.only(right: 10),
-                width: 84,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+              IconButton(
+                onPressed: () {
+                  if (canvasController.zoomFactor == 1.0) {
+                    canvasController.zoomFactor = 2.0;
+                  } else if (canvasController.zoomFactor == 2.0) {
+                    canvasController.zoomFactor = 4.0;
+                  } else {
+                    canvasController.zoomFactor = 1.0;
+                  }
+                },
+                icon: Container(
+                  height: 24,
+                  padding: const EdgeInsets.only(right: 10),
+                  width: 62,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        '${canvasController.zoomFactor.toStringAsFixed(2)}x',
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                        ),
+                      Builder(
+                        builder: (context) {
+                          final String text = switch (canvasController.zoomFactor) {
+                            1.0 => '1x',
+                            < 10 => '${canvasController.zoomFactor.toStringWithOptionalDecimal(2)}x',
+                            _ => '${canvasController.zoomFactor.round()}x',
+                          };
+
+                          return Text(
+                            text,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: canvasController.zoomFactor != 1.0 ? Colors.blue : Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(width: 4),
-                      const Icon(
+                      Icon(
                         Icons.zoom_in,
-                        color: Colors.grey,
+                        color: canvasController.zoomFactor != 1.0 ? Colors.blue : Colors.grey,
                         size: 16,
                       ),
                     ],
@@ -274,6 +292,8 @@ class HorizontalDivider extends StatelessWidget {
     this.height,
   });
 
+  /// The height of the divider
+  /// Still is a 1px line, the reset is padding
   final double? height;
 
   @override
@@ -291,10 +311,16 @@ class HorizontalDivider extends StatelessWidget {
 }
 
 extension on double {
-  /// Removes all trailing zeros from a double and keeps up to [decimalPlaces] decimal places.
+  /// Removes trailing zeros when an actual integer, otherwise always shows [decimalPlaces] decimal places.
   /// 1.0 -> 1
+  /// 1.10 -> 1.10
   /// 1.020 -> 1.02
   String toStringWithOptionalDecimal(int decimalPlaces) {
-    return toStringAsFixed(decimalPlaces).replaceAll(RegExp(r'0*$'), '').replaceAll(RegExp(r'\.$'), '');
+    final withFraction = toStringAsFixed(decimalPlaces);
+    final zeroEnd = '.'.padRight(decimalPlaces + 1, '0');
+    if (withFraction.endsWith(zeroEnd)) {
+      return toStringAsFixed(0);
+    }
+    return withFraction;
   }
 }
