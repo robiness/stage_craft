@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/stage/control_bar.dart';
@@ -279,6 +280,35 @@ class _StageCanvasState extends State<StageCanvas> {
       widget.controller.zoomFactor = currentScale;
       setState(() {});
     });
+
+    widget.controller.addListener(_updateZoom);
+  }
+
+  @override
+  void didUpdateWidget(covariant StageCanvas oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller.removeListener(_updateZoom);
+      widget.controller.addListener(_updateZoom);
+    }
+  }
+
+  void _updateZoom() {
+    final zoom = widget.controller.zoomFactor;
+    _zoomInteractiveViewer(zoom);
+  }
+
+  void _zoomInteractiveViewer(double zoom) {
+    final zoomBefore = _transformationController.value.getMaxScaleOnAxis();
+    if (zoomBefore != zoom) {
+      final zoomDelta = zoom / zoomBefore;
+      final event = PointerScaleEvent(
+        device: 1,
+        position: _rect!.center,
+        scale: zoomDelta,
+      );
+      GestureBinding.instance.handlePointerEvent(event);
+    }
   }
 
   void _sizeAndCenterStage() {
