@@ -430,6 +430,12 @@ class _StageCanvasState extends State<StageCanvas> {
                   maxScale: 256,
                   child: Stack(
                     children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onPanDown: _onDragStart,
+                        onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
+                        child: const SizedBox.expand(),
+                      ),
                       // The widget on stage
                       MediaQuery(
                         data: MediaQueryData(
@@ -459,24 +465,19 @@ class _StageCanvasState extends State<StageCanvas> {
                       // The border of the stage
                       StageRect(
                         rect: _rect!,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onPanDown: _onDragStart,
-                          onPanUpdate: (details) => _handleDrag(details, constraints, Alignment.center, widget.style),
-                          child: IgnorePointer(
-                            child: widget.controller.showRuler
-                                ? DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: widget.style.borderColor,
-                                        strokeAlign: BorderSide.strokeAlignOutside,
-                                        width: 1 * (1 / currentScale),
-                                      ),
+                        child: IgnorePointer(
+                          child: widget.controller.showRuler
+                              ? DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: widget.style.borderColor,
+                                      strokeAlign: BorderSide.strokeAlignOutside,
+                                      width: 1 * (1 / currentScale),
                                     ),
-                                    child: const SizedBox.expand(),
-                                  )
-                                : const SizedBox.expand(),
-                          ),
+                                  ),
+                                  child: const SizedBox.expand(),
+                                )
+                              : const SizedBox.expand(),
                         ),
                       ),
                       if (widget.controller.showRuler)
