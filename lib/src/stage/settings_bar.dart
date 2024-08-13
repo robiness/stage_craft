@@ -1,3 +1,4 @@
+// ignore: unnecessary_import - remove when min SDK is 3.19 or higher
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

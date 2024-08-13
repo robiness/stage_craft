@@ -205,7 +205,9 @@ class _StageBuilderState extends State<StageBuilder> {
   void _adjustTheme() {
     _theme = _theme.copyWith(
       checkboxTheme: CheckboxThemeData(
+        // ignore: deprecated_member_use - remove when on min SDK 3.19.0 or higher
         checkColor: MaterialStateProperty.all(_theme.colorScheme.onSurface),
+        // ignore: deprecated_member_use - remove when on min SDK 3.19.0 or higher
         fillColor: MaterialStateProperty.all(Colors.transparent),
         side: BorderSide(color: _theme.colorScheme.onSurface),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
