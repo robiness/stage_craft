@@ -86,6 +86,10 @@ class _StageBuilderState extends State<StageBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    // When in preview mode, we don't need the stage
+    if (context.stageMode == StageMode.preview) {
+      return widget.builder(context);
+    }
     return Theme(
       data: _theme,
       child: StageStyle(
@@ -706,5 +710,37 @@ extension RectPixelExtension on Rect {
       width.roundToDouble(),
       height.roundToDouble(),
     );
+  }
+}
+
+enum StageMode {
+  /// The stage is in preview mode.
+  preview,
+  standard,
+}
+
+class InheritedStageMode extends InheritedWidget {
+  const InheritedStageMode({
+    super.key,
+    required this.stageMode,
+    required Widget child,
+  }) : super(child: child);
+
+  final StageMode stageMode;
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return false;
+  }
+
+  static StageMode? of(BuildContext context) {
+    final inherited = context.dependOnInheritedWidgetOfExactType<InheritedStageMode>();
+    return inherited?.stageMode;
+  }
+}
+
+extension StagePreviewMode on BuildContext {
+  StageMode get stageMode {
+    return InheritedStageMode.of(this) ?? StageMode.standard;
   }
 }
