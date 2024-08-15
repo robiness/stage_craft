@@ -87,7 +87,7 @@ class _StageBuilderState extends State<StageBuilder> {
   @override
   Widget build(BuildContext context) {
     // When in preview mode, we don't need the stage
-    if (context.stageMode == StageMode.preview) {
+    if (StageModeWidget.of(context) == StageMode.preview) {
       return widget.builder(context);
     }
     return Theme(
@@ -713,19 +713,25 @@ extension RectPixelExtension on Rect {
   }
 }
 
+/// Defines the mode of the stage.
 enum StageMode {
-  /// The stage is in preview mode.
+  /// The stage is in preview mode. Directly returning the widget without the stage and controls.
   preview,
+
+  /// The stage is in standard mode. Showing all controls and the stage.
   standard,
 }
 
-class InheritedStageMode extends InheritedWidget {
-  const InheritedStageMode({
+/// A widget that provides the stage mode to it's children.
+class StageModeWidget extends InheritedWidget {
+  /// Creates a [StageModeWidget].
+  const StageModeWidget({
     super.key,
     required this.stageMode,
-    required Widget child,
-  }) : super(child: child);
+    required super.child,
+  });
 
+  /// The mode of the stage beneath this widget.
   final StageMode stageMode;
 
   @override
@@ -733,14 +739,9 @@ class InheritedStageMode extends InheritedWidget {
     return false;
   }
 
+  /// Returns the stage mode of the nearest [StageModeWidget] in the widget tree.
   static StageMode? of(BuildContext context) {
-    final inherited = context.dependOnInheritedWidgetOfExactType<InheritedStageMode>();
+    final inherited = context.dependOnInheritedWidgetOfExactType<StageModeWidget>();
     return inherited?.stageMode;
-  }
-}
-
-extension StagePreviewMode on BuildContext {
-  StageMode get stageMode {
-    return InheritedStageMode.of(this) ?? StageMode.standard;
   }
 }
