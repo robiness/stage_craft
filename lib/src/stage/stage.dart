@@ -179,26 +179,27 @@ class _StageBuilderState extends State<StageBuilder> {
                     ),
                 ],
               ),
-              CompositedTransformFollower(
-                link: _sidebarLink,
-                offset: const Offset(-44, 0),
-                child: IconButton(
-                  icon: _expanded
-                      ? Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                        )
-                      : Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                  onPressed: () {
-                    setState(() {
-                      _expanded = !_expanded;
-                    });
-                  },
+              if (widget.controls.isNotEmpty)
+                CompositedTransformFollower(
+                  link: _sidebarLink,
+                  offset: const Offset(-44, 0),
+                  child: IconButton(
+                    icon: _expanded
+                        ? Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          )
+                        : Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          ),
+                    onPressed: () {
+                      setState(() {
+                        _expanded = !_expanded;
+                      });
+                    },
+                  ),
                 ),
-              ),
             ],
           ),
         ),
