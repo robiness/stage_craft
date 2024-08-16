@@ -9,6 +9,8 @@ class DoubleControl extends ValueControl<double> {
   DoubleControl({
     required super.label,
     required super.initialValue,
+    super.max,
+    super.min,
   });
 
   /// The controller for the text field.

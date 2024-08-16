@@ -10,6 +10,8 @@ class DurationControl extends ValueControl<Duration> {
   DurationControl({
     required super.initialValue,
     required super.label,
+    super.min,
+    super.max,
   });
 
   late final _millisecondsController = TextEditingController(text: value.inMilliseconds.toString());
@@ -101,6 +103,8 @@ class DurationControlNullable extends ValueControl<Duration?> {
   DurationControlNullable({
     required super.initialValue,
     required super.label,
+    super.min,
+    super.max,
   });
 
   final _millisecondsController = TextEditingController();
