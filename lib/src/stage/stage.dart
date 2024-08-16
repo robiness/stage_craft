@@ -462,7 +462,10 @@ class _StageCanvasState extends State<StageCanvas> {
                               child: ListenableBuilder(
                                 listenable: Listenable.merge([...widget.controls, _hotReloadListener]),
                                 builder: (context, _) {
-                                  return widget.widgetBuilder(context);
+                                  return KeyedSubtree(
+                                    key: _childKey,
+                                    child: widget.widgetBuilder(context),
+                                  );
                                 },
                               ),
                             ),
