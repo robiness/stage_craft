@@ -273,6 +273,9 @@ class _StageCanvasState extends State<StageCanvas> {
 
   final _hotReloadListener = ValueNotifier<Key>(UniqueKey());
 
+  // Create a GlobalKey to access the RenderBox of the widget
+  final GlobalKey _interactiveViewerKey = GlobalKey();
+
   @override
   void reassemble() {
     super.reassemble();
@@ -307,11 +310,14 @@ class _StageCanvasState extends State<StageCanvas> {
 
   void _zoomInteractiveViewer(double zoom) {
     final zoomBefore = _transformationController.value.getMaxScaleOnAxis();
+    // We need to add the _rects global position to the scale event.
+    final RenderBox renderBox = _interactiveViewerKey.currentContext!.findRenderObject()! as RenderBox;
+    final Offset globalCenter = renderBox.localToGlobal(_rect!.center);
     if (zoomBefore != zoom) {
       final zoomDelta = zoom / zoomBefore;
       final event = PointerScaleEvent(
         device: 1,
-        position: _rect!.center,
+        position: _rect!.center + Offset(0, globalCenter.dy),
         scale: zoomDelta,
       );
       GestureBinding.instance.handlePointerEvent(event);
@@ -432,6 +438,7 @@ class _StageCanvasState extends State<StageCanvas> {
                     ),
                   ),
                 InteractiveViewer(
+                  key: _interactiveViewerKey,
                   transformationController: _transformationController,
                   minScale: 0.1,
                   maxScale: 256,

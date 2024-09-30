@@ -13,6 +13,9 @@ class MinimalExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Minimal Example'),
+        ),
         body: MinimalExampleStage(),
       ),
     );
