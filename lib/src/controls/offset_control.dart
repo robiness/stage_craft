@@ -11,27 +11,40 @@ class OffsetControl extends ValueControl<Offset> {
     required super.label,
   });
 
-  late final TextEditingController _controllerX = TextEditingController();
-  late final TextEditingController _controllerY = TextEditingController();
+  late final TextEditingController _controllerX = TextEditingController(text: value.dx.toString());
+  late final TextEditingController _controllerY = TextEditingController(text: value.dy.toString());
 
   @override
   Widget builder(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        StageCraftTextField(
-          controller: _controllerX,
-          onChanged: (newString) {
-            value = Offset(double.parse(newString), value.dy);
-          },
-        ),
-        StageCraftTextField(
-          controller: _controllerY,
-          onChanged: (newString) {
-            value = Offset(value.dx, double.parse(newString));
-          },
-        ),
-      ],
+    return DefaultControlBarRow(
+      control: this,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          StageCraftTextField(
+            controller: _controllerX,
+            onChanged: (newString) {
+              final double? dx = double.tryParse(newString);
+              if (dx == null) {
+                value = Offset(0, value.dy);
+                return;
+              }
+              value = Offset(dx, value.dy);
+            },
+          ),
+          StageCraftTextField(
+            controller: _controllerY,
+            onChanged: (newString) {
+              final double? dy = double.tryParse(newString);
+              if (dy == null) {
+                value = Offset(value.dx, 0);
+                return;
+              }
+              value = Offset(value.dx, dy);
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -43,6 +56,17 @@ class OffsetControlNullable extends ValueControl<Offset?> {
     required super.initialValue,
     required super.label,
   });
+
+  void _onChanged() {
+    final double? dx = double.tryParse(_controllerX.text);
+    final double? dy = double.tryParse(_controllerY.text);
+    if (dx == null && dy == null) {
+      value = null;
+      return;
+    }
+
+    value = Offset(dx ?? 0, dy ?? 0);
+  }
 
   late final TextEditingController _controllerX = TextEditingController(text: value?.dx.toString() ?? '');
   late final TextEditingController _controllerY = TextEditingController(text: value?.dy.toString() ?? '');
@@ -57,22 +81,16 @@ class OffsetControlNullable extends ValueControl<Offset?> {
           Flexible(
             child: StageCraftTextField(
               controller: _controllerX,
-              onChanged: (newString) {
-                final double? dx = double.tryParse(newString);
-                if (dx == null) {
-                  value = null;
-                }
-                if (value != null) {
-                  value = Offset(dx!, value!.dy);
-                }
+              onChanged: (_) {
+                _onChanged();
               },
             ),
           ),
           Flexible(
             child: StageCraftTextField(
               controller: _controllerY,
-              onChanged: (newString) {
-                value = Offset(value!.dx, double.parse(newString));
+              onChanged: (_) {
+                _onChanged();
               },
             ),
           ),
