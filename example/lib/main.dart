@@ -38,9 +38,9 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: Colors.orange,
   );
 
-  final tagShadow = OffsetControlNullable(
+  final tagShadow = OffsetControl(
     label: 'shadow',
-    initialValue: Offset.zero,
+    initialValue: const Offset(2, 2),
   );
 
   final options = StringListControl(
@@ -101,6 +101,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           controls: [
             chipIntrinsicWidth,
             chipBorderRadius,
+            tagShadow,
             chipColor,
             chipWidth,
             chipShadowBlur,
@@ -241,11 +242,10 @@ class Chip extends StatelessWidget {
           color: color,
           borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
           boxShadow: [
-            if (shadowOffset != null)
-              BoxShadow(
-                blurRadius: blur,
-                offset: shadowOffset!,
-              ),
+            BoxShadow(
+              blurRadius: 0,
+              offset: shadowOffset ?? Offset.zero,
+            ),
           ],
         ),
         child: child,
