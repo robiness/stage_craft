@@ -14,7 +14,16 @@ class WidgetControl extends ValueControl<Widget> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: value,
+      child: DropdownButton<Widget>(
+        items: const [
+          DropdownMenuItem(value: Text('Nicer Text'), child: Text('Text')),
+          DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+          DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+        ],
+        onChanged: (value) {
+          this.value = value!;
+        },
+      ),
     );
   }
 }
@@ -31,7 +40,16 @@ class WidgetControlNullable extends ValueControl<Widget?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: value ?? const SizedBox.shrink(),
+      child: DropdownButton<Widget>(
+        items: const [
+          DropdownMenuItem(value: Text('Nicer Text'), child: Text('Text')),
+          DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+          DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+        ],
+        onChanged: (value) {
+          this.value = value;
+        },
+      ),
     );
   }
 }
