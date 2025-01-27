@@ -42,7 +42,6 @@ class _ControlBarState extends State<ControlBar> {
   }
 
   void _update() {
-    print('WE DO THE UDPATE');
     setState(() {});
   }
 
@@ -58,8 +57,8 @@ class _ControlBarState extends State<ControlBar> {
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
           ),
           Flexible(
-            child: Column(
-              // padding: const EdgeInsets.only(left: 4, top: 4, right: 4),
+            child: ListView(
+              padding: const EdgeInsets.only(left: 4, top: 4, right: 4),
               children: widget.controls.map((control) {
                 return control.builder(context);
               }).toList(),
