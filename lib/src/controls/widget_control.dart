@@ -32,7 +32,7 @@ class WidgetControl extends ValueControl<Widget> {
 class WidgetControlNullable extends ValueControl<Widget?> {
   /// Creates a widget control.
   WidgetControlNullable({
-    required super.initialValue,
+    super.initialValue,
     required super.label,
   });
 

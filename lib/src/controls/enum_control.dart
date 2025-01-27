@@ -50,8 +50,8 @@ class EnumControl<T extends Enum> extends ValueControl<T> {
 class EnumControlNullable<T extends Enum> extends ValueControl<T?> {
   /// Creates a control to modify a nullable enum parameter of the widget on stage.
   EnumControlNullable({
+    super.initialValue,
     required super.label,
-    required super.initialValue,
     required this.values,
   });
 

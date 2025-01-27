@@ -5,6 +5,7 @@ export 'control_group.dart';
 export 'double_control.dart';
 export 'duration_control.dart';
 export 'enum_control.dart';
+export 'function_control.dart';
 export 'generic_control.dart';
 export 'int_control.dart';
 export 'offset_control.dart';

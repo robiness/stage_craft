@@ -35,7 +35,7 @@ class IntControlNullable extends ValueControl<int?> {
   /// Creates a new nullable int control.
   IntControlNullable({
     required super.label,
-    required super.initialValue,
+    super.initialValue,
     super.max,
     super.min,
   });

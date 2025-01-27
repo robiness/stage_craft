@@ -53,7 +53,7 @@ class OffsetControl extends ValueControl<Offset> {
 class OffsetControlNullable extends ValueControl<Offset?> {
   /// Creates an offset control.
   OffsetControlNullable({
-    required super.initialValue,
+    super.initialValue,
     required super.label,
   });
 

@@ -35,7 +35,7 @@ class DoubleControlNullable extends ValueControl<double?> {
   /// Creates a nullable double control.
   DoubleControlNullable({
     required super.label,
-    required super.initialValue,
+    super.initialValue,
     super.max,
     super.min,
   });
