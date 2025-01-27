@@ -33,7 +33,16 @@ class _ControlBarState extends State<ControlBar> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant ControlBar oldWidget) {
+    for (final control in widget.controls) {
+      control.addListener(_update);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _update() {
+    print('WE DO THE UDPATE');
     setState(() {});
   }
 
@@ -49,8 +58,8 @@ class _ControlBarState extends State<ControlBar> {
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
           ),
           Flexible(
-            child: ListView(
-              padding: const EdgeInsets.only(left: 4, top: 4, right: 4),
+            child: Column(
+              // padding: const EdgeInsets.only(left: 4, top: 4, right: 4),
               children: widget.controls.map((control) {
                 return control.builder(context);
               }).toList(),
