@@ -93,8 +93,8 @@ class ControlStage extends StatelessWidget {
         widgetControlNullable,
       ],
       builder: (context) {
-        return Container(
-          color: Colors.grey.withOpacity(0.8),
+        return ColoredBox(
+          color: Colors.grey.withAlpha(160),
           child: ListView(
             children: [
               boolControl.builder(context),
@@ -111,14 +111,8 @@ class ControlStage extends StatelessWidget {
               durationControlNullable.builder(context),
               enumControl.builder(context),
               enumControlNullable.builder(context),
-              _FunctionButton(
-                onTap: functionControl.value,
-                child: functionControl.builder(context),
-              ),
-              _FunctionButton(
-                onTap: functionControlNullable.value,
-                child: functionControlNullable.builder(context),
-              ),
+              functionControl.builder(context),
+              functionControlNullable.builder(context),
               genericControl.builder(context),
               genericControlNullable.builder(context),
               offsetControl.builder(context),
@@ -130,36 +124,6 @@ class ControlStage extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _FunctionButton extends StatelessWidget {
-  const _FunctionButton({required this.onTap, required this.child});
-
-  final VoidCallback? onTap;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              height: 20,
-              width: 20,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Expanded(child: child),
-      ],
     );
   }
 }

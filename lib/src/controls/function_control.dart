@@ -16,12 +16,30 @@ class VoidFunctionControl extends ValueControl<VoidCallback> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.orange.withAlpha(100),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Text('PrintCallBack'),
+      child: Row(
+        children: [
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: value,
+              child: Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.orange.withAlpha(100),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text('PrintCallBack'),
+          ),
+        ],
       ),
     );
   }
@@ -45,23 +63,34 @@ class VoidFunctionControlNullable extends ValueControl<VoidCallback?> {
 
   @override
   Widget builder(BuildContext context) {
+    print('VoidFunctionControlNullable: $value');
+    print('NULL: ${value == null}');
     return DefaultControlBarRow(
       control: this,
-      child: GestureDetector(
-        onTap: () {
-          if (value == null) {
-            value = _initialValue;
-          } else {
-            value = null;
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.orange.withAlpha(100),
-            borderRadius: BorderRadius.circular(8),
+      child: Row(
+        children: [
+          MouseRegion(
+            cursor: value == null ? MouseCursor.defer : SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: value,
+              child: Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  color: value == null ? Colors.grey : Colors.green,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
           ),
-          child: const Text('PrintCallBack'),
-        ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.orange.withAlpha(100),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text('PrintCallBack'),
+          ),
+        ],
       ),
     );
   }
