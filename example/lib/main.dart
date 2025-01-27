@@ -59,7 +59,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   );
   final chipWidth = DoubleControlNullable(
     label: 'width',
-    initialValue: null,
   );
   final alignment = EnumControl<CrossAxisAlignment>(
     label: 'alignment',
