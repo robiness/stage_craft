@@ -10,3 +10,4 @@ export 'int_control.dart';
 export 'offset_control.dart';
 export 'string_control.dart';
 export 'string_list_control.dart';
+export 'widget_control.dart';
