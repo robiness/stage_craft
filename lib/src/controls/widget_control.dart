@@ -6,23 +6,41 @@ import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
 class WidgetControl extends ValueControl<Widget> {
   /// Creates a widget control.
   WidgetControl({
-    required super.initialValue,
     required super.label,
-  });
+  }) : super(initialValue: _textWidget);
 
   @override
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: DropdownButton<Widget>(
-        items: const [
-          DropdownMenuItem(value: Text('Nicer Text'), child: Text('Text')),
-          DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
-          DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+      child: Row(
+        children: [
+          SizedBox(
+            height: 40,
+            width: 40,
+            child: value,
+          ),
+          const SizedBox(),
+          DropdownButton<Widget>(
+            items: const [
+              DropdownMenuItem(value: _textWidget, child: Text('Text')),
+              DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+              DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+            ],
+            selectedItemBuilder: (context) {
+              return [
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: value,
+                ),
+              ];
+            },
+            onChanged: (value) {
+              this.value = value!;
+            },
+          ),
         ],
-        onChanged: (value) {
-          this.value = value!;
-        },
       ),
     );
   }
@@ -32,24 +50,35 @@ class WidgetControl extends ValueControl<Widget> {
 class WidgetControlNullable extends ValueControl<Widget?> {
   /// Creates a widget control.
   WidgetControlNullable({
-    super.initialValue,
     required super.label,
-  });
+  }) : super(initialValue: _textWidget);
 
   @override
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: DropdownButton<Widget>(
-        items: const [
-          DropdownMenuItem(value: Text('Nicer Text'), child: Text('Text')),
-          DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
-          DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+      child: Row(
+        children: [
+          SizedBox(
+            height: 40,
+            width: 40,
+            child: value,
+          ),
+          const SizedBox(),
+          DropdownButton<Widget>(
+            items: const [
+              DropdownMenuItem(value: _textWidget, child: Text('Text')),
+              DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+              DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+            ],
+            onChanged: (value) {
+              this.value = value;
+            },
+          ),
         ],
-        onChanged: (value) {
-          this.value = value;
-        },
       ),
     );
   }
 }
+
+const Center _textWidget = Center(child: Text('Text'));

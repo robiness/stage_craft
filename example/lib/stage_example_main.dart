@@ -61,7 +61,7 @@ class ControlStage extends StatelessWidget {
 
   // TODO add initialValue to StringListControlNullable
   // final stringListControlNullable = StringListControlNullable(label: 'stringListNullable');
-  final widgetControl = WidgetControl(label: 'widget', initialValue: const Text('Hello'));
+  final widgetControl = WidgetControl(label: 'widget');
   final widgetControlNullable = WidgetControlNullable(label: 'widgetNullable');
 
   @override
