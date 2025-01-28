@@ -33,6 +33,14 @@ class _ControlBarState extends State<ControlBar> {
     }
   }
 
+  @override
+  void didUpdateWidget(covariant ControlBar oldWidget) {
+    for (final control in widget.controls) {
+      control.addListener(_update);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _update() {
     setState(() {});
   }

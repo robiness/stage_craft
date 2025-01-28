@@ -30,7 +30,7 @@ class StringControl extends ValueControl<String> {
 /// A control to modify a nullable string parameter of the widget on stage.
 class StringControlNullable extends ValueControl<String?> {
   /// Creates a new nullable string control.
-  StringControlNullable({required super.initialValue, required super.label});
+  StringControlNullable({super.initialValue, required super.label});
 
   late final TextEditingController _controller = TextEditingController(text: value);
 

@@ -8,11 +8,11 @@ class GenericControl<T> extends ValueControl<T> {
   GenericControl({
     required super.label,
     required super.initialValue,
-    required this.values,
+    required this.options,
   });
 
   /// The values that can be selected.
-  final List<DropdownMenuItem<T>> values;
+  final List<DropdownMenuItem<T>> options;
 
   @override
   Widget builder(BuildContext context) {
@@ -20,7 +20,7 @@ class GenericControl<T> extends ValueControl<T> {
       control: this,
       child: DropdownButton<T>(
         value: value,
-        items: values,
+        items: options,
         onChanged: (e) {
           if (e != null) {
             value = e;

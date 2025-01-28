@@ -64,7 +64,7 @@ class ColorControlNullable extends ValueControl<Color?> {
   /// Creates a nullable color control.
   ColorControlNullable({
     required super.label,
-    required super.initialValue,
+    super.initialValue,
     this.colorSamples,
   });
 

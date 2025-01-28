@@ -28,7 +28,7 @@ class BoolControl extends ValueControl<bool> {
 class BoolControlNullable extends ValueControl<bool?> {
   /// Creates a new nullable boolean control.
   BoolControlNullable({
-    required super.initialValue,
+    super.initialValue,
     required super.label,
   });
 

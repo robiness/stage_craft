@@ -101,7 +101,7 @@ class DurationControl extends ValueControl<Duration> {
 class DurationControlNullable extends ValueControl<Duration?> {
   /// Creates a new boolean control.
   DurationControlNullable({
-    required super.initialValue,
+    super.initialValue,
     required super.label,
     super.min,
     super.max,
