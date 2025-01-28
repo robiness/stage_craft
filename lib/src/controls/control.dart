@@ -9,7 +9,7 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   /// Creates a new [ValueControl] with the given initial value.
   ValueControl({
     required this.label,
-    required T initialValue,
+    required this.initialValue,
     T? min,
     T? max,
   })  : _previousValue = initialValue,
@@ -32,6 +32,9 @@ abstract class ValueControl<T> extends ValueNotifier<T> {
   Widget builder(BuildContext context);
 
   T _previousValue;
+
+  /// The initial value of the control.
+  final T initialValue;
 
   final T? _minValue;
 

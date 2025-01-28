@@ -7,7 +7,12 @@ class WidgetControl extends ValueControl<Widget> {
   /// Creates a widget control.
   WidgetControl({
     required super.label,
-  }) : super(initialValue: _textWidget);
+    Widget? initialValue,
+  })  : _initialValue = initialValue,
+        super(initialValue: initialValue ?? _textWidget);
+
+  // We need to store it here since it can be null. If set we want to show it in the dropdown.
+  final Widget? _initialValue;
 
   @override
   Widget builder(BuildContext context) {
@@ -22,10 +27,11 @@ class WidgetControl extends ValueControl<Widget> {
           ),
           const SizedBox(),
           DropdownButton<Widget>(
-            items: const [
-              DropdownMenuItem(value: _textWidget, child: Text('Text')),
-              DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
-              DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+            items: [
+              if (_initialValue != null) DropdownMenuItem(value: _initialValue, child: const Text('Initial')),
+              const DropdownMenuItem(value: _textWidget, child: Text('Text')),
+              const DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+              const DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
             ],
             selectedItemBuilder: (context) {
               return [
@@ -51,7 +57,8 @@ class WidgetControlNullable extends ValueControl<Widget?> {
   /// Creates a widget control.
   WidgetControlNullable({
     required super.label,
-  }) : super(initialValue: _textWidget);
+    Widget? initialValue,
+  }) : super(initialValue: initialValue ?? _textWidget);
 
   @override
   Widget builder(BuildContext context) {
@@ -66,10 +73,11 @@ class WidgetControlNullable extends ValueControl<Widget?> {
           ),
           const SizedBox(),
           DropdownButton<Widget>(
-            items: const [
-              DropdownMenuItem(value: _textWidget, child: Text('Text')),
-              DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
-              DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
+            items: [
+              if (initialValue != null) DropdownMenuItem(value: initialValue, child: const Text('Initial')),
+              const DropdownMenuItem(value: _textWidget, child: Text('Text')),
+              const DropdownMenuItem(value: ColoredBox(color: Colors.red), child: Text('ColoredBox')),
+              const DropdownMenuItem(value: Icon(Icons.ac_unit), child: Text('Icon')),
             ],
             onChanged: (value) {
               this.value = value;

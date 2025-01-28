@@ -92,4 +92,7 @@ class ControlGroup implements ValueControl {
 
   @override
   Null get minValue => null;
+
+  @override
+  get initialValue => null;
 }
