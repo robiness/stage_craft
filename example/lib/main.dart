@@ -79,6 +79,12 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: const Duration(seconds: 3),
   );
 
+  final padding = PaddingControl.all(16, label: 'padding');
+  final margin = EdgeInsetsControl(
+    label: 'margin',
+    initialValue: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -95,6 +101,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         alignment,
         options,
         duration,
+        padding,
+        margin,
         ControlGroup(
           label: 'Chip',
           controls: [
@@ -122,6 +130,8 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           chipShadowBlur: chipShadowBlur.value,
           chipIntrinsicWidth: chipIntrinsicWidth.value,
           duration: duration.value,
+          padding: padding.value,
+          margin: margin.value,
         );
       },
     );
@@ -144,6 +154,8 @@ class MyAwesomeWidget extends StatelessWidget {
     required this.chipShadowBlur,
     required this.chipIntrinsicWidth,
     required this.duration,
+    required this.padding,
+    required this.margin,
   })  : options = options ?? const [],
         chipColor = chipColor ?? Colors.blue;
 
@@ -162,50 +174,54 @@ class MyAwesomeWidget extends StatelessWidget {
   final double chipShadowBlur;
   final bool chipIntrinsicWidth;
   final Duration? duration;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: width,
       height: height,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: alignment,
-          children: [
-            if (label != null)
-              Text(
-                label!,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-            Text('Duration: $duration'),
-            Wrap(
-              runSpacing: 8,
-              spacing: 8,
-              children: options.map(
-                (option) {
-                  return Chip(
-                    width: chipWidth,
-                    color: chipColor,
-                    borderRadius: chipBorderRadius,
-                    shadowOffset: chipShadowOffset,
-                    blur: chipShadowBlur,
-                    intrinsicWidth: chipIntrinsicWidth,
-                    child: Center(
-                      child: Text(
-                        option,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  );
-                },
-              ).toList(),
+      margin: margin,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: alignment,
+        children: [
+          if (label != null)
+            Text(
+              label!,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
-          ],
-        ),
+          Text('Duration: $duration'),
+          Text('Padding: $padding'),
+          Text('Margin: $margin'),
+          Wrap(
+            runSpacing: 8,
+            spacing: 8,
+            children: options.map(
+              (option) {
+                return Chip(
+                  width: chipWidth,
+                  color: chipColor,
+                  borderRadius: chipBorderRadius,
+                  shadowOffset: chipShadowOffset,
+                  blur: chipShadowBlur,
+                  intrinsicWidth: chipIntrinsicWidth,
+                  child: Center(
+                    child: Text(
+                      option,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                );
+              },
+            ).toList(),
+          ),
+        ],
       ),
     );
   }
