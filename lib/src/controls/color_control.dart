@@ -19,41 +19,49 @@ class ColorControl extends ValueControl<Color> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, bottom: 2, top: 2),
-        child: StageCraftColorPicker(
-          initialColor: value,
-          onColorSelected: (color) {
-            value = color;
-          },
-          colorSamples: colorSamples,
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Container(
-                height: 24,
-                width: 48,
-                foregroundDecoration: BoxDecoration(
-                  // The actual color drawn over the chessboard pattern
-                  color: value,
-                ),
-                // The chessboard pattern
-                child: const CustomPaint(
-                  foregroundPainter: _ChessBoardPainter(
-                    boxSize: 8,
-                    // The color of the chessboard pattern
-                    color: Colors.grey,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Color',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
+          const SizedBox(width: 8),
+          StageCraftColorPicker(
+            initialColor: value,
+            onColorSelected: (color) {
+              value = color;
+            },
+            colorSamples: colorSamples,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  height: 24,
+                  width: 48,
+                  foregroundDecoration: BoxDecoration(
+                    // The actual color drawn over the chessboard pattern
+                    color: value,
                   ),
-                  child: ColoredBox(
-                    // Background of the chessboard pattern
-                    color: Colors.white,
+                  // The chessboard pattern
+                  child: const CustomPaint(
+                    foregroundPainter: _ChessBoardPainter(
+                      boxSize: 8,
+                      // The color of the chessboard pattern
+                      color: Colors.grey,
+                    ),
+                    child: ColoredBox(
+                      // Background of the chessboard pattern
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -75,38 +83,49 @@ class ColorControlNullable extends ValueControl<Color?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: StageCraftColorPicker(
-        initialColor: value,
-        onColorSelected: (color) {
-          value = color;
-        },
-        colorSamples: colorSamples,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              height: 38,
-              width: 38,
-              foregroundDecoration: BoxDecoration(
-                // The actual color drawn over the chessboard pattern
-                color: value,
-              ),
-              // The chessboard pattern
-              child: const CustomPaint(
-                foregroundPainter: _ChessBoardPainter(
-                  boxSize: 8,
-                  // The color of the chessboard pattern
-                  color: Colors.grey,
-                ),
-                child: ColoredBox(
-                  // Background of the chessboard pattern
-                  color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Color',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
+          const SizedBox(width: 8),
+          StageCraftColorPicker(
+            initialColor: value,
+            onColorSelected: (color) {
+              value = color;
+            },
+            colorSamples: colorSamples,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  height: 24,
+                  width: 48,
+                  foregroundDecoration: BoxDecoration(
+                    // The actual color drawn over the chessboard pattern
+                    color: value,
+                  ),
+                  // The chessboard pattern
+                  child: const CustomPaint(
+                    foregroundPainter: _ChessBoardPainter(
+                      boxSize: 8,
+                      // The color of the chessboard pattern
+                      color: Colors.grey,
+                    ),
+                    child: ColoredBox(
+                      // Background of the chessboard pattern
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

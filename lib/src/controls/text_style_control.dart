@@ -4,6 +4,7 @@ import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
 import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 import 'package:stage_craft/src/widgets/stage_craft_hover_control.dart';
 import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
+import 'package:stage_craft/src/widgets/stage_craft_collapsible_section.dart';
 
 /// A control to modify a TextStyle parameter with organized, collapsible sections.
 class TextStyleControl extends ValueControl<TextStyle> {
@@ -99,7 +100,7 @@ class TextStyleControl extends ValueControl<TextStyle> {
           const SizedBox(height: 8),
           
           // Typography section - collapsible
-          _TextStyleSection(
+          StageCraftCollapsibleSection(
             title: 'Typography',
             isExpanded: _typographyExpanded,
             onToggle: () {
@@ -142,7 +143,7 @@ class TextStyleControl extends ValueControl<TextStyle> {
           const SizedBox(height: 4),
           
           // Style section - collapsible
-          _TextStyleSection(
+          StageCraftCollapsibleSection(
             title: 'Decoration',
             isExpanded: _styleExpanded,
             onToggle: () {
@@ -162,68 +163,6 @@ class TextStyleControl extends ValueControl<TextStyle> {
               },
             ) : null,
           ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Widget for collapsible sections.
-class _TextStyleSection extends StatelessWidget {
-  const _TextStyleSection({
-    required this.title,
-    required this.isExpanded,
-    required this.onToggle,
-    this.child,
-  });
-
-  final String title;
-  final bool isExpanded;
-  final VoidCallback onToggle;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Header with expand/collapse button
-          GestureDetector(
-            onTap: onToggle,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                children: [
-                  Icon(
-                    isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_right,
-                    size: 16,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Content
-          if (child != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: child,
-            ),
         ],
       ),
     );
@@ -412,46 +351,48 @@ class _TextStyleTypographySection extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         
-        // Letter spacing
+        // Letter and word spacing
         Row(
           children: [
             Expanded(
-              child: Text(
-                'Letter',
-                style: Theme.of(context).textTheme.labelSmall,
-                textAlign: TextAlign.center,
+              child: Row(
+                children: [
+                  Text(
+                    'Letter',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: StageCraftTextField(
+                      controller: letterSpacingController,
+                      onChanged: (value) {
+                        final spacing = double.tryParse(value) ?? letterSpacing;
+                        onLetterSpacingChanged(spacing);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                'Word',
-                style: Theme.of(context).textTheme.labelSmall,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Row(
-          children: [
-            Expanded(
-              child: StageCraftTextField(
-                controller: letterSpacingController,
-                onChanged: (value) {
-                  final spacing = double.tryParse(value) ?? letterSpacing;
-                  onLetterSpacingChanged(spacing);
-                },
-              ),
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: StageCraftTextField(
-                controller: wordSpacingController,
-                onChanged: (value) {
-                  final spacing = double.tryParse(value) ?? wordSpacing;
-                  onWordSpacingChanged(spacing);
-                },
+              child: Row(
+                children: [
+                  Text(
+                    'Word',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: StageCraftTextField(
+                      controller: wordSpacingController,
+                      onChanged: (value) {
+                        final spacing = double.tryParse(value) ?? wordSpacing;
+                        onWordSpacingChanged(spacing);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -18,30 +18,56 @@ class OffsetControl extends ValueControl<Offset> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
-          StageCraftTextField(
-            controller: _controllerX,
-            onChanged: (newString) {
-              final double? dx = double.tryParse(newString);
-              if (dx == null) {
-                value = Offset(0, value.dy);
-                return;
-              }
-              value = Offset(dx, value.dy);
-            },
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  'X',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: StageCraftTextField(
+                    controller: _controllerX,
+                    onChanged: (newString) {
+                      final double? dx = double.tryParse(newString);
+                      if (dx == null) {
+                        value = Offset(0, value.dy);
+                        return;
+                      }
+                      value = Offset(dx, value.dy);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-          StageCraftTextField(
-            controller: _controllerY,
-            onChanged: (newString) {
-              final double? dy = double.tryParse(newString);
-              if (dy == null) {
-                value = Offset(value.dx, 0);
-                return;
-              }
-              value = Offset(value.dx, dy);
-            },
+          const SizedBox(width: 8),
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  'Y',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: StageCraftTextField(
+                    controller: _controllerY,
+                    onChanged: (newString) {
+                      final double? dy = double.tryParse(newString);
+                      if (dy == null) {
+                        value = Offset(value.dx, 0);
+                        return;
+                      }
+                      value = Offset(value.dx, dy);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -75,23 +101,45 @@ class OffsetControlNullable extends ValueControl<Offset?> {
   Widget builder(BuildContext context) {
     return DefaultControlBarRow(
       control: this,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
-          Flexible(
-            child: StageCraftTextField(
-              controller: _controllerX,
-              onChanged: (_) {
-                _onChanged();
-              },
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  'X',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: StageCraftTextField(
+                    controller: _controllerX,
+                    onChanged: (_) {
+                      _onChanged();
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          Flexible(
-            child: StageCraftTextField(
-              controller: _controllerY,
-              onChanged: (_) {
-                _onChanged();
-              },
+          const SizedBox(width: 8),
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  'Y',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: StageCraftTextField(
+                    controller: _controllerY,
+                    onChanged: (_) {
+                      _onChanged();
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],

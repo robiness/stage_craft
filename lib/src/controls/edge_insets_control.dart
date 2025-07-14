@@ -187,45 +187,42 @@ class _EdgeInsetsSymmetricInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
+        Expanded(
+          child: Row(
+            children: [
+              Text(
                 'H',
                 style: Theme.of(context).textTheme.labelSmall,
-                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: Text(
+              const SizedBox(width: 4),
+              Expanded(
+                child: StageCraftTextField(
+                  controller: horizontalController,
+                  onChanged: (_) => onChanged(),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Row(
+            children: [
+              Text(
                 'V',
                 style: Theme.of(context).textTheme.labelSmall,
-                textAlign: TextAlign.center,
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Row(
-          children: [
-            Expanded(
-              child: StageCraftTextField(
-                controller: horizontalController,
-                onChanged: (_) => onChanged(),
+              const SizedBox(width: 4),
+              Expanded(
+                child: StageCraftTextField(
+                  controller: verticalController,
+                  onChanged: (_) => onChanged(),
+                ),
               ),
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: StageCraftTextField(
-                controller: verticalController,
-                onChanged: (_) => onChanged(),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -254,34 +251,78 @@ class _EdgeInsetsCustomInput extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Top
-        StageCraftTextField(
-          controller: topController,
-          onChanged: (_) => onChanged(),
-        ),
-        const SizedBox(height: 2),
-        // Left and Right
         Row(
           children: [
-            Expanded(
-              child: StageCraftTextField(
-                controller: leftController,
-                onChanged: (_) => onChanged(),
-              ),
+            Text(
+              'T',
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             const SizedBox(width: 4),
             Expanded(
               child: StageCraftTextField(
-                controller: rightController,
+                controller: topController,
                 onChanged: (_) => onChanged(),
               ),
             ),
           ],
         ),
         const SizedBox(height: 2),
+        // Left and Right
+        Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    'L',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: StageCraftTextField(
+                      controller: leftController,
+                      onChanged: (_) => onChanged(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    'R',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: StageCraftTextField(
+                      controller: rightController,
+                      onChanged: (_) => onChanged(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
         // Bottom
-        StageCraftTextField(
-          controller: bottomController,
-          onChanged: (_) => onChanged(),
+        Row(
+          children: [
+            Text(
+              'B',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: StageCraftTextField(
+                controller: bottomController,
+                onChanged: (_) => onChanged(),
+              ),
+            ),
+          ],
         ),
       ],
     );
