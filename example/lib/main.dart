@@ -38,9 +38,13 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: Colors.orange,
   );
 
-  final tagShadow = OffsetControl(
-    label: 'shadow',
-    initialValue: const Offset(2, 2),
+  final chipShadow = BoxShadowControl(
+    label: 'chip shadow',
+    initialValue: const BoxShadow(
+      color: Colors.black26,
+      offset: Offset(2, 2),
+      blurRadius: 2,
+    ),
   );
 
   final options = StringListControl(
@@ -65,10 +69,6 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     initialValue: CrossAxisAlignment.start,
     values: CrossAxisAlignment.values,
   );
-  final chipShadowBlur = DoubleControl(
-    label: 'shadow blur',
-    initialValue: 2,
-  );
   final chipIntrinsicWidth = BoolControl(
     label: 'intrinsic width',
     initialValue: true,
@@ -83,6 +83,16 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   final margin = EdgeInsetsControl(
     label: 'margin',
     initialValue: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  );
+
+  final boxShadow = BoxShadowControl(
+    label: 'box shadow',
+    initialValue: const BoxShadow(
+      color: Colors.black26,
+      offset: Offset(2, 2),
+      blurRadius: 4,
+      spreadRadius: 1,
+    ),
   );
 
   @override
@@ -103,15 +113,15 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         duration,
         padding,
         margin,
+        boxShadow,
         ControlGroup(
           label: 'Chip',
           controls: [
             chipIntrinsicWidth,
             chipBorderRadius,
-            tagShadow,
+            chipShadow,
             chipColor,
             chipWidth,
-            chipShadowBlur,
           ],
         ),
       ],
@@ -121,17 +131,17 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           height: height.value,
           label: label.value,
           backgroundColor: backgroundColor.value,
-          chipShadowOffset: tagShadow.value,
+          chipShadow: chipShadow.value,
           options: options.value,
           chipBorderRadius: chipBorderRadius.value,
           chipColor: chipColor.value,
           chipWidth: chipWidth.value,
           alignment: alignment.value,
-          chipShadowBlur: chipShadowBlur.value,
           chipIntrinsicWidth: chipIntrinsicWidth.value,
           duration: duration.value,
           padding: padding.value,
           margin: margin.value,
+          boxShadow: boxShadow.value,
         );
       },
     );
@@ -146,16 +156,16 @@ class MyAwesomeWidget extends StatelessWidget {
     this.width,
     this.height,
     List<String>? options,
-    this.chipShadowOffset,
+    required this.chipShadow,
     this.chipBorderRadius,
     this.chipWidth,
     Color? chipColor,
     required this.alignment,
-    required this.chipShadowBlur,
     required this.chipIntrinsicWidth,
     required this.duration,
     required this.padding,
     required this.margin,
+    required this.boxShadow,
   })  : options = options ?? const [],
         chipColor = chipColor ?? Colors.blue;
 
@@ -167,15 +177,15 @@ class MyAwesomeWidget extends StatelessWidget {
   final List<String> options;
 
   final double? chipBorderRadius;
-  final Offset? chipShadowOffset;
+  final BoxShadow chipShadow;
   final double? chipWidth;
   final Color chipColor;
   final CrossAxisAlignment alignment;
-  final double chipShadowBlur;
   final bool chipIntrinsicWidth;
   final Duration? duration;
   final EdgeInsets padding;
   final EdgeInsets margin;
+  final BoxShadow boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +197,7 @@ class MyAwesomeWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
+        boxShadow: [boxShadow],
       ),
       child: Column(
         crossAxisAlignment: alignment,
@@ -199,6 +210,7 @@ class MyAwesomeWidget extends StatelessWidget {
           Text('Duration: $duration'),
           Text('Padding: $padding'),
           Text('Margin: $margin'),
+          Text('BoxShadow: $boxShadow'),
           Wrap(
             runSpacing: 8,
             spacing: 8,
@@ -208,8 +220,7 @@ class MyAwesomeWidget extends StatelessWidget {
                   width: chipWidth,
                   color: chipColor,
                   borderRadius: chipBorderRadius,
-                  shadowOffset: chipShadowOffset,
-                  blur: chipShadowBlur,
+                  shadow: chipShadow,
                   intrinsicWidth: chipIntrinsicWidth,
                   child: Center(
                     child: Text(
@@ -233,18 +244,16 @@ class Chip extends StatelessWidget {
     required this.width,
     required this.color,
     required this.borderRadius,
-    required this.shadowOffset,
+    required this.shadow,
     required this.child,
-    required this.blur,
     required this.intrinsicWidth,
   });
 
   final double? width;
   final Color color;
   final double? borderRadius;
-  final Offset? shadowOffset;
+  final BoxShadow shadow;
   final Widget child;
-  final double blur;
   final bool intrinsicWidth;
 
   @override
@@ -256,12 +265,7 @@ class Chip extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 0,
-              offset: shadowOffset ?? Offset.zero,
-            ),
-          ],
+          boxShadow: [shadow],
         ),
         child: child,
       ),

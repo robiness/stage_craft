@@ -1,4 +1,5 @@
 export 'bool_control.dart';
+export 'box_shadow_control.dart';
 export 'color_control.dart';
 export 'control.dart';
 export 'control_group.dart';
