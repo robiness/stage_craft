@@ -14,4 +14,5 @@ export 'offset_control.dart';
 export 'padding_control.dart';
 export 'string_control.dart';
 export 'string_list_control.dart';
+export 'text_style_control.dart';
 export 'widget_control.dart';

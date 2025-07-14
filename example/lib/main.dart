@@ -95,6 +95,15 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
     ),
   );
 
+  final textStyle = TextStyleControl(
+    label: 'text style',
+    initialValue: const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -114,6 +123,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
         padding,
         margin,
         boxShadow,
+        textStyle,
         ControlGroup(
           label: 'Chip',
           controls: [
@@ -142,6 +152,7 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
           padding: padding.value,
           margin: margin.value,
           boxShadow: boxShadow.value,
+          textStyle: textStyle.value,
         );
       },
     );
@@ -166,6 +177,7 @@ class MyAwesomeWidget extends StatelessWidget {
     required this.padding,
     required this.margin,
     required this.boxShadow,
+    required this.textStyle,
   })  : options = options ?? const [],
         chipColor = chipColor ?? Colors.blue;
 
@@ -186,6 +198,7 @@ class MyAwesomeWidget extends StatelessWidget {
   final EdgeInsets padding;
   final EdgeInsets margin;
   final BoxShadow boxShadow;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +218,7 @@ class MyAwesomeWidget extends StatelessWidget {
           if (label != null)
             Text(
               label!,
-              style: Theme.of(context).textTheme.headlineLarge,
+              style: textStyle,
             ),
           Text('Duration: $duration'),
           Text('Padding: $padding'),
