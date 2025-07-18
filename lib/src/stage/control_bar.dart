@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/widgets/control_tile.dart';
-import 'package:stage_craft/src/widgets/expandable_controls_toolbar.dart';
 import 'package:stage_craft/stage_craft.dart';
 
 /// A control bar that displays a list of controls to manipulate the stage.
@@ -19,38 +18,6 @@ class ControlBar extends StatefulWidget {
 }
 
 class _ControlBarState extends State<ControlBar> {
-  late ExpandableControlsController _expandableController;
-
-  @override
-  void initState() {
-    super.initState();
-    _expandableController = ExpandableControlsController();
-    for (final control in widget.controls) {
-      control.addListener(_update);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _expandableController.dispose();
-    for (final control in widget.controls) {
-      control.removeListener(_update);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant ControlBar oldWidget) {
-    for (final control in widget.controls) {
-      control.addListener(_update);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  void _update() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -65,12 +32,6 @@ class _ControlBarState extends State<ControlBar> {
           Flexible(
             child: Column(
               children: [
-                // Toolbar
-                ExpandableControlsToolbar(
-                  onExpandAll: _expandableController.expandAll,
-                  onCollapseAll: _expandableController.collapseAll,
-                ),
-
                 // Controls list
                 Expanded(
                   child: ListView(
@@ -80,7 +41,6 @@ class _ControlBarState extends State<ControlBar> {
                         padding: const EdgeInsets.only(bottom: 2),
                         child: ControlTile(
                           control: control,
-                          controller: _expandableController,
                         ),
                       );
                     }).toList(),

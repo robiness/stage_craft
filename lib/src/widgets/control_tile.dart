@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/widgets/control_value_preview.dart';
-import 'package:stage_craft/src/widgets/expandable_controls_toolbar.dart';
 
 /// A compact control tile that shows a one-liner summary with click-to-expand functionality.
 /// Displays control icon, label, and value preview in compact form, expanding to show full control on tap.
@@ -11,13 +8,9 @@ class ControlTile extends StatefulWidget {
   const ControlTile({
     super.key,
     required this.control,
-    this.isExpandedByDefault = false,
-    this.controller,
   });
 
   final ValueControl control;
-  final bool isExpandedByDefault;
-  final ExpandableControlsController? controller;
 
   @override
   State<ControlTile> createState() => _ControlTileState();
@@ -27,13 +20,10 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
   late bool _isExpanded;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
-  StreamSubscription<ExpandCommand>? _commandSubscription;
 
   @override
   void initState() {
     super.initState();
-    _isExpanded = widget.isExpandedByDefault;
-
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -46,45 +36,12 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
     if (_isExpanded) {
       _animationController.value = 1.0;
     }
-
-    // Listen to expansion commands from controller
-    _commandSubscription = widget.controller?.commandStream.listen(_onCommand);
   }
 
   @override
   void dispose() {
-    _commandSubscription?.cancel();
     _animationController.dispose();
     super.dispose();
-  }
-
-  void _onCommand(ExpandCommand command) {
-    switch (command) {
-      case ExpandCommand.expandAll:
-        if (!_isExpanded) {
-          _expand();
-        }
-        break;
-      case ExpandCommand.collapseAll:
-        if (_isExpanded) {
-          _collapse();
-        }
-        break;
-    }
-  }
-
-  void _expand() {
-    setState(() {
-      _isExpanded = true;
-      _animationController.forward();
-    });
-  }
-
-  void _collapse() {
-    setState(() {
-      _isExpanded = false;
-      _animationController.reverse();
-    });
   }
 
   void _toggleExpanded() {
