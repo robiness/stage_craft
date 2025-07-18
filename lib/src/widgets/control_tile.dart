@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/widgets/control_value_preview.dart';
@@ -11,13 +13,11 @@ class ControlTile extends StatefulWidget {
     required this.control,
     this.isExpandedByDefault = false,
     this.controller,
-    this.onExpansionChanged,
   });
 
   final ValueControl control;
   final bool isExpandedByDefault;
   final ExpandableControlsController? controller;
-  final ValueChanged<bool>? onExpansionChanged;
 
   @override
   State<ControlTile> createState() => _ControlTileState();
@@ -27,12 +27,11 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
   late bool _isExpanded;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
-  late String _controlId;
+  StreamSubscription<ExpandCommand>? _commandSubscription;
 
   @override
   void initState() {
     super.initState();
-    _controlId = '${widget.control.runtimeType}_${widget.control.label}';
     _isExpanded = widget.isExpandedByDefault;
 
     _animationController = AnimationController(
@@ -48,41 +47,44 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
       _animationController.value = 1.0;
     }
 
-    // Register command handlers with controller - use post frame callback to avoid setState during build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.controller?.registerControl(
-        _controlId,
-        _expand,
-        _collapse,
-      );
-    });
+    // Listen to expansion commands from controller
+    _commandSubscription = widget.controller?.commandStream.listen(_onCommand);
   }
 
   @override
   void dispose() {
-    widget.controller?.unregisterControl(_controlId);
+    _commandSubscription?.cancel();
     _animationController.dispose();
     super.dispose();
   }
 
-  void _expand() {
-    if (!_isExpanded) {
-      setState(() {
-        _isExpanded = true;
-        _animationController.forward();
-      });
-      widget.onExpansionChanged?.call(true);
+  void _onCommand(ExpandCommand command) {
+    switch (command) {
+      case ExpandCommand.expandAll:
+        if (!_isExpanded) {
+          _expand();
+        }
+        break;
+      case ExpandCommand.collapseAll:
+        if (_isExpanded) {
+          _collapse();
+        }
+        break;
     }
   }
 
+  void _expand() {
+    setState(() {
+      _isExpanded = true;
+      _animationController.forward();
+    });
+  }
+
   void _collapse() {
-    if (_isExpanded) {
-      setState(() {
-        _isExpanded = false;
-        _animationController.reverse();
-      });
-      widget.onExpansionChanged?.call(false);
-    }
+    setState(() {
+      _isExpanded = false;
+      _animationController.reverse();
+    });
   }
 
   void _toggleExpanded() {
@@ -94,7 +96,6 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
         _animationController.reverse();
       }
     });
-    widget.onExpansionChanged?.call(_isExpanded);
   }
 
   @override

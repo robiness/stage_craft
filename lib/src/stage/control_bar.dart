@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stage_craft/stage_craft.dart';
 import 'package:stage_craft/src/widgets/control_tile.dart';
 import 'package:stage_craft/src/widgets/expandable_controls_toolbar.dart';
+import 'package:stage_craft/stage_craft.dart';
 
 /// A control bar that displays a list of controls to manipulate the stage.
 class ControlBar extends StatefulWidget {
@@ -20,13 +20,11 @@ class ControlBar extends StatefulWidget {
 
 class _ControlBarState extends State<ControlBar> {
   late ExpandableControlsController _expandableController;
-  int _expandedCount = 0;
-  
+
   @override
   void initState() {
     super.initState();
     _expandableController = ExpandableControlsController();
-    _expandableController.addListener(_update);
     for (final control in widget.controls) {
       control.addListener(_update);
     }
@@ -35,7 +33,6 @@ class _ControlBarState extends State<ControlBar> {
   @override
   void dispose() {
     super.dispose();
-    _expandableController.removeListener(_update);
     _expandableController.dispose();
     for (final control in widget.controls) {
       control.removeListener(_update);
@@ -52,13 +49,6 @@ class _ControlBarState extends State<ControlBar> {
 
   void _update() {
     setState(() {});
-  }
-
-  void _onExpansionChanged(bool isExpanded) {
-    setState(() {
-      _expandedCount += isExpanded ? 1 : -1;
-      _expandableController.updateExpandedCount(_expandedCount);
-    });
   }
 
   @override
@@ -79,10 +69,8 @@ class _ControlBarState extends State<ControlBar> {
                 ExpandableControlsToolbar(
                   onExpandAll: _expandableController.expandAll,
                   onCollapseAll: _expandableController.collapseAll,
-                  expandedCount: _expandableController.getExpandedCount(),
-                  totalCount: _expandableController.getTotalCount(),
                 ),
-                
+
                 // Controls list
                 Expanded(
                   child: ListView(
@@ -93,8 +81,6 @@ class _ControlBarState extends State<ControlBar> {
                         child: ControlTile(
                           control: control,
                           controller: _expandableController,
-                          isExpandedByDefault: false,
-                          onExpansionChanged: _onExpansionChanged,
                         ),
                       );
                     }).toList(),

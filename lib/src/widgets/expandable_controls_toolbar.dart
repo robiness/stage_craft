@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// Provides global controls for managing expandable controls.
@@ -6,14 +8,10 @@ class ExpandableControlsToolbar extends StatelessWidget {
     super.key,
     required this.onExpandAll,
     required this.onCollapseAll,
-    this.expandedCount = 0,
-    this.totalCount = 0,
   });
 
   final VoidCallback onExpandAll;
   final VoidCallback onCollapseAll;
-  final int expandedCount;
-  final int totalCount;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,7 @@ class ExpandableControlsToolbar extends StatelessWidget {
           _ToolbarButton(
             icon: Icons.unfold_more,
             label: 'Expand All',
-            onPressed: expandedCount < totalCount ? onExpandAll : null,
+            onPressed: onExpandAll,
           ),
 
           const SizedBox(width: 4),
@@ -43,7 +41,7 @@ class ExpandableControlsToolbar extends StatelessWidget {
           _ToolbarButton(
             icon: Icons.unfold_less,
             label: 'Collapse All',
-            onPressed: expandedCount > 0 ? onCollapseAll : null,
+            onPressed: onCollapseAll,
           ),
         ],
       ),
@@ -74,9 +72,7 @@ class _ToolbarButton extends StatelessWidget {
           child: Icon(
             icon,
             size: 16,
-            color: onPressed != null
-                ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8)
-                : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
           ),
         ),
       ),
@@ -84,52 +80,32 @@ class _ToolbarButton extends StatelessWidget {
   }
 }
 
-/// A controller to dispatch expansion commands to multiple expandable controls.
-class ExpandableControlsController extends ChangeNotifier {
-  final Map<String, VoidCallback> _expandCommands = {};
-  final Map<String, VoidCallback> _collapseCommands = {};
-  
-  int _expandedCount = 0;
-  int _totalCount = 0;
+/// Commands that can be broadcast to expandable controls.
+enum ExpandCommand {
+  expandAll,
+  collapseAll,
+}
 
-  /// Register command callbacks for a control tile.
-  void registerControl(String controlId, VoidCallback expandCommand, VoidCallback collapseCommand) {
-    _expandCommands[controlId] = expandCommand;
-    _collapseCommands[controlId] = collapseCommand;
-    _totalCount = _expandCommands.length;
-    notifyListeners();
-  }
+/// A controller to broadcast expansion commands to multiple expandable controls.
+/// Each control tile listens to the stream and decides independently whether to respond.
+class ExpandableControlsController {
+  final StreamController<ExpandCommand> _commandController = StreamController<ExpandCommand>.broadcast();
 
-  /// Unregister a control tile.
-  void unregisterControl(String controlId) {
-    _expandCommands.remove(controlId);
-    _collapseCommands.remove(controlId);
-    _totalCount = _expandCommands.length;
-    notifyListeners();
-  }
+  /// Stream of expansion commands that tiles can listen to.
+  Stream<ExpandCommand> get commandStream => _commandController.stream;
 
-  /// Update the expanded count when a tile's state changes.
-  void updateExpandedCount(int newCount) {
-    if (_expandedCount != newCount) {
-      _expandedCount = newCount;
-      notifyListeners();
-    }
-  }
-
-  /// Send expand command to all registered controls.
+  /// Broadcast expand all command to all listening tiles.
   void expandAll() {
-    for (final command in _expandCommands.values) {
-      command();
-    }
+    _commandController.add(ExpandCommand.expandAll);
   }
 
-  /// Send collapse command to all registered controls.
+  /// Broadcast collapse all command to all listening tiles.
   void collapseAll() {
-    for (final command in _collapseCommands.values) {
-      command();
-    }
+    _commandController.add(ExpandCommand.collapseAll);
   }
 
-  int getExpandedCount() => _expandedCount;
-  int getTotalCount() => _totalCount;
+  /// Dispose of the controller and close the stream.
+  void dispose() {
+    _commandController.close();
+  }
 }
