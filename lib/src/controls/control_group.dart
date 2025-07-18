@@ -16,64 +16,45 @@ class ControlGroup implements ValueControl {
   final String label;
 
   @override
+  Widget? get iconWidget => const Icon(Icons.folder, size: 16, color: Colors.brown);
+
+  @override
+  Widget? get valuePreviewWidget => Text(
+    '${controls.length} controls',
+    style: const TextStyle(
+      fontSize: 12,
+      color: Colors.grey,
+    ),
+  );
+
+  @override
   Widget builder(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header section - consistent with collapsible sections
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.folder,
-                    size: 16,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: controls.map((control) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Control label
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: Text(
+                  control.label,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Content with hierarchy styling
-            Container(
-              margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                  width: 1,
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: controls.map((control) {
-                  return control.builder(context);
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
+              // Control widget
+              control.builder(context),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 

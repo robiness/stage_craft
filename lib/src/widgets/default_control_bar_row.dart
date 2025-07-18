@@ -27,14 +27,9 @@ class DefaultControlBarRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    control.label,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-                  ),
                   const SizedBox(width: 4),
                   if (control.minValue != null)
                     Text(
@@ -53,20 +48,7 @@ class DefaultControlBarRow extends StatelessWidget {
             ],
           );
         }
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 4),
-            Flexible(
-              child: Text(
-                control.label,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            child,
-          ],
-        );
+        return child;
       },
     );
   }

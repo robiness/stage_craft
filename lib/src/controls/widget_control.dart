@@ -58,7 +58,7 @@ class WidgetControlNullable extends ValueControl<Widget?> {
   WidgetControlNullable({
     required super.label,
     Widget? initialValue,
-  }) : super(initialValue: initialValue ?? _textWidget);
+  }) : super(initialValue: initialValue);
 
   @override
   Widget builder(BuildContext context) {
