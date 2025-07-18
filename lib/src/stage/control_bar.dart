@@ -58,13 +58,13 @@ class _ControlBarState extends State<ControlBar> {
     final controlIds = widget.controls.map((control) => '${control.runtimeType}_${control.label}').toList();
     
     return ColoredBox(
-      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 4,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),
           ),
           Flexible(
             child: Column(

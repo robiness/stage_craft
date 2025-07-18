@@ -35,10 +35,10 @@ class _StageCraftHoverControlState extends State<StageCraftHoverControl> with Ti
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(_hovered ? 0.05 : 0),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: _hovered ? 0.05 : 0),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(_hovered ? 0.1 : 0),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: _hovered ? 0.1 : 0),
           ),
         ),
         child: Center(child: widget.child),

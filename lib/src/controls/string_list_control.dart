@@ -36,13 +36,13 @@ class StringListControl extends ValueControl<List<String>> {
       child: Container(
         decoration: BoxDecoration(
           color: hasExpandedSections 
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.08)
-            : Theme.of(context).canvasColor.withOpacity(0.15),
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.08)
+            : Theme.of(context).canvasColor.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
             color: hasExpandedSections 
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
-              : Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
             width: hasExpandedSections ? 1.5 : 1,
           ),
         ),

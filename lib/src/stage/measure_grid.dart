@@ -31,7 +31,7 @@ class _MeasureGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size canvasSize) {
     final paint = Paint()
-      ..color = Colors.grey.withOpacity(0.05)
+      ..color = Colors.grey.withValues(alpha: 0.05)
       ..strokeWidth = 2;
 
     for (double i = 0; i < canvasSize.width; i += size) {

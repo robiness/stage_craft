@@ -56,7 +56,6 @@ class VoidFunctionControlNullable extends ValueControl<VoidCallback?> {
           initialValue: () {},
         );
 
-  late final VoidCallback _initialValue;
 
   @override
   Widget builder(BuildContext context) {

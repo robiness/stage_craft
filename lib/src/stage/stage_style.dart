@@ -20,8 +20,8 @@ class StageStyleData {
       brightness: theme.brightness,
       canvasColor: theme.colorScheme.surface,
       primaryColor: theme.colorScheme.primary,
-      onSurface: theme.colorScheme.onSurface.withOpacity(0.2),
-      borderColor: theme.colorScheme.onSurface.withOpacity(0.4),
+      onSurface: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+      borderColor: theme.colorScheme.onSurface.withValues(alpha: 0.4),
     );
   }
 

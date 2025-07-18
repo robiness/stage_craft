@@ -187,11 +187,11 @@ class _StageBuilderState extends State<StageBuilder> {
                     icon: _expanded
                         ? Icon(
                             Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                           )
                         : Icon(
                             Icons.arrow_back_ios_new,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                     onPressed: () {
                       setState(() {
@@ -223,8 +223,8 @@ class _StageBuilderState extends State<StageBuilder> {
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: _theme.colorScheme.onSurface,
-        selectionColor: _theme.colorScheme.onSurface.withOpacity(0.1),
-        selectionHandleColor: _theme.colorScheme.onSurface.withOpacity(0.1),
+        selectionColor: _theme.colorScheme.onSurface.withValues(alpha: 0.1),
+        selectionHandleColor: _theme.colorScheme.onSurface.withValues(alpha: 0.1),
       ),
     );
   }
@@ -618,7 +618,7 @@ class _CrossHairState extends State<CrossHair> {
         child: CustomPaint(
           painter: CrossHairPainter(
             mousePosition: mousePosition,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),

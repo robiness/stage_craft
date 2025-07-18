@@ -19,10 +19,10 @@ class StageCraftCollapsibleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor.withOpacity(0.3),
+        color: Theme.of(context).canvasColor.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(4),
         border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -40,7 +40,7 @@ class StageCraftCollapsibleSection extends StatelessWidget {
                     size: isExpanded ? 18 : 16,
                     color: isExpanded 
                       ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 4),
                   Expanded(
@@ -64,10 +64,10 @@ class StageCraftCollapsibleSection extends StatelessWidget {
               margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
+                color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),

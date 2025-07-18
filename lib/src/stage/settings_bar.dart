@@ -32,7 +32,7 @@ class SettingsBarCenter extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: 0.3),
               width: 2,
             ),
             color: Colors.white,
@@ -131,7 +131,7 @@ class SettingsBarRight extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: 0.3),
               width: 2,
             ),
             color: Colors.white,

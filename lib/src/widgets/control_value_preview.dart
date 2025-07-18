@@ -28,7 +28,7 @@ class ControlValuePreview extends StatelessWidget {
     return Text(
       value.toString(),
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
       overflow: TextOverflow.ellipsis,
     );

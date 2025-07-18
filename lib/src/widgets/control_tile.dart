@@ -46,8 +46,10 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
       _animationController.value = 1.0;
     }
 
-    // Register with controller
-    widget.controller?.setExpansionState(_controlId, _isExpanded);
+    // Register with controller - use post frame callback to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.controller?.setExpansionState(_controlId, _isExpanded);
+    });
     widget.controller?.addListener(_onControllerChanged);
   }
 
@@ -89,13 +91,13 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
     return Container(
       decoration: BoxDecoration(
         color: _isExpanded
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.08)
-            : Theme.of(context).colorScheme.surface.withOpacity(0.5),
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.08)
+            : Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: _isExpanded
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
-              : Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -117,7 +119,7 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
                     decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
@@ -185,10 +187,10 @@ class _ControlTileHeader extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
+                  color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                 ),
                 child: Text(
@@ -208,7 +210,7 @@ class _ControlTileHeader extends StatelessWidget {
               size: 20,
               color: isExpanded
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ],
         ),

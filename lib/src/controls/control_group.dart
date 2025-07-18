@@ -15,10 +15,10 @@ class ControlGroup implements ValueControl {
   @override
   final String label;
 
-  @override
+  /// The icon widget displayed for this control group.
   Widget? get iconWidget => const Icon(Icons.folder, size: 16, color: Colors.brown);
 
-  @override
+  /// The preview widget showing the number of controls.
   Widget? get valuePreviewWidget => Text(
     '${controls.length} controls',
     style: const TextStyle(
@@ -105,5 +105,5 @@ class ControlGroup implements ValueControl {
   Null get minValue => null;
 
   @override
-  get initialValue => null;
+  Object? get initialValue => null;
 }
