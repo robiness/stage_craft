@@ -17,7 +17,7 @@ class ControlTile extends StatefulWidget {
 }
 
 class _ControlTileState extends State<ControlTile> with SingleTickerProviderStateMixin {
-  late bool _isExpanded;
+  bool _isExpanded = false;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
 
