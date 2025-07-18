@@ -20,6 +20,7 @@ class ControlBar extends StatefulWidget {
 
 class _ControlBarState extends State<ControlBar> {
   late ExpandableControlsController _expandableController;
+  int _expandedCount = 0;
   
   @override
   void initState() {
@@ -53,10 +54,15 @@ class _ControlBarState extends State<ControlBar> {
     setState(() {});
   }
 
+  void _onExpansionChanged(bool isExpanded) {
+    setState(() {
+      _expandedCount += isExpanded ? 1 : -1;
+      _expandableController.updateExpandedCount(_expandedCount);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controlIds = widget.controls.map((control) => '${control.runtimeType}_${control.label}').toList();
-    
     return ColoredBox(
       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
       child: Row(
@@ -71,8 +77,8 @@ class _ControlBarState extends State<ControlBar> {
               children: [
                 // Toolbar
                 ExpandableControlsToolbar(
-                  onExpandAll: () => _expandableController.expandAll(controlIds),
-                  onCollapseAll: () => _expandableController.collapseAll(controlIds),
+                  onExpandAll: _expandableController.expandAll,
+                  onCollapseAll: _expandableController.collapseAll,
                   expandedCount: _expandableController.getExpandedCount(),
                   totalCount: _expandableController.getTotalCount(),
                 ),
@@ -88,6 +94,7 @@ class _ControlBarState extends State<ControlBar> {
                           control: control,
                           controller: _expandableController,
                           isExpandedByDefault: false,
+                          onExpansionChanged: _onExpansionChanged,
                         ),
                       );
                     }).toList(),

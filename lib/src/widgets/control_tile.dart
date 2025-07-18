@@ -11,11 +11,13 @@ class ControlTile extends StatefulWidget {
     required this.control,
     this.isExpandedByDefault = false,
     this.controller,
+    this.onExpansionChanged,
   });
 
   final ValueControl control;
   final bool isExpandedByDefault;
   final ExpandableControlsController? controller;
+  final ValueChanged<bool>? onExpansionChanged;
 
   @override
   State<ControlTile> createState() => _ControlTileState();
@@ -31,7 +33,7 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _controlId = '${widget.control.runtimeType}_${widget.control.label}';
-    _isExpanded = widget.controller?.getExpansionState(_controlId) ?? widget.isExpandedByDefault;
+    _isExpanded = widget.isExpandedByDefault;
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -46,44 +48,53 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
       _animationController.value = 1.0;
     }
 
-    // Register with controller - use post frame callback to avoid setState during build
+    // Register command handlers with controller - use post frame callback to avoid setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.controller?.setExpansionState(_controlId, _isExpanded);
+      widget.controller?.registerControl(
+        _controlId,
+        _expand,
+        _collapse,
+      );
     });
-    widget.controller?.addListener(_onControllerChanged);
   }
 
   @override
   void dispose() {
-    widget.controller?.removeListener(_onControllerChanged);
+    widget.controller?.unregisterControl(_controlId);
     _animationController.dispose();
     super.dispose();
   }
 
-  void _onControllerChanged() {
-    final newState = widget.controller?.getExpansionState(_controlId) ?? _isExpanded;
-    if (newState != _isExpanded) {
+  void _expand() {
+    if (!_isExpanded) {
       setState(() {
-        _isExpanded = newState;
-        if (_isExpanded) {
-          _animationController.forward();
-        } else {
-          _animationController.reverse();
-        }
+        _isExpanded = true;
+        _animationController.forward();
       });
+      widget.onExpansionChanged?.call(true);
+    }
+  }
+
+  void _collapse() {
+    if (_isExpanded) {
+      setState(() {
+        _isExpanded = false;
+        _animationController.reverse();
+      });
+      widget.onExpansionChanged?.call(false);
     }
   }
 
   void _toggleExpanded() {
     setState(() {
       _isExpanded = !_isExpanded;
-      widget.controller?.setExpansionState(_controlId, _isExpanded);
       if (_isExpanded) {
         _animationController.forward();
       } else {
         _animationController.reverse();
       }
     });
+    widget.onExpansionChanged?.call(_isExpanded);
   }
 
   @override

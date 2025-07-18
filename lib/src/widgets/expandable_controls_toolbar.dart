@@ -84,40 +84,52 @@ class _ToolbarButton extends StatelessWidget {
   }
 }
 
-/// A controller to manage the expansion state of multiple expandable controls.
+/// A controller to dispatch expansion commands to multiple expandable controls.
 class ExpandableControlsController extends ChangeNotifier {
-  final Map<String, bool> _expansionStates = {};
+  final Map<String, VoidCallback> _expandCommands = {};
+  final Map<String, VoidCallback> _collapseCommands = {};
+  
+  int _expandedCount = 0;
+  int _totalCount = 0;
 
-  bool getExpansionState(String controlId) {
-    return _expansionStates[controlId] ?? false;
+  /// Register command callbacks for a control tile.
+  void registerControl(String controlId, VoidCallback expandCommand, VoidCallback collapseCommand) {
+    _expandCommands[controlId] = expandCommand;
+    _collapseCommands[controlId] = collapseCommand;
+    _totalCount = _expandCommands.length;
+    notifyListeners();
   }
 
-  void setExpansionState(String controlId, bool isExpanded) {
-    if (_expansionStates[controlId] != isExpanded) {
-      _expansionStates[controlId] = isExpanded;
+  /// Unregister a control tile.
+  void unregisterControl(String controlId) {
+    _expandCommands.remove(controlId);
+    _collapseCommands.remove(controlId);
+    _totalCount = _expandCommands.length;
+    notifyListeners();
+  }
+
+  /// Update the expanded count when a tile's state changes.
+  void updateExpandedCount(int newCount) {
+    if (_expandedCount != newCount) {
+      _expandedCount = newCount;
       notifyListeners();
     }
   }
 
-  void expandAll(List<String> controlIds) {
-    for (final id in controlIds) {
-      _expansionStates[id] = true;
+  /// Send expand command to all registered controls.
+  void expandAll() {
+    for (final command in _expandCommands.values) {
+      command();
     }
-    notifyListeners();
   }
 
-  void collapseAll(List<String> controlIds) {
-    for (final id in controlIds) {
-      _expansionStates[id] = false;
+  /// Send collapse command to all registered controls.
+  void collapseAll() {
+    for (final command in _collapseCommands.values) {
+      command();
     }
-    notifyListeners();
   }
 
-  int getExpandedCount() {
-    return _expansionStates.values.where((expanded) => expanded).length;
-  }
-
-  int getTotalCount() {
-    return _expansionStates.length;
-  }
+  int getExpandedCount() => _expandedCount;
+  int getTotalCount() => _totalCount;
 }
