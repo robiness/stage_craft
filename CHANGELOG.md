@@ -1,3 +1,7 @@
+# 1.2.0
+
+* Control Sidebar UI overhaul
+
 # 1.1.0
 
 * Introduction of a StageMode to enable previews.
