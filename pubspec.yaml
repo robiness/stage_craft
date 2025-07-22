@@ -5,7 +5,7 @@ description: >
 repository: https://github.com/robiness/stage_craft
 issue_tracker: https://github.com/robiness/stage_craft/issues
 
-version: 1.1.0
+version: 1.2.0
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
