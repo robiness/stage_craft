@@ -20,88 +20,76 @@ class MyAwesomeWidgetStage extends StatefulWidget {
 }
 
 class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
-  final width = DoubleControlNullable(
-    label: 'width',
-    initialValue: 300,
-    min: 100,
-    max: 400,
+  final avatarSize = DoubleControl(
+    label: 'Avatar Size',
+    initialValue: 80,
+    min: 40,
+    max: 120,
   );
-  final height = DoubleControl(label: 'height', initialValue: 250);
 
-  final label = StringControl(
-    label: 'label',
-    initialValue: 'Tag Selection',
+  final name = StringControl(
+    label: 'Name',
+    initialValue: 'Sarah Johnson',
+  );
+
+  final title = StringControl(
+    label: 'Title',
+    initialValue: 'Senior Flutter Developer',
+  );
+
+  final primaryColor = ColorControl(
+    label: 'Primary Color',
+    initialValue: const Color(0xFF6366F1),
+  );
+
+  final secondaryColor = ColorControl(
+    label: 'Secondary Color',
+    initialValue: const Color(0xFF8B5CF6),
   );
 
   final backgroundColor = ColorControl(
-    label: 'background',
-    initialValue: Colors.orange,
+    label: 'Background',
+    initialValue: Colors.white,
   );
 
-  final chipShadow = BoxShadowControl(
-    label: 'chip shadow',
-    initialValue: const BoxShadow(
-      color: Colors.black26,
-      offset: Offset(2, 2),
-      blurRadius: 2,
-    ),
+  final cornerRadius = DoubleControl(
+    label: 'Corner Radius',
+    initialValue: 20,
+    min: 0,
+    max: 50,
   );
 
-  final options = StringListControl(
-    label: 'options',
-    initialValue: ['one', 'two', 'three'],
-    defaultValue: 'option',
+  final elevation = DoubleControl(
+    label: 'Elevation',
+    initialValue: 8,
+    min: 0,
+    max: 24,
   );
 
-  final chipBorderRadius = DoubleControl(
-    label: 'border radius',
-    initialValue: 10,
-  );
-  final chipColor = ColorControl(
-    label: 'color',
-    initialValue: Colors.blue,
-  );
-  final chipWidth = DoubleControlNullable(
-    label: 'width',
-  );
-  final alignment = EnumControl<CrossAxisAlignment>(
-    label: 'alignment',
-    initialValue: CrossAxisAlignment.start,
-    values: CrossAxisAlignment.values,
-  );
-  final chipIntrinsicWidth = BoolControl(
-    label: 'intrinsic width',
+  final showStats = BoolControl(
+    label: 'Show Stats',
     initialValue: true,
   );
 
-  final duration = DurationControlNullable(
-    label: 'duration',
-    initialValue: const Duration(seconds: 3),
+  final followers = IntControl(
+    label: 'Followers',
+    initialValue: 1234,
+    min: 0,
+    max: 999999,
   );
 
-  final padding = PaddingControl.all(16, label: 'padding');
-  final margin = EdgeInsetsControl(
-    label: 'margin',
-    initialValue: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  final following = IntControl(
+    label: 'Following',
+    initialValue: 567,
+    min: 0,
+    max: 999999,
   );
 
-  final boxShadow = BoxShadowControl(
-    label: 'box shadow',
-    initialValue: const BoxShadow(
-      color: Colors.black26,
-      offset: Offset(2, 2),
-      blurRadius: 4,
-      spreadRadius: 1,
-    ),
-  );
-
-  final textStyle = TextStyleControl(
-    label: 'text style',
-    initialValue: const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: Colors.black87,
-    ),
+  final posts = IntControl(
+    label: 'Posts',
+    initialValue: 89,
+    min: 0,
+    max: 999999,
   );
 
   @override
@@ -113,181 +101,290 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   Widget build(BuildContext context) {
     return StageBuilder(
       controls: [
-        width,
-        height,
-        label,
+        name,
+        title,
+        avatarSize,
         backgroundColor,
-        alignment,
-        options,
-        duration,
-        padding,
-        margin,
-        boxShadow,
-        textStyle,
+        cornerRadius,
+        elevation,
         ControlGroup(
-          label: 'Chip',
+          label: 'Colors',
           controls: [
-            chipIntrinsicWidth,
-            chipBorderRadius,
-            chipShadow,
-            chipColor,
-            chipWidth,
+            primaryColor,
+            secondaryColor,
+          ],
+        ),
+        ControlGroup(
+          label: 'Social Stats',
+          controls: [
+            showStats,
+            followers,
+            following,
+            posts,
           ],
         ),
       ],
       builder: (context) {
-        return MyAwesomeWidget(
-          width: width.value,
-          height: height.value,
-          label: label.value,
+        return AnimatedProfileCard(
+          name: name.value,
+          title: title.value,
+          avatarSize: avatarSize.value,
+          primaryColor: primaryColor.value,
+          secondaryColor: secondaryColor.value,
           backgroundColor: backgroundColor.value,
-          chipShadow: chipShadow.value,
-          options: options.value,
-          chipBorderRadius: chipBorderRadius.value,
-          chipColor: chipColor.value,
-          chipWidth: chipWidth.value,
-          alignment: alignment.value,
-          chipIntrinsicWidth: chipIntrinsicWidth.value,
-          duration: duration.value,
-          padding: padding.value,
-          margin: margin.value,
-          boxShadow: boxShadow.value,
-          textStyle: textStyle.value,
+          cornerRadius: cornerRadius.value,
+          elevation: elevation.value,
+          showStats: showStats.value,
+          followers: followers.value,
+          following: following.value,
+          posts: posts.value,
         );
       },
     );
   }
 }
 
-class MyAwesomeWidget extends StatelessWidget {
-  const MyAwesomeWidget({
+class AnimatedProfileCard extends StatefulWidget {
+  const AnimatedProfileCard({
     super.key,
-    this.label,
-    this.backgroundColor,
-    this.width,
-    this.height,
-    List<String>? options,
-    required this.chipShadow,
-    this.chipBorderRadius,
-    this.chipWidth,
-    Color? chipColor,
-    required this.alignment,
-    required this.chipIntrinsicWidth,
-    required this.duration,
-    required this.padding,
-    required this.margin,
-    required this.boxShadow,
-    required this.textStyle,
-  })  : options = options ?? const [],
-        chipColor = chipColor ?? Colors.blue;
+    required this.name,
+    required this.title,
+    required this.avatarSize,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.backgroundColor,
+    required this.cornerRadius,
+    required this.elevation,
+    required this.showStats,
+    required this.followers,
+    required this.following,
+    required this.posts,
+  });
 
-  final double? width;
-  final double? height;
-  final String? label;
-  final Color? backgroundColor;
+  final String name;
+  final String title;
+  final double avatarSize;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final Color backgroundColor;
+  final double cornerRadius;
+  final double elevation;
+  final bool showStats;
+  final int followers;
+  final int following;
+  final int posts;
 
-  final List<String> options;
+  @override
+  State<AnimatedProfileCard> createState() => _AnimatedProfileCardState();
+}
 
-  final double? chipBorderRadius;
-  final BoxShadow chipShadow;
-  final double? chipWidth;
-  final Color chipColor;
-  final CrossAxisAlignment alignment;
-  final bool chipIntrinsicWidth;
-  final Duration? duration;
-  final EdgeInsets padding;
-  final EdgeInsets margin;
-  final BoxShadow boxShadow;
-  final TextStyle textStyle;
+class _AnimatedProfileCardState extends State<AnimatedProfileCard> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late AnimationController _hoverController;
+  late Animation<double> _scaleAnimation;
+  bool _isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _hoverController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _hoverController,
+      curve: Curves.easeInOut,
+    ));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _hoverController.dispose();
+    super.dispose();
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
+    }
+    return number.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [boxShadow],
-      ),
-      child: Column(
-        crossAxisAlignment: alignment,
-        children: [
-          if (label != null)
-            Text(
-              label!,
-              style: textStyle,
-            ),
-          Text('Duration: $duration'),
-          Text('Padding: $padding'),
-          Text('Margin: $margin'),
-          Text('BoxShadow: $boxShadow'),
-          Wrap(
-            runSpacing: 8,
-            spacing: 8,
-            children: options.map(
-              (option) {
-                return Chip(
-                  width: chipWidth,
-                  color: chipColor,
-                  borderRadius: chipBorderRadius,
-                  shadow: chipShadow,
-                  intrinsicWidth: chipIntrinsicWidth,
-                  child: Center(
-                    child: Text(
-                      option,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() => _isHovered = true);
+          _hoverController.forward();
+        },
+        onExit: (_) {
+          setState(() => _isHovered = false);
+          _hoverController.reverse();
+        },
+        child: AnimatedBuilder(
+          animation: _hoverController,
+          builder: (context, child) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: 320 * _scaleAnimation.value,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: widget.backgroundColor,
+                borderRadius: BorderRadius.circular(widget.cornerRadius),
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.primaryColor.withValues(alpha: 0.15),
+                    blurRadius: widget.elevation + (_isHovered ? 4 : 0),
+                    offset: Offset(0, widget.elevation / 2 + (_isHovered ? 2 : 0)),
+                    spreadRadius: _isHovered ? 1 : 0,
                   ),
-                );
-              },
-            ).toList(),
-          ),
-        ],
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: widget.avatarSize,
+                        height: widget.avatarSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [widget.primaryColor, widget.secondaryColor],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: widget.primaryColor.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.person,
+                          size: widget.avatarSize * 0.6,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.name,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: widget.primaryColor,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.title,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (widget.showStats) ...[
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: widget.primaryColor.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: widget.primaryColor.withValues(alpha: 0.1),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _StatItem(
+                            label: 'Followers',
+                            value: _formatNumber(widget.followers),
+                            color: widget.primaryColor,
+                          ),
+                          _StatItem(
+                            label: 'Following',
+                            value: _formatNumber(widget.following),
+                            color: widget.secondaryColor,
+                          ),
+                          _StatItem(
+                            label: 'Posts',
+                            value: _formatNumber(widget.posts),
+                            color: widget.primaryColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class Chip extends StatelessWidget {
-  const Chip({
-    super.key,
-    required this.width,
+class _StatItem extends StatelessWidget {
+  const _StatItem({
+    required this.label,
+    required this.value,
     required this.color,
-    required this.borderRadius,
-    required this.shadow,
-    required this.child,
-    required this.intrinsicWidth,
   });
 
-  final double? width;
+  final String label;
+  final String value;
   final Color color;
-  final double? borderRadius;
-  final BoxShadow shadow;
-  final Widget child;
-  final bool intrinsicWidth;
 
   @override
   Widget build(BuildContext context) {
-    final tag = SizedBox(
-      height: 50,
-      width: width,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
-          boxShadow: [shadow],
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
-        child: child,
-      ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
-    if (intrinsicWidth) {
-      return IntrinsicWidth(
-        child: tag,
-      );
-    }
-    return tag;
   }
 }
