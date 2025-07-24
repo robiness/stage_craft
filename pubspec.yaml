@@ -23,7 +23,6 @@ dev_dependencies:
     sdk: flutter
   lint: ^2.8.0
   spot: '>=0.13.0 <1.0.0'
-  meta: ^1.15.0
 
 
 flutter:

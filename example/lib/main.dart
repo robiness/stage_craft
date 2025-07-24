@@ -198,10 +198,12 @@ class _AnimatedProfileCardState extends State<AnimatedProfileCard> with TickerPr
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: 1.05,
-    ).animate(CurvedAnimation(
-      parent: _hoverController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _hoverController,
+        curve: Curves.easeInOut,
+      ),
+    );
     _controller.forward();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// A reusable collapsible section widget for organizing control UI.
 class StageCraftCollapsibleSection extends StatelessWidget {
+  /// Creates a collapsible section with a title and optional child content.
   const StageCraftCollapsibleSection({
     super.key,
     required this.title,
@@ -10,9 +11,13 @@ class StageCraftCollapsibleSection extends StatelessWidget {
     this.child,
   });
 
+  /// The title displayed in the section header.
   final String title;
+  /// Whether the section is currently expanded.
   final bool isExpanded;
+  /// Callback called when the section expand/collapse state should change.
   final VoidCallback onToggle;
+  /// Optional child widget displayed when the section is expanded.
   final Widget? child;
 
   @override
@@ -38,20 +43,20 @@ class StageCraftCollapsibleSection extends StatelessWidget {
                   Icon(
                     isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_right,
                     size: isExpanded ? 18 : 16,
-                    color: isExpanded 
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    color: isExpanded
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       title,
-                      style: isExpanded 
-                        ? Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : Theme.of(context).textTheme.labelMedium,
+                      style: isExpanded
+                          ? Theme.of(context).textTheme.labelMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                          : Theme.of(context).textTheme.labelMedium,
                     ),
                   ),
                 ],
@@ -68,7 +73,6 @@ class StageCraftCollapsibleSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
                   color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-                  width: 1,
                 ),
               ),
               child: child,

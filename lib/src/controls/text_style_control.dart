@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
+import 'package:stage_craft/src/widgets/stage_craft_collapsible_section.dart';
 import 'package:stage_craft/src/widgets/stage_craft_color_picker.dart';
 import 'package:stage_craft/src/widgets/stage_craft_hover_control.dart';
 import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
-import 'package:stage_craft/src/widgets/stage_craft_collapsible_section.dart';
 
 /// A control to modify a TextStyle parameter with organized, collapsible sections.
 class TextStyleControl extends ValueControl<TextStyle> {
@@ -43,16 +43,11 @@ class TextStyleControl extends ValueControl<TextStyle> {
   bool _typographyExpanded = false;
   bool _styleExpanded = false;
 
-  late final TextEditingController _fontSizeController =
-      TextEditingController(text: _fontSize.toString());
-  late final TextEditingController _letterSpacingController =
-      TextEditingController(text: _letterSpacing.toString());
-  late final TextEditingController _wordSpacingController =
-      TextEditingController(text: _wordSpacing.toString());
-  late final TextEditingController _heightController =
-      TextEditingController(text: _height.toString());
-  late final TextEditingController _fontFamilyController =
-      TextEditingController(text: _fontFamily ?? '');
+  late final TextEditingController _fontSizeController = TextEditingController(text: _fontSize.toString());
+  late final TextEditingController _letterSpacingController = TextEditingController(text: _letterSpacing.toString());
+  late final TextEditingController _wordSpacingController = TextEditingController(text: _wordSpacing.toString());
+  late final TextEditingController _heightController = TextEditingController(text: _height.toString());
+  late final TextEditingController _fontFamilyController = TextEditingController(text: _fontFamily ?? '');
 
   void _updateTextStyle() {
     value = TextStyle(
@@ -96,9 +91,9 @@ class TextStyleControl extends ValueControl<TextStyle> {
               _updateTextStyle();
             },
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Typography section - collapsible
           StageCraftCollapsibleSection(
             title: 'Typography',
@@ -107,41 +102,43 @@ class TextStyleControl extends ValueControl<TextStyle> {
               _typographyExpanded = !_typographyExpanded;
               notifyListeners();
             },
-            child: _typographyExpanded ? _TextStyleTypographySection(
-              fontStyle: _fontStyle,
-              letterSpacing: _letterSpacing,
-              wordSpacing: _wordSpacing,
-              height: _height,
-              fontFamily: _fontFamily,
-              letterSpacingController: _letterSpacingController,
-              wordSpacingController: _wordSpacingController,
-              heightController: _heightController,
-              fontFamilyController: _fontFamilyController,
-              onFontStyleChanged: (style) {
-                _fontStyle = style;
-                _updateTextStyle();
-              },
-              onLetterSpacingChanged: (spacing) {
-                _letterSpacing = spacing;
-                _updateTextStyle();
-              },
-              onWordSpacingChanged: (spacing) {
-                _wordSpacing = spacing;
-                _updateTextStyle();
-              },
-              onHeightChanged: (height) {
-                _height = height;
-                _updateTextStyle();
-              },
-              onFontFamilyChanged: (family) {
-                _fontFamily = family.isNotEmpty ? family : null;
-                _updateTextStyle();
-              },
-            ) : null,
+            child: _typographyExpanded
+                ? _TextStyleTypographySection(
+                    fontStyle: _fontStyle,
+                    letterSpacing: _letterSpacing,
+                    wordSpacing: _wordSpacing,
+                    height: _height,
+                    fontFamily: _fontFamily,
+                    letterSpacingController: _letterSpacingController,
+                    wordSpacingController: _wordSpacingController,
+                    heightController: _heightController,
+                    fontFamilyController: _fontFamilyController,
+                    onFontStyleChanged: (style) {
+                      _fontStyle = style;
+                      _updateTextStyle();
+                    },
+                    onLetterSpacingChanged: (spacing) {
+                      _letterSpacing = spacing;
+                      _updateTextStyle();
+                    },
+                    onWordSpacingChanged: (spacing) {
+                      _wordSpacing = spacing;
+                      _updateTextStyle();
+                    },
+                    onHeightChanged: (height) {
+                      _height = height;
+                      _updateTextStyle();
+                    },
+                    onFontFamilyChanged: (family) {
+                      _fontFamily = family.isNotEmpty ? family : null;
+                      _updateTextStyle();
+                    },
+                  )
+                : null,
           ),
-          
+
           const SizedBox(height: 4),
-          
+
           // Style section - collapsible
           StageCraftCollapsibleSection(
             title: 'Decoration',
@@ -150,18 +147,20 @@ class TextStyleControl extends ValueControl<TextStyle> {
               _styleExpanded = !_styleExpanded;
               notifyListeners();
             },
-            child: _styleExpanded ? _TextStyleDecorationSection(
-              decoration: _decoration,
-              decorationColor: _decorationColor,
-              onDecorationChanged: (decoration) {
-                _decoration = decoration;
-                _updateTextStyle();
-              },
-              onDecorationColorChanged: (color) {
-                _decorationColor = color;
-                _updateTextStyle();
-              },
-            ) : null,
+            child: _styleExpanded
+                ? _TextStyleDecorationSection(
+                    decoration: _decoration,
+                    decorationColor: _decorationColor,
+                    onDecorationChanged: (decoration) {
+                      _decoration = decoration;
+                      _updateTextStyle();
+                    },
+                    onDecorationColorChanged: (color) {
+                      _decorationColor = color;
+                      _updateTextStyle();
+                    },
+                  )
+                : null,
           ),
         ],
       ),
@@ -217,7 +216,7 @@ class _TextStyleCoreSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        
+
         // Color
         Row(
           children: [
@@ -246,7 +245,7 @@ class _TextStyleCoreSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        
+
         // Font weight
         StageCraftHoverControl(
           child: DropdownButton<FontWeight>(
@@ -343,14 +342,14 @@ class _TextStyleTypographySection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        
+
         // Font family
         StageCraftTextField(
           controller: fontFamilyController,
           onChanged: onFontFamilyChanged,
         ),
         const SizedBox(height: 4),
-        
+
         // Letter and word spacing
         Row(
           children: [
@@ -398,7 +397,7 @@ class _TextStyleTypographySection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 4),
-        
+
         // Line height
         Row(
           children: [
@@ -470,7 +469,7 @@ class _TextStyleDecorationSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        
+
         // Decoration color
         if (decoration != TextDecoration.none)
           Row(

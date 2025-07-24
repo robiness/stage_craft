@@ -160,10 +160,10 @@ class _StageCraftColorPickerState extends State<StageCraftColorPicker> {
 /// It contains a `Color` and an optional `String` to represent its according name.
 ///
 /// Used as optional parameters in [ColorFieldConfigurator] and [ColorFieldConfiguratorNullable].
-/// ```
+/// dart```
 /// Creating a ColorSample
 /// const ColorSample sample = ColorSample(color: Colors.blue, name: "MyColors.blue");
-/// ```
+/// dart```
 class ColorSample {
   /// Creates a `ColorSample`.
   ///
