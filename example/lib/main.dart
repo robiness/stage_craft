@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stage_craft/stage_craft.dart';
+import 'package:stage_craft/src/recording/recording.dart';
+import 'package:stage_craft/src/recording/scenario_repository.dart';
 
 Future<void> main() async {
   runApp(
@@ -20,6 +22,9 @@ class MyAwesomeWidgetStage extends StatefulWidget {
 }
 
 class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
+  late final StageController _stageController;
+  late final PlaybackController _playbackController;
+
   final avatarSize = DoubleControl(
     label: 'Avatar Size',
     initialValue: 80,
@@ -93,13 +98,26 @@ class _MyAwesomeWidgetStageState extends State<MyAwesomeWidgetStage> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    _stageController = StageController(
+      scenarioRepository: SharedPreferencesScenarioRepository(),
+    );
+    _playbackController = PlaybackController();
+  }
+
+  @override
   void dispose() {
+    _stageController.dispose();
+    _playbackController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StageBuilder(
+    return RecordingStageBuilder(
+      stageController: _stageController,
+      playbackController: _playbackController,
       controls: [
         name,
         title,

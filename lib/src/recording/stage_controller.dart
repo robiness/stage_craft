@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/recording/playback_controller.dart';
 import 'package:stage_craft/src/recording/scenario_repository.dart';
@@ -17,9 +20,13 @@ class StageController extends ChangeNotifier {
   final List<ScenarioFrame> _recordedFrames = [];
   List<ValueControl>? _currentControls;
   StageCanvasController? _currentCanvasController;
+  Timer? _recordingTimer;
 
   /// Whether recording is currently active.
   bool get isRecording => _isRecording;
+
+  /// Whether there are any recorded frames available.
+  bool get hasRecordedFrames => _recordedFrames.isNotEmpty;
 
   /// The duration of the current recording session.
   Duration get recordingDuration {
@@ -39,6 +46,16 @@ class StageController extends ChangeNotifier {
     _currentControls = controls;
     _currentCanvasController = canvasController;
 
+    // Start a timer to periodically update UI and capture frames
+    _recordingTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+      if (_isRecording) {
+        // Capture a frame with current state (auto-capture during recording)
+        captureFrame([]); // Empty drawing calls for now, focus on control values
+        
+        notifyListeners(); // This will update the UI with the current duration
+      }
+    });
+
     notifyListeners();
   }
 
@@ -50,6 +67,10 @@ class StageController extends ChangeNotifier {
     _recordingStartTime = null;
     _currentControls = null;
     _currentCanvasController = null;
+
+    // Stop the recording timer
+    _recordingTimer?.cancel();
+    _recordingTimer = null;
 
     notifyListeners();
   }
@@ -64,6 +85,10 @@ class StageController extends ChangeNotifier {
     _currentControls = null;
     _currentCanvasController = null;
 
+    // Stop the recording timer
+    _recordingTimer?.cancel();
+    _recordingTimer = null;
+
     notifyListeners();
   }
 
@@ -75,7 +100,7 @@ class StageController extends ChangeNotifier {
 
     final controlValues = <String, dynamic>{};
     for (final control in _currentControls!) {
-      controlValues[control.label] = control.value;
+      controlValues[control.label] = _serializeControlValue(control.value);
     }
 
     final canvasSettings = <String, dynamic>{
@@ -130,5 +155,24 @@ class StageController extends ChangeNotifier {
       metadata: metadata ?? {},
       frames: List.from(_recordedFrames),
     );
+  }
+
+  /// Converts control values to JSON-serializable format.
+  dynamic _serializeControlValue(dynamic value) {
+    if (value is Color) {
+      return value.value;
+    }
+    if (value is DateTime) {
+      return value.millisecondsSinceEpoch;
+    }
+    return value;
+  }
+
+  @override
+  void dispose() {
+    // Stop and clean up the recording timer
+    _recordingTimer?.cancel();
+    _recordingTimer = null;
+    super.dispose();
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/recording/test_scenario.dart';
 import 'package:stage_craft/src/stage/stage.dart';
@@ -120,7 +121,8 @@ class PlaybackController extends ChangeNotifier {
     if (controls != null) {
       for (final control in controls) {
         if (frame.controlValues.containsKey(control.label)) {
-          control.value = frame.controlValues[control.label];
+          final serializedValue = frame.controlValues[control.label];
+          control.value = _deserializeControlValue(serializedValue, control.value.runtimeType);
         }
       }
     }
@@ -140,6 +142,17 @@ class PlaybackController extends ChangeNotifier {
         canvasController.textScale = canvasSettings['textScale'] as double;
       }
     }
+  }
+
+  /// Converts serialized values back to their original types based on expected type.
+  dynamic _deserializeControlValue(dynamic serializedValue, Type expectedType) {
+    if (expectedType == Color && serializedValue is int) {
+      return Color(serializedValue);
+    }
+    if (expectedType == DateTime && serializedValue is int) {
+      return DateTime.fromMillisecondsSinceEpoch(serializedValue);
+    }
+    return serializedValue;
   }
 
   @override
