@@ -3,11 +3,13 @@ import 'package:stage_craft/src/controls/control.dart';
 
 /// Value preview widget for controls.
 class ControlValuePreview extends StatelessWidget {
+  /// Creates a control value preview for the given control.
   const ControlValuePreview({
     super.key,
     required this.control,
   });
 
+  /// The control whose value to preview.
   final ValueControl control;
 
   @override

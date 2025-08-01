@@ -2,8 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:stage_craft/src/controls/control.dart';
 import 'package:stage_craft/src/widgets/default_control_bar_row.dart';
-import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 import 'package:stage_craft/src/widgets/stage_craft_collapsible_section.dart';
+import 'package:stage_craft/src/widgets/stage_craft_text_field.dart';
 
 /// A control for a list of strings.
 class StringListControl extends ValueControl<List<String>> {
@@ -28,21 +28,22 @@ class StringListControl extends ValueControl<List<String>> {
   Widget builder(BuildContext context) {
     final coreItems = value.take(_coreItemsCount).toList();
     final additionalItems = value.length > _coreItemsCount ? value.skip(_coreItemsCount).toList() : <String>[];
-    
-    final hasExpandedSections = (_moreItemsExpanded && additionalItems.isNotEmpty) || (_advancedExpanded && value.isNotEmpty);
-    
+
+    final hasExpandedSections =
+        (_moreItemsExpanded && additionalItems.isNotEmpty) || (_advancedExpanded && value.isNotEmpty);
+
     return DefaultControlBarRow(
       control: this,
       child: Container(
         decoration: BoxDecoration(
-          color: hasExpandedSections 
-            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.08)
-            : Theme.of(context).canvasColor.withValues(alpha: 0.15),
+          color: hasExpandedSections
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.08)
+              : Theme.of(context).canvasColor.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: hasExpandedSections 
-              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
-              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
+            color: hasExpandedSections
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
+                : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1),
             width: hasExpandedSections ? 1.5 : 1,
           ),
         ),
@@ -67,7 +68,7 @@ class StringListControl extends ValueControl<List<String>> {
                 value = List<String>.from(value)..add(defaultValue);
               },
             ),
-          
+
             // More items section - collapsible (only show if there are additional items)
             if (additionalItems.isNotEmpty) ...<Widget>[
               const SizedBox(height: 4),
@@ -78,26 +79,28 @@ class StringListControl extends ValueControl<List<String>> {
                   _moreItemsExpanded = !_moreItemsExpanded;
                   notifyListeners();
                 },
-                child: _moreItemsExpanded ? _StringListAdditionalSection(
-                  items: additionalItems,
-                  startIndex: _coreItemsCount,
-                  onItemChanged: (index, newValue) {
-                    final newList = List<String>.from(value);
-                    newList[index] = newValue;
-                    value = newList;
-                  },
-                  onItemRemoved: (index) {
-                    final newList = List<String>.from(value);
-                    newList.removeAt(index);
-                    value = newList;
-                  },
-                  onAddItem: () {
-                    value = List<String>.from(value)..add(defaultValue);
-                  },
-                ) : null,
+                child: _moreItemsExpanded
+                    ? _StringListAdditionalSection(
+                        items: additionalItems,
+                        startIndex: _coreItemsCount,
+                        onItemChanged: (index, newValue) {
+                          final newList = List<String>.from(value);
+                          newList[index] = newValue;
+                          value = newList;
+                        },
+                        onItemRemoved: (index) {
+                          final newList = List<String>.from(value);
+                          newList.removeAt(index);
+                          value = newList;
+                        },
+                        onAddItem: () {
+                          value = List<String>.from(value)..add(defaultValue);
+                        },
+                      )
+                    : null,
               ),
             ],
-          
+
             // Advanced section - collapsible (only show if there are items)
             if (value.isNotEmpty) ...<Widget>[
               const SizedBox(height: 4),
@@ -108,16 +111,18 @@ class StringListControl extends ValueControl<List<String>> {
                   _advancedExpanded = !_advancedExpanded;
                   notifyListeners();
                 },
-                child: _advancedExpanded ? _StringListAdvancedSection(
-                  itemCount: value.length,
-                  onClearAll: () {
-                    value = [];
-                  },
-                  onAddMultiple: () {
-                    final newItems = List.generate(3, (index) => '$defaultValue ${value.length + index + 1}');
-                    value = List<String>.from(value)..addAll(newItems);
-                  },
-                ) : null,
+                child: _advancedExpanded
+                    ? _StringListAdvancedSection(
+                        itemCount: value.length,
+                        onClearAll: () {
+                          value = [];
+                        },
+                        onAddMultiple: () {
+                          final newItems = List.generate(3, (index) => '$defaultValue ${value.length + index + 1}');
+                          value = List<String>.from(value)..addAll(newItems);
+                        },
+                      )
+                    : null,
               ),
             ],
           ],
@@ -269,7 +274,7 @@ class _StringListAdvancedSection extends StatelessWidget {
           style: Theme.of(context).textTheme.labelSmall,
         ),
         const SizedBox(height: 4),
-        
+
         // Bulk operations
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

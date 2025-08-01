@@ -5,11 +5,13 @@ import 'package:stage_craft/src/widgets/control_value_preview.dart';
 /// A compact control tile that shows a one-liner summary with click-to-expand functionality.
 /// Displays control icon, label, and value preview in compact form, expanding to show full control on tap.
 class ControlTile extends StatefulWidget {
+  /// Creates a control tile for the given control.
   const ControlTile({
     super.key,
     required this.control,
   });
 
+  /// The control to display in this tile.
   final ValueControl control;
 
   @override
@@ -89,7 +91,6 @@ class _ControlTileState extends State<ControlTile> with SingleTickerProviderStat
                       border: Border(
                         top: BorderSide(
                           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-                          width: 1,
                         ),
                       ),
                     ),
